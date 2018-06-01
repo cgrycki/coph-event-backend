@@ -41,14 +41,32 @@ router
     response.end();
   });
 
-router.post('/api/events', (request, response) => {
-  // Body Parser lets us use JSON. Extract the request information from body
-  const { name, date, time, comments, email } = request.body;
-  
-  // Create a new event, the created/updated/approved fields are pre filled.
-  const event = new Event();
-  event.eventID = new mongoose.mongo.ObjectId();
-});
+router
+  .route('/events')
+  .post((request, response) => {
+    // Body Parser lets us use JSON. Extract the request information from body
+    const { 
+      name, date, time, comments, email,
+      circleTables, rectTables, barTables, posterBoards, trashCans 
+    } = request.body;
+    
+    // Create a new event, the created/updated/approved fields are pre filled.
+    const event = new Event({
+      name, date, time, comments, email,
+      circleTables, rectTables, barTables, posterBoards, trashCans
+    });
+    event.eventID = new mongoose.Types.ObjectId();
+
+    // Save the event to our MongoDB collection.
+    event.save((err) => {
+      if (err) response.send(err);
+      else 
+        response.json({message: "Event saved to database!"});
+    });
+    //console.log(event);
+
+    //response.end();
+  });
 
 
 

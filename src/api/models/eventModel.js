@@ -10,21 +10,18 @@ var Schema   = mongoose.Schema;
 var eventSchema = new Schema({
 
   /* Administrative attributes */
-  // Unique key
-  eventID: {
-    type: Schema.Types.ObjectId, 
-    index: true, 
-    unique: true,
-    required: true
-  },
-  // Indicates if event has been approved by Facilities
+  // Indicates if event has been approved by the Facilities Mgmt.
   approved: {
     type: Boolean,
     required: true,
     default: false
   },
   // Comments by approver (optional)
-  approvalComments: String,
+  approvalComments: {
+    type: String,
+    required: false,
+    default: ''
+  },
   // Timestamp, immutable
   created: {
     type: Date, 
@@ -55,7 +52,7 @@ var eventSchema = new Schema({
   // Comments + instructions given by user
   comments: {
     type: String,
-    required: true
+    required: false
   },
   // User email
   email: {
