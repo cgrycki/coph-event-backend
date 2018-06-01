@@ -1,0 +1,8 @@
+# Ignore Visual Studio Code files
+.vscode/
+
+# Ignore any notebook checkpoints
+**/.ipynb_checkpoints/
+
+# Ignore secrets (MongoDB URI, oAuth Keys)
+secrets.js
