@@ -6,3 +6,6 @@
 
 # Ignore secrets (MongoDB URI, oAuth Keys)
 secrets.js
+
+# Ignore installed node libraries
+node_modules/
