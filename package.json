@@ -2,10 +2,10 @@
   "name": "coph-backend",
   "version": "0.1.0",
   "description": "Server for CoPH event creation app.",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "nodemon src/server.js"
   },
   "configurations": [],
   "repository": {
