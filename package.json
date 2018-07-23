@@ -2,13 +2,13 @@
   "name": "coph-backend",
   "version": "0.1.0",
   "description": "Server for CoPH event creation app.",
-  "main": "src/server.js",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/server.js",
-    "docs": "jsdoc2md src/*.js > docs/README.md"
+    "start": "nodemon ./bin/www",
+    "predeploy": "claudia generate-serverless-express-proxy --express-module server",
+    "deploy": "npm run predeploy && TMPDIR=/tmp claudia create --handler lambda.handler --deploy-proxy-api --region us-east-1",
+    "update": "npm run predeploy && TMPDIR=/tmp claudia update"
   },
-  "configurations": [],
   "repository": {
     "type": "git",
     "url": "https://github.uiowa.edu/rlrson/coph-event-backend.git"
