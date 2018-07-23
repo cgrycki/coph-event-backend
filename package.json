@@ -16,12 +16,24 @@
   "author": "College of Public Health IT",
   "license": "ISC",
   "dependencies": {
+    "aws-sdk": "^2.279.1",
+    "aws-serverless-express": "^3.2.0",
     "body-parser": "^1.18.3",
+    "claudia": "^5.1.0",
+    "connect-dynamodb": "^2.0.1",
+    "cookie-parser": "^1.4.3",
+    "debug": "^3.1.0",
+    "dotenv": "^6.0.0",
+    "dynamodb": "^1.1.2",
     "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "express-validator": "^5.3.0",
+    "helmet": "^3.13.0",
     "jsdoc-to-markdown": "^4.0.1",
-    "mongoose": "^5.1.2",
-    "nodemon": "^1.17.5",
-    "request": "^2.87.0",
-    "request-promise": "^4.2.2"
+    "moment": "^2.22.2",
+    "morgan": "^1.9.0",
+    "nodemon": "^1.18.3",
+    "request-promise": "^4.2.2",
+    "simple-oauth2": "^2.2.0"
   }
 }
