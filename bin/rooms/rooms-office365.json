@@ -1,0 +1,178 @@
+[
+    {
+        "Id": {
+            "Name": "RES-CPHB-C212",
+            "EmailAddress": "RES-CPHB-C212@uiowa.edu",
+            "RoutingType": "SMTP",
+            "MailboxType": "Mailbox"
+        }
+    },
+    {
+        "Id": {
+            "Name": "RES-CPHB-C217",
+            "EmailAddress": "RES-CPHB-C217@uiowa.edu",
+            "RoutingType": "SMTP",
+            "MailboxType": "Mailbox"
+        }
+    },
+    {
+        "Id": {
+            "Name": "RES-CPHB-C303",
+            "EmailAddress": "RES-CPHB-C303@uiowa.edu",
+            "RoutingType": "SMTP",
+            "MailboxType": "Mailbox"
+        }
+    },
+    {
+        "Id": {
+            "Name": "RES-CPHB-C312",
+            "EmailAddress": "RES-CPHB-C312@uiowa.edu",
+            "RoutingType": "SMTP",
+            "MailboxType": "Mailbox"
+        }
+    },
+    {
+        "Id": {
+            "Name": "RES-CPHB-C412",
+            "EmailAddress": "RES-CPHB-C412@uiowa.edu",
+            "RoutingType": "SMTP",
+            "MailboxType": "Mailbox"
+        }
+    },
+    {
+        "Id": {
+            "Name": "RES-CPHB-N202",
+            "EmailAddress": "RES-CPHB-N202@uiowa.edu",
+            "RoutingType": "SMTP",
+            "MailboxType": "Mailbox"
+        }
+    },
+    {
+        "Id": {
+            "Name": "RES-CPHB-N228",
+            "EmailAddress": "RES-CPHB-N228@uiowa.edu",
+            "RoutingType": "SMTP",
+            "MailboxType": "Mailbox"
+        }
+    },
+    {
+        "Id": {
+            "Name": "RES-CPHB-N473",
+            "EmailAddress": "RES-CPHB-N473@uiowa.edu",
+            "RoutingType": "SMTP",
+            "MailboxType": "Mailbox"
+        }
+    },
+    {
+        "Id": {
+            "Name": "RES-CPHB-N502",
+            "EmailAddress": "RES-CPHB-N502@iowa.uiowa.edu",
+            "RoutingType": "SMTP",
+            "MailboxType": "Mailbox"
+        }
+    },
+    {
+        "Id": {
+            "Name": "RES-CPHB-N504",
+            "EmailAddress": "RES-CPHB-N504@iowa.uiowa.edu",
+            "RoutingType": "SMTP",
+            "MailboxType": "Mailbox"
+        }
+    },
+    {
+        "Id": {
+            "Name": "RES-CPHB-N510",
+            "EmailAddress": "RES-CPHB-N510@iowa.uiowa.edu",
+            "RoutingType": "SMTP",
+            "MailboxType": "Mailbox"
+        }
+    },
+    {
+        "Id": {
+            "Name": "RES-CPHB-N512",
+            "EmailAddress": "RES-CPHB-N512@iowa.uiowa.edu",
+            "RoutingType": "SMTP",
+            "MailboxType": "Mailbox"
+        }
+    },
+    {
+        "Id": {
+            "Name": "RES-CPHB-N523",
+            "EmailAddress": "RES-CPHB-N523@iowa.uiowa.edu",
+            "RoutingType": "SMTP",
+            "MailboxType": "Mailbox"
+        }
+    },
+    {
+        "Id": {
+            "Name": "RES-CPHB-N534",
+            "EmailAddress": "RES-CPHB-N534@uiowa.edu",
+            "RoutingType": "SMTP",
+            "MailboxType": "Mailbox"
+        }
+    },
+    {
+        "Id": {
+            "Name": "RES-CPHB-N536",
+            "EmailAddress": "RES-CPHB-N536@uiowa.edu",
+            "RoutingType": "SMTP",
+            "MailboxType": "Mailbox"
+        }
+    },
+    {
+        "Id": {
+            "Name": "RES-CPHB-N538",
+            "EmailAddress": "RES-CPHB-N538@uiowa.edu",
+            "RoutingType": "SMTP",
+            "MailboxType": "Mailbox"
+        }
+    },
+    {
+        "Id": {
+            "Name": "RES-CPHB-N540",
+            "EmailAddress": "RES-CPHB-N540@uiowa.edu",
+            "RoutingType": "SMTP",
+            "MailboxType": "Mailbox"
+        }
+    },
+    {
+        "Id": {
+            "Name": "RES-CPHB-N542",
+            "EmailAddress": "RES-CPHB-N542@uiowa.edu",
+            "RoutingType": "SMTP",
+            "MailboxType": "Mailbox"
+        }
+    },
+    {
+        "Id": {
+            "Name": "RES-CPHB-N544",
+            "EmailAddress": "RES-CPHB-N544@uiowa.edu",
+            "RoutingType": "SMTP",
+            "MailboxType": "Mailbox"
+        }
+    },
+    {
+        "Id": {
+            "Name": "RES-CPHB-N565",
+            "EmailAddress": "RES-CPHB-N565@iowa.uiowa.edu",
+            "RoutingType": "SMTP",
+            "MailboxType": "Mailbox"
+        }
+    },
+    {
+        "Id": {
+            "Name": "RES-CPHB-S247",
+            "EmailAddress": "RES-CPHB-S247@uiowa.edu",
+            "RoutingType": "SMTP",
+            "MailboxType": "Mailbox"
+        }
+    },
+    {
+        "Id": {
+            "Name": "RES-CPHB-S249",
+            "EmailAddress": "RES-CPHB-S249@uiowa.edu",
+            "RoutingType": "SMTP",
+            "MailboxType": "Mailbox"
+        }
+    }
+]
