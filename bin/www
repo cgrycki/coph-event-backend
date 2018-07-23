@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 var app = require('../server');
-var debug = require('debug')('workflow-test:server');
+var debug = require('debug')('coph-event-app:server');
 var http = require('http');
 
 /**
