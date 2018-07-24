@@ -5,7 +5,6 @@
 
 /* Dependencies -------------------------------------------------------------*/
 const { check } = require('express-validator/check');
-const request   = require('request');
 const rp        = require('request-promise');
 
 
