@@ -4,7 +4,12 @@
  */
 
 // List of domains we will accept
-const whitelist_domains = [process.env.REDIRECT_URI, process.env.FRONTEND_URI, 'uiowa.edu'];
+const whitelist_domains = [
+  process.env.REDIRECT_URI, 
+  process.env.FRONTEND_URI, 
+  'uiowa.edu',
+  'http://localhost:3000'
+];
 
 // List of Headers we will accept
 const whitelist_headers = [
