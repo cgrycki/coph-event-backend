@@ -14,7 +14,7 @@ var bodyParser   = require('body-parser');
 var session      = require('./auth/auth.session');
 var validator    = require('express-validator');
 var logger       = require('morgan');
-var app = express();
+var app          = express();
 
 
 /* Further App Configurations -----------------------------------------------*/

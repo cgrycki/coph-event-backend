@@ -6,8 +6,8 @@
   "scripts": {
     "start": "nodemon ./bin/www",
     "predeploy": "claudia generate-serverless-express-proxy --express-module server",
-    "deploy": "npm run predeploy && TMPDIR=/tmp claudia create --handler lambda.handler --deploy-proxy-api --region us-east-1",
-    "update": "npm run predeploy && TMPDIR=/tmp claudia update"
+    "deploy": "npm run predeploy && exec bin/claudia-deploy.sh",
+    "update": "npm run predeploy && TMPDIR=/tmp claudia update --set-env-from-json"
   },
   "repository": {
     "type": "git",
