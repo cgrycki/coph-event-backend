@@ -60,7 +60,7 @@ async function getAuthTokenFromCode(auth_code, request) {
   const token = oauth_uiowa.accessToken.create(result);
 
   // Save token values to session
-  saveTokenToSession(token, request);
+  //saveTokenToSession(token, request);
 
   return token;
 }
@@ -113,10 +113,11 @@ async function authenticateCode(request, response, next) {
     } 
     catch (error) {
       response.status(500).json({ 
-        message: 'Error while authenticating token',
-        error: error.message, 
-        stack: error.stack,
-        token: token
+        error  : 'Error while authenticating token',
+        message: error.message,
+        stack  : error.stack,
+        token  : token,
+        code   : code
       });
     }
   } else {
