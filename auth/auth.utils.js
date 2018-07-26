@@ -119,8 +119,8 @@ async function authenticateCode(request, response, next) {
       } catch (authError) {
         response.status(500).json({ 
           error  : 'Error while handshaking token',
-          message: error.message,
-          stack  : error.stack,
+          message: authError.message,
+          stack  : authError.stack,
           token  : token,
           code   : code
         });
