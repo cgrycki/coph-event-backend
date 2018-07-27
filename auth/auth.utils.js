@@ -20,8 +20,7 @@ const oauth_uiowa = oauth2.create({
     tokenPath    : 'token.page'
   },
   options: {
-    authorizationMethod: 'body',
-    bodyFormat: 'json'
+    authorizationMethod: 'body'
   }
 });
 
