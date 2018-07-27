@@ -112,7 +112,7 @@
         "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
         "buildingCode": "CPHB",
         "roomNumber": "C217A",
-        "roomName": null,
+        "roomName": "2nd Floor Conference Room (left side)",
         "regionList": [
             "College of Public Health",
             "College of Public Health Classrooms",
@@ -139,7 +139,7 @@
         "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
         "buildingCode": "CPHB",
         "roomNumber": "C217AB",
-        "roomName": null,
+        "roomName": "2nd Floor Conference Room (combined)",
         "regionList": [
             "College of Public Health",
             "College of Public Health Classrooms",
@@ -166,7 +166,7 @@
         "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
         "buildingCode": "CPHB",
         "roomNumber": "C217B",
-        "roomName": null,
+        "roomName": "2nd Floor Conference Room (right side)", 
         "regionList": [
             "College of Public Health",
             "College of Public Health Classrooms",
@@ -193,7 +193,7 @@
         "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
         "buildingCode": "CPHB",
         "roomNumber": "C301",
-        "roomName": null,
+        "roomName": "3rd Floor Conference Room",
         "regionList": [
             "1) Programmed Classrooms - Level 2",
             "Classroom-Programmed",
@@ -348,7 +348,7 @@
         "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
         "buildingCode": "CPHB",
         "roomNumber": "C410",
-        "roomName": null,
+        "roomName": "4th Floor Conference Room",
         "regionList": [
             "1) Programmed Classrooms - Level 2",
             "Classroom-Programmed",
@@ -729,7 +729,7 @@
         "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
         "buildingCode": "CPHB",
         "roomNumber": "S025A",
-        "roomName": null,
+        "roomName": "Basement Classroom (left side)",
         "regionList": [
             "1) University Classrooms",
             "1) University Classrooms - Fixed AV Tech",
@@ -774,7 +774,7 @@
         "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
         "buildingCode": "CPHB",
         "roomNumber": "S025AB",
-        "roomName": null,
+        "roomName": "Basement Classroom (combined)",
         "regionList": [
             "1) University Classrooms",
             "1) University Classrooms - Fixed AV Tech",
@@ -819,7 +819,7 @@
         "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
         "buildingCode": "CPHB",
         "roomNumber": "S025B",
-        "roomName": null,
+        "roomName": "Basement Classroom (right side)",
         "regionList": [
             "1) University Classrooms",
             "1) University Classrooms - Fixed AV Tech",
@@ -864,7 +864,7 @@
         "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
         "buildingCode": "CPHB",
         "roomNumber": "S030",
-        "roomName": null,
+        "roomName": "Basement Auditorium",
         "regionList": [
             "1) University Classrooms",
             "1) University Classrooms - Fixed AV Tech",
@@ -1286,7 +1286,7 @@
         "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
         "buildingCode": "CPHB",
         "roomNumber": "XC100",
-        "roomName": "1st Flr Atrium",
+        "roomName": "1st Floor Atrium",
         "regionList": [
             "College of Public Health",
             "Event Scheduler CPHB",

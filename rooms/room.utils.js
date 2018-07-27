@@ -4,10 +4,10 @@
 
 
 /* Dependencies -------------------------------------------------------------*/
-const requests  = require('request');
+const rp        = require('request-promise');
 const { check } = require('express-validator/check');
 const moment    = require('moment');
-const Room      = require('./room.model');
+//const Room      = require('./room.model');
 
 
 /* Paramater Validation -----------------------------------------------------*/
@@ -23,7 +23,8 @@ const validRoomNum = check('roomNumber')
 // date
 const validDate = check('date')
   .exists().withMessage('You need a date param')
-  .isString().withMessage('Date param should be formatted YYYY-mm-dd')
+  .isString().withMessage('Date should be a date-coercable string')
+  .isISO8601().withMessage('Date param should be formatted YYYY-mm-dd')
   .trim();
 
 // startTime
@@ -40,19 +41,37 @@ const validEndTime = check('endTime')
 
 
 /* Utilities ----------------------------------------------------------------*/
+const getNextDay = (date_string) => {
+  try {
+    // Coerce string into a date
+    const parsed_date = moment(date_string);
 
-// DRY Convenience function
-const getAstraURL = api => {
-  return {
-    url: api,
+    // Add one day to get tomorrow
+    const next_day = parsed_date.add(1, 'days');
+
+    // Return the YYYY-MM-DD formatted date
+    const next_day_format = next_day.format("YYYY-MM-DD");
+    return next_day_format;
+  } catch (error) {
+    return false;
+  };
+}
+
+function getRoomSchedule(roomNumber, startDate, endDate) {
+  // Create URL and GET options for MAUI API call
+  const uri = 'https://api.maui.uiowa.edu/maui/api/pub/registrar/courses/AstraRoomSchedule/' +
+              `${startDate}/${endDate}/CPHB/${roomNumber}`;
+  const options = { 
     method: 'GET',
-    followRedirect: true,
-    accepts: 'application/json',
     headers: {
+      'Accept': 'application/json',
       'Content-Type': 'application/x-www-form-urlencoded'
     }
   };
-};
+
+  // Return a promise to be resolved in our route handler.
+  return rp(uri, options);
+}
 
 
 
@@ -60,3 +79,5 @@ exports.validRoomNum   = validRoomNum;
 exports.validDate      = validDate;
 exports.validStartTime = validStartTime;
 exports.validEndTime   = validEndTime;
+exports.getNextDay     = getNextDay;
+exports.getRoomSchedule = getRoomSchedule;
