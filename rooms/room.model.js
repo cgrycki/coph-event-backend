@@ -60,7 +60,8 @@ var Room = dynamo.define('Room', {
 Room.getRooms = function(request, response) {
   Room
     .scan()
-    .attributes(['roomNumber', 'floor'])
+    .where('reservable').equals(true)
+    .attributes(['roomNumber', 'floor', 'rmType', 'roomName'])
     .exec((err, data) => {
       if (err) response.send(404).json(err);
       else response.status(200).json(data.Items);
