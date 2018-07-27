@@ -28,24 +28,23 @@ router.get('/', (req, res) => Room.getRooms(req, res));
 /* GET /rooms/:roomNumber -- Get one room's info. */
 router.get('/:roomNumber', utils.validateParams, (req, res) => Room.getRoom(req, res));
 
+/* GET /rooms/:roomNumber/:date -- Get Astra Schedule for a room */
+router.get('/:roomNumber/:date', utils.validateParams, (request, response) => {
 
+  // Room number parameter
+  const roomNumber = request.params.roomNumber;
 
+  // Create start and end date parameters for MAUI.
+  let start_date = request.params.date;
+  let end_date   = roomUtils.getNextDay(start_date);
+  if (end_date === false) response.json({ error: 'Error while coercing date', date: start_date});
 
-
-
-/* GET /rooms/:roomNumber/:date/:startTime-:endTime -- Check if a room is free. */
-//http://localhost:3001/rooms/N110/2017-02-07/
-/*
-router.get('/:roomNumber/:date', //:startTime-:endTime', 
-  [
-    utils.validateParams,
-    roomUtils.addDayMiddleware,
-    roomUtils.getAstraRoomSchedule,
-    roomUtils.formatAstraRoomSchedule
-  ],
-  (request, response) => response.send(request.roomSchedule)
-);
-*/
+  // Make the call and return the JSON room schedule
+  roomUtils.getRoomSchedule(roomNumber, start_date, end_date)
+    .then(res => JSON.parse(res))
+    .then(res => response.status(200).json(res))
+    .catch(err => response.status(404).json(err));
+});
 
 
 module.exports = router;
