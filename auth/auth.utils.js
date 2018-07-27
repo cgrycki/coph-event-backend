@@ -47,26 +47,23 @@ async function getAuthTokenFromCode(auth_code, request) {
     code          = AUTHORIZATION_CODE&
     redirect_uri  = YOUR_REDIRECT_URL
   */
-  try {
-    // Get auth token with application+user authorization code
-    let result = await oauth_uiowa.authorizationCode.getToken({
-      grant_type   : 'authorization_code',
-      client_id    : process.env.UIOWA_ACCESS_KEY_ID,
-      client_secret: process.env.UIOWA_SECRET_ACCESS_KEY,
-      code         : auth_code,
-      redirect_uri : process.env.REDIRECT_URI
-    });
 
-    // Confirm with the handshake
-    //const token = oauth_uiowa.accessToken.create(result);
+  // Get auth token with application+user authorization code
+  let result = await oauth_uiowa.authorizationCode.getToken({
+    grant_type   : 'authorization_code',
+    client_id    : process.env.UIOWA_ACCESS_KEY_ID,
+    client_secret: process.env.UIOWA_SECRET_ACCESS_KEY,
+    code         : auth_code,
+    redirect_uri : process.env.REDIRECT_URI
+  });
 
-    // Save token values to session
-    //saveTokenToSession(token, request);
+  // Confirm with the handshake
+  //const token = oauth_uiowa.accessToken.create(result);
 
-    return result;
-  } catch (error) {
-    return error;
-  }
+  // Save token values to session
+  //saveTokenToSession(token, request);
+
+  return result;
 }
 
 // Saves a user token values to their session
@@ -143,7 +140,8 @@ async function authenticateCode(request, response, next) {
         //message: error.message,
         //stack  : error.stack,
         errorFull: error,
-        code   : code
+        code   : code,
+
       });
     }
   } else {
