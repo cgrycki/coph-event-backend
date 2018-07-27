@@ -111,7 +111,7 @@ async function authenticateCode(request, response, next) {
     try {
       // This will also save our user's values to their session
       try {
-        //token = await getAuthTokenFromCode(code, request);
+        token = await getAuthTokenFromCode(code, request);
 
         // Token checks out, values are saved. Send them to fill form on client.
         //return next();
@@ -121,7 +121,8 @@ async function authenticateCode(request, response, next) {
           //result: token,
           redirect_uri: process.env.REDIRECT_URI,
           versions: process.versions,
-          version: process.version
+          version: process.version,
+          code: code
         });
 
       } catch (authError) {
@@ -131,7 +132,8 @@ async function authenticateCode(request, response, next) {
           stack  : authError.stack,
           token  : token,
           code   : code,
-          redirect_uri: process.env.REDIRECT_URI
+          redirect_uri: process.env.REDIRECT_URI,
+          errorFull: authError
         });
       }
     } 
