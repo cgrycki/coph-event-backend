@@ -111,17 +111,17 @@ async function authenticateCode(request, response, next) {
     try {
       // This will also save our user's values to their session
       try {
-        token = await getAuthTokenFromCode(code, request);
+        //token = await getAuthTokenFromCode(code, request);
 
         // Token checks out, values are saved. Send them to fill form on client.
         //return next();
 
         response.json({
           message: 'returning result from getAuthTokenFromCode',
-          result: token,
+          //result: token,
           redirect_uri: process.env.REDIRECT_URI
         });
-        
+
       } catch (authError) {
         response.status(500).json({ 
           error  : 'Error while handshaking token',
