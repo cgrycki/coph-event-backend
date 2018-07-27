@@ -132,8 +132,8 @@ async function authenticateCode(request, response, next) {
           stack  : authError.stack,
           token  : token,
           code   : code,
-          redirect_uri: process.env.REDIRECT_URI,
-          errorFull: JSON.stringify(authError)
+          redirect_uri: process.env.REDIRECT_URI
+          //errorFull: JSON.stringify(authError)
         });
       }
     } 
@@ -142,7 +142,6 @@ async function authenticateCode(request, response, next) {
         error  : 'Error while authenticating token',
         message: error.message,
         stack  : error.stack,
-        token  : token,
         code   : code
       });
     }
