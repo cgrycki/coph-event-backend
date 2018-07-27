@@ -18,6 +18,10 @@ const oauth_uiowa = oauth2.create({
     tokenHost    : 'https://login.uiowa.edu/uip/',
     authorizePath: 'auth.page',
     tokenPath    : 'token.page'
+  },
+  options: {
+    authorizationMethod: 'body',
+    bodyFormat: 'json'
   }
 });
 
