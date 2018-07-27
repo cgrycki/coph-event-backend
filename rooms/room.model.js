@@ -50,7 +50,7 @@ var Room = dynamo.define('Room', {
   }]
 });
 
-// RESTful functions
+/* RESTful functions --------------------------------------------------------*/
 
 /**
  * Model function to return a list of rooms as {roomNumber, floor} objects.
