@@ -133,7 +133,7 @@ async function authenticateCode(request, response, next) {
           token  : token,
           code   : code,
           redirect_uri: process.env.REDIRECT_URI,
-          errorFull: authError
+          errorFull: JSON.stringify(authError)
         });
       }
     } 
