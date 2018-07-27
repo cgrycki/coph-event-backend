@@ -118,7 +118,7 @@ async function authenticateCode(request, response, next) {
 
         response.json({
           message: 'returning result from getAuthTokenFromCode',
-          //result: token,
+          result: token,
           redirect_uri: process.env.REDIRECT_URI,
           versions: process.versions,
           version: process.version,
