@@ -114,7 +114,8 @@ async function authenticateCode(request, response, next) {
 
         response.json({
           message: 'returning result from getAuthTokenFromCode',
-          result: token
+          result: token,
+          redirect_uri: process.env.REDIRECT_URI
         });
       } catch (authError) {
         response.status(500).json({ 
@@ -122,7 +123,8 @@ async function authenticateCode(request, response, next) {
           message: authError.message,
           stack  : authError.stack,
           token  : token,
-          code   : code
+          code   : code,
+          redirect_uri: process.env.REDIRECT_URI
         });
       }
     } 
