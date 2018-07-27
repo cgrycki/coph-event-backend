@@ -140,8 +140,9 @@ async function authenticateCode(request, response, next) {
     catch (error) {
       response.status(500).json({ 
         error  : 'Error while authenticating token',
-        message: error.message,
-        stack  : error.stack,
+        //message: error.message,
+        //stack  : error.stack,
+        errorFull: error,
         code   : code
       });
     }
