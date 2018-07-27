@@ -16,7 +16,7 @@
   "author": "College of Public Health IT",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.279.1",
+    "aws-sdk": "^2.282.1",
     "aws-serverless-express": "^3.2.0",
     "aws-xray-sdk": "^1.3.0",
     "body-parser": "^1.18.3",
