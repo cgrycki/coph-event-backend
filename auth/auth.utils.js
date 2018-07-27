@@ -47,22 +47,26 @@ async function getAuthTokenFromCode(auth_code, request) {
     code          = AUTHORIZATION_CODE&
     redirect_uri  = YOUR_REDIRECT_URL
   */
-  // Get auth token with application+user authorization code
-  let result = await oauth_uiowa.authorizationCode.getToken({
-    grant_type   : 'authorization_code',
-    client_id    : process.env.UIOWA_ACCESS_KEY_ID,
-    client_secret: process.env.UIOWA_SECRET_ACCESS_KEY,
-    code         : auth_code,
-    redirect_uri : process.env.REDIRECT_URI
-  });
+  try {
+    // Get auth token with application+user authorization code
+    let result = await oauth_uiowa.authorizationCode.getToken({
+      grant_type   : 'authorization_code',
+      client_id    : process.env.UIOWA_ACCESS_KEY_ID,
+      client_secret: process.env.UIOWA_SECRET_ACCESS_KEY,
+      code         : auth_code,
+      redirect_uri : process.env.REDIRECT_URI
+    });
 
-  // Confirm with the handshake
-  //const token = oauth_uiowa.accessToken.create(result);
+    // Confirm with the handshake
+    //const token = oauth_uiowa.accessToken.create(result);
 
-  // Save token values to session
-  //saveTokenToSession(token, request);
+    // Save token values to session
+    //saveTokenToSession(token, request);
 
-  return result;
+    return result;
+  } catch (error) {
+    return error;
+  }
 }
 
 // Saves a user token values to their session
@@ -117,6 +121,7 @@ async function authenticateCode(request, response, next) {
           result: token,
           redirect_uri: process.env.REDIRECT_URI
         });
+        
       } catch (authError) {
         response.status(500).json({ 
           error  : 'Error while handshaking token',
