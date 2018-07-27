@@ -64,7 +64,7 @@ async function getAuthTokenFromCode(auth_code, request) {
   const token = oauth_uiowa.accessToken.create(result);
 
   // Save token values to session
-  //saveTokenToSession(token, request);
+  saveTokenToSession(token, request);
 
   return token;
 }
@@ -93,9 +93,10 @@ function saveTokenToSession(token, request) {
   sess.expires_in = token.token.expires_in;
 
   // Save alphanumeric HawkID
-  //sess.hawkid = token.token.hawkid;
+  sess.hawkid = token.token.hawkid;
+
   // Save University ID interger
-  //sess.uid = token.token.uid;
+  sess.uid = token.token.uid;
 }
 
 
@@ -110,40 +111,16 @@ async function authenticateCode(request, response, next) {
 
     try {
       // This will also save our user's values to their session
-      try {
-        token = await getAuthTokenFromCode(code, request);
+      token = await getAuthTokenFromCode(code, request);
 
-        // Token checks out, values are saved. Send them to fill form on client.
-        //return next();
+      // Token checks out, values are saved. Send them to fill form on client.
+      next();
 
-        return response.json({
-          message: 'returning result from getAuthTokenFromCode',
-          result: token,
-          redirect_uri: process.env.REDIRECT_URI,
-          versions: process.versions,
-          version: process.version,
-          code: code
-        });
-
-      } catch (authError) {
-        return response.status(500).json({ 
-          error  : 'Error while handshaking token',
-          message: authError.message,
-          stack  : authError.stack,
-          token  : token,
-          code   : code,
-          redirect_uri: process.env.REDIRECT_URI
-          //errorFull: JSON.stringify(authError)
-        });
-      }
-    } 
-    catch (error) {
+    } catch (error) {
       return response.status(500).json({ 
         error  : 'Error while authenticating token',
-        //message: error.message,
-        //stack  : error.stack,
-        errorFull: error,
-        code   : code
+        message: error.message,
+        stack  : error.stack,
       });
     }
   } else {
