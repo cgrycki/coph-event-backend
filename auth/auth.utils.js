@@ -113,7 +113,7 @@ async function authenticateCode(request, response, next) {
         // Token checks out, values are saved. Send them to fill form on client.
         //return next();
 
-        response.json({
+        return response.json({
           message: 'returning result from getAuthTokenFromCode',
           result: token,
           redirect_uri: process.env.REDIRECT_URI,
@@ -123,7 +123,7 @@ async function authenticateCode(request, response, next) {
         });
 
       } catch (authError) {
-        response.status(500).json({ 
+        return response.status(500).json({ 
           error  : 'Error while handshaking token',
           message: authError.message,
           stack  : authError.stack,
@@ -135,18 +135,17 @@ async function authenticateCode(request, response, next) {
       }
     } 
     catch (error) {
-      response.status(500).json({ 
+      return response.status(500).json({ 
         error  : 'Error while authenticating token',
         //message: error.message,
         //stack  : error.stack,
         errorFull: error,
-        code   : code,
-
+        code   : code
       });
     }
   } else {
     // No authentication code. Redirect to login URL 
-    response.status(403).redirect(getAuthURL());
+    return response.status(403).redirect(getAuthURL());
   }
 }
 
