@@ -14,7 +14,7 @@
 /* DEPENDENCIES -------------------------------------------------------------*/
 // Set up Dynamo to connect, even in our Lambda env.
 var dynamo = require('dynamodb');
-dynamo.AWS.config.update({ region: process.env.AWS_DEFAULT_REGION });
+dynamo.AWS.config.update({ region: process.env.AWS_REGION });
 
 // Database model validation
 const Joi    = require('joi');
@@ -28,6 +28,7 @@ const table           = 'rooms';
 
 /* MODEL --------------------------------------------------------------------*/
 var Room = dynamo.define('Room', {
+  tableName: createTableName(name, env, table),
   hashKey: 'roomNumber',
   schema: {
     buildingName   : Joi.string().required(),
@@ -41,9 +42,12 @@ var Room = dynamo.define('Room', {
     acadOrgUnitName: Joi.number().integer().allow(null),
     roomCategory   : Joi.string().allow(null),
     roomTypeGroup  : Joi.string().allow(null).required(),
-    floor          : Joi.number().integer().required()
+    floor          : Joi.number().integer().required(),
+    reservable     : Joi.boolean().required()
   },
-  tableName: createTableName(name, env, table)
+  indexes: [{
+    hashKey: 'roomNumber', name: 'RoomTypeIndex', type: 'global' 
+  }]
 });
 
 // RESTful functions
