@@ -61,12 +61,12 @@ async function getAuthTokenFromCode(auth_code, request) {
   });
 
   // Confirm with the handshake
-  //const token = oauth_uiowa.accessToken.create(result);
+  const token = oauth_uiowa.accessToken.create(result);
 
   // Save token values to session
   //saveTokenToSession(token, request);
 
-  return result;
+  return token;
 }
 
 // Saves a user token values to their session
