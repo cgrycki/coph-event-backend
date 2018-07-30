@@ -19,7 +19,8 @@ const whitelist_headers = [
   'Access-Control-Request-Origin', 'Access-Control-Request-Credentials',
   'Access-Control-Allow-Origin', 'Access-Control-Allow-Credentials',
   'access-control-allow-origin', 'access-control-allow-credentials',
-  'Cache-Control', 'cache-control'
+  'Cache-Control', 'cache-control',
+  'enctype'
 ];
 
 // Whitelist of HTTP Methods
