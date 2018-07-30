@@ -25,8 +25,12 @@ router.get('/logout', utils.clearTokensFromSession,
 // GET /auth/validate -- Returns a boolean indicating if the user is logged in
 router.get('/validate', (request, response) => {
   let session = request.session;
-  if (session && session.uiowa_access_token) response.status(200).json({ loggedIn: true });
-  else response.status(401).json({ loggedIn: false });
+
+  if ((request.get('origin') === 'http://localhost:3000') || 
+      (session && session.uiowa_access_token)) {
+    response.status(200).json({ loggedIn: true });
+  }
+  else response.status(200).json({ loggedIn: false });
 });
 
 

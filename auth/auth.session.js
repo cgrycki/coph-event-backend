@@ -27,13 +27,13 @@ const dynamo_options = {
 const ONE_HOUR = 60 * 60 * 1000;
 
 module.exports = session({
-  store: new DynamoDBStore(dynamo_options), 
-  secret: process.env.MY_AWS_SECRET_ACCESS_KEY,
-  resave: false,
+  store            : new DynamoDBStore(dynamo_options),
+  secret           : process.env.MY_AWS_SECRET_ACCESS_KEY,
+  resave           : false,
   saveUninitialized: false,
-  cookie: {
-    maxAge: ONE_HOUR,
-    secure: true,
+  cookie           : {
+    maxAge  : ONE_HOUR,
+    secure  : true,
     httpOnly: false
   },
   proxy: true

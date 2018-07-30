@@ -15,7 +15,7 @@ const Room      = require('./room.model');
 
 
 /* Parameters? ---*/
-router.param('roomNumber',  roomUtils.validRoomNum);
+router.param('room_number',  roomUtils.validRoomNum);
 router.param('date',        roomUtils.validDate);
 router.param('startTime',   roomUtils.validStartTime);
 router.param('endTime',     roomUtils.validEndTime);
@@ -25,14 +25,14 @@ router.param('endTime',     roomUtils.validEndTime);
 /* GET /rooms -- List CoPH rooms as JS objects. */
 router.get('/', (req, res) => Room.getRooms(req, res));
 
-/* GET /rooms/:roomNumber -- Get one room's info. */
-router.get('/:roomNumber', utils.validateParams, (req, res) => Room.getRoom(req, res));
+/* GET /rooms/:room_number -- Get one room's info. */
+router.get('/:room_number', utils.validateParams, (req, res) => Room.getRoom(req, res));
 
-/* GET /rooms/:roomNumber/:date -- Get Astra Schedule for a room */
-router.get('/:roomNumber/:date', utils.validateParams, (request, response) => {
+/* GET /rooms/:room_number/:date -- Get Astra Schedule for a room */
+router.get('/:room_number/:date', utils.validateParams, (request, response) => {
 
   // Room number parameter
-  const roomNumber = request.params.roomNumber;
+  const room_number = request.params.room_number;
 
   // Create start and end date parameters for MAUI.
   let start_date = request.params.date;
@@ -40,7 +40,7 @@ router.get('/:roomNumber/:date', utils.validateParams, (request, response) => {
   if (end_date === false) response.json({ error: 'Error while coercing date', date: start_date});
 
   // Make the call and return the JSON room schedule
-  roomUtils.getRoomSchedule(roomNumber, start_date, end_date)
+  roomUtils.getRoomSchedule(room_number, start_date, end_date)
     .then(res => JSON.parse(res))
     .then(res => response.status(200).json(res))
     .catch(err => response.status(404).json(err));
