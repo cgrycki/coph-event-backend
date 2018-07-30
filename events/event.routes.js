@@ -38,11 +38,11 @@ router.get('/:id',
 router.post('/', 
   [
     multer.fields([]),
-    eventUtils.validParamTextField,
-    eventUtils.validParamUserEmail,
-    validateParams,
+    //eventUtils.validParamTextField,
+    //eventUtils.validParamUserEmail,
+    //validateParams,
     //authUtils.checkSession,
-    authUtils.retrieveSession,
+    //authUtils.retrieveSession,
     //eventUtils.postWorkflowEvent
     //EventModel.saveEventMiddleware
   ], 
