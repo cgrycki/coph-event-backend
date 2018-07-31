@@ -4,7 +4,12 @@
  */
 
 // List of domains we will accept
-const whitelist_domains = [process.env.REDIRECT_URI, process.env.FRONTEND_URI, 'uiowa.edu'];
+const whitelist_domains = [
+  process.env.REDIRECT_URI, 
+  process.env.FRONTEND_URI, 
+  'uiowa.edu',
+  'http://localhost:3000'
+];
 
 // List of Headers we will accept
 const whitelist_headers = [
@@ -14,7 +19,8 @@ const whitelist_headers = [
   'Access-Control-Request-Origin', 'Access-Control-Request-Credentials',
   'Access-Control-Allow-Origin', 'Access-Control-Allow-Credentials',
   'access-control-allow-origin', 'access-control-allow-credentials',
-  'Cache-Control', 'cache-control'
+  'Cache-Control', 'cache-control',
+  'enctype'
 ];
 
 // Whitelist of HTTP Methods

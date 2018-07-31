@@ -6,8 +6,8 @@
   "scripts": {
     "start": "nodemon ./bin/www",
     "predeploy": "claudia generate-serverless-express-proxy --express-module server",
-    "deploy": "npm run predeploy && TMPDIR=/tmp claudia create --handler lambda.handler --deploy-proxy-api --region us-east-1",
-    "update": "npm run predeploy && TMPDIR=/tmp claudia update",
+    "deploy": "npm run predeploy && exec bin/claudia-deploy.sh",
+    "update": "npm run predeploy && TMPDIR=/tmp claudia update --set-env-from-json",
     "populate-rooms": "node -r dotenv/config bin/rooms/populate-database.js"
   },
   "repository": {
@@ -17,7 +17,7 @@
   "author": "College of Public Health IT",
   "license": "ISC",
   "dependencies": {
-    "aws-sdk": "^2.279.1",
+    "aws-sdk": "^2.282.1",
     "aws-serverless-express": "^3.2.0",
     "aws-xray-sdk": "^1.3.0",
     "body-parser": "^1.18.3",

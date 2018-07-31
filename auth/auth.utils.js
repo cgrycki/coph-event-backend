@@ -18,6 +18,9 @@ const oauth_uiowa = oauth2.create({
     tokenHost    : 'https://login.uiowa.edu/uip/',
     authorizePath: 'auth.page',
     tokenPath    : 'token.page'
+  },
+  options: {
+    authorizationMethod: 'body'
   }
 });
 
@@ -47,6 +50,7 @@ async function getAuthTokenFromCode(auth_code, request) {
     code          = AUTHORIZATION_CODE&
     redirect_uri  = YOUR_REDIRECT_URL
   */
+
   // Get auth token with application+user authorization code
   let result = await oauth_uiowa.authorizationCode.getToken({
     grant_type   : 'authorization_code',
@@ -89,9 +93,10 @@ function saveTokenToSession(token, request) {
   sess.expires_in = token.token.expires_in;
 
   // Save alphanumeric HawkID
-  //sess.hawkid = token.token.hawkid;
+  sess.hawkid = token.token.hawkid;
+
   // Save University ID interger
-  //sess.uid = token.token.uid;
+  sess.uid = token.token.uid;
 }
 
 
@@ -109,19 +114,18 @@ async function authenticateCode(request, response, next) {
       token = await getAuthTokenFromCode(code, request);
 
       // Token checks out, values are saved. Send them to fill form on client.
-      return next();
-    } 
-    catch (error) {
-      response.status(500).json({ 
-        message: 'Error while authenticating token',
-        error: error.message, 
-        stack: error.stack,
-        token: token
+      next();
+
+    } catch (error) {
+      return response.status(500).json({ 
+        error  : 'Error while authenticating token',
+        message: error.message,
+        stack  : error.stack,
       });
     }
   } else {
     // No authentication code. Redirect to login URL 
-    response.status(403).redirect(getAuthURL());
+    return response.status(403).redirect(getAuthURL());
   }
 }
 

@@ -13,7 +13,7 @@ const moment    = require('moment');
 /* Paramater Validation -----------------------------------------------------*/
 
 // roomId
-const validRoomNum = check('roomNumber')
+const validRoomNum = check('room_number')
   .exists().withMessage('Must have a roomId to access API')
   .isString().withMessage('roomId must be a string')
   .isAlphanumeric().withMessage('roomId must be alphanumeric')
@@ -28,13 +28,13 @@ const validDate = check('date')
   .trim();
 
 // startTime
-const validStartTime = check('startTime')
+const validStartTime = check('start_time')
   .exists().withMessage('Must have a start time')
   .isString()
   .trim();
 
 // endTime
-const validEndTime = check('endTime')
+const validEndTime = check('end_time')
   .exists()
   .isString()
   .trim();

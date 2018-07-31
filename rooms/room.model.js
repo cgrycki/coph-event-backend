@@ -61,7 +61,7 @@ Room.getRooms = function(request, response) {
   Room
     .scan()
     .where('reservable').equals(true)
-    .attributes(['roomNumber', 'floor', 'rmType', 'roomName'])
+    .attributes(['roomNumber', 'floor', 'rmType', 'roomName', 'maxOccupancy'])
     .exec((err, data) => {
       if (err) response.send(404).json(err);
       else response.status(200).json(data.Items);
