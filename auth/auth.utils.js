@@ -162,7 +162,7 @@ async function checkSession(request, response, next) {
   //response.status(403).redirect(getAuthURL());
 
   // No authenticated session? Expired?
-  response.status(401).send();
+  response.status(401).json({ error: true, message: "You are not logged in" });
 }
 
 // Middelware refreshing a session auth, and passing the user details for /events
