@@ -43,7 +43,11 @@ router.get('/:room_number/:date', utils.validateParams, (request, response) => {
   roomUtils.getRoomSchedule(room_number, start_date, end_date)
     .then(res => JSON.parse(res))
     .then(res => response.status(200).json(res))
-    .catch(err => response.status(404).json(err));
+    .catch(err => {
+      // MAUI will return a 404 if there are no events, which is still success
+      if (res.status === 404) response.status(200).json([]);
+      else response.status(404).json(err);
+    });
 });
 
 
