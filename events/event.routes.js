@@ -41,7 +41,7 @@ router.post('/',
     //eventUtils.validParamTextField,
     //eventUtils.validParamUserEmail,
     //validateParams,
-    //authUtils.checkSession,
+    authUtils.checkSession,
     //authUtils.retrieveSession,
     //eventUtils.postWorkflowEvent
     //EventModel.saveEventMiddleware
