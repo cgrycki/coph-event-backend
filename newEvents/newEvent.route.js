@@ -7,7 +7,8 @@ var   router  = express.Router();
 /* Created dependencies -----------------------------------------------------*/
 // Event model
 // Event utilities
-// Auth  utilities
+import { checkSession, retrieveSession } from '../events/event.utils';
+import { validateParams } from '../utils/index';
 
 
 /* Routes -------------------------------------------------------------------*/
@@ -21,7 +22,22 @@ var   router  = express.Router();
 
 
 // POST: Dispatch create event 
-// loggedIn, tokenValid, paramValidation, postWorkflow, saveDynamoDB, postOffice365, return
+// parseFields, loggedIn, tokenValid, paramValidation, postWorkflow, saveDynamoDB, postOffice365, return
+router.post('/',
+  [
+    multer.fields([]),
+    checkSession,
+    //retrieveSession,
+    // params
+    validateParams
+  ],
+  (request, response) => response.status(201).json({
+    message: "Sucess!",
+    form_id: process.env.FORM_ID,
+    ip     : request.user_ip_address,
+    body   : request.body
+  })
+);
 
 
 // PATCH/:id: Update a given event
