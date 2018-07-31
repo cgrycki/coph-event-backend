@@ -1,7 +1,7 @@
 /**
  * Event Utilities
  */
-import * as rp from 'request-promise';
+const rp = require('request-promise');
 
 function getWorkflowURI() {
   const env_type = process.env.EENV;
@@ -42,3 +42,12 @@ export async function postWorkflowEvent(request, response, next) {
   request.workflow_options = options;
   next();
 }
+/*
+rp(options)
+  .then(res => JSON.parse(res))
+  .then(res => {
+    request.workflow_response = res;
+    next();
+  })
+  .catch(err => response.status(400).json(err))
+*/
