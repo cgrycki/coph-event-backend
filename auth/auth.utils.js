@@ -130,14 +130,14 @@ async function authenticateCode(request, response, next) {
 }
 
 // Checks if a request is verified or not. 
-function checkSession(request, response, next) {
+async function checkSession(request, response, next) {
   let sess = request.session;
 
   // Check if they've been here before
   if (sess && sess.uiowa_access_token) {
     // We have a token, but is it expired?
     // Expire 5 minutes early to account for clock differences
-    /*const expires = sess.cookie.expires;
+    const expires = sess.cookie.expires;
     const FIVE_MINUTES = 300000;
     const expiration = new Date(parseFloat(expires - FIVE_MINUTES));
     
@@ -146,9 +146,12 @@ function checkSession(request, response, next) {
 
     // Expired, refresh token and save values to session
     const refresh_token = sess.uiowa_refresh_token; 
-    ASYNC const new_token = await oauth_uiowa.accessToken.create({refresh_token: refresh_token}).refresh();
+    const new_token = await oauth_uiowa.accessToken
+      .create({refresh_token: refresh_token})
+      .refresh();
+
+    // Save new token and continue with request
     saveTokenToSession(new_token, request);
-    */
     next();
   }
   
@@ -156,7 +159,10 @@ function checkSession(request, response, next) {
   if (request.path.endsWith('/auth') && request.query.code) next();
 
   // No authenticated session token? send them to entry point
-  response.status(403).redirect(getAuthURL());
+  //response.status(403).redirect(getAuthURL());
+
+  // No authenticated session? Expired?
+  response.status(401).send();
 }
 
 // Middelware refreshing a session auth, and passing the user details for /events
