@@ -42,7 +42,7 @@ router.post('/',
     //eventUtils.validParamUserEmail,
     //validateParams,
     authUtils.checkSession,
-    //authUtils.retrieveSession,
+    authUtils.retrieveSession,
     //eventUtils.postWorkflowEvent
     //EventModel.saveEventMiddleware
   ], 
