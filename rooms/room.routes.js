@@ -45,7 +45,7 @@ router.get('/:room_number/:date', utils.validateParams, (request, response) => {
     .then(res => response.status(200).json(res))
     .catch(err => {
       // MAUI will return a 404 if there are no events, which is still success
-      if (res.status === 404) response.status(200).json([]);
+      if (err.status === 204) response.status(200).json(err);
       else response.status(404).json(err);
     });
 });
