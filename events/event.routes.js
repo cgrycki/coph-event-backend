@@ -16,10 +16,11 @@ var multer      = require('multer')();
 
 
 /* Created dependencies -----------------------------------------------------*/
-var EventModel  = new require('./event.model');
-const validateParams = require('../utils/index').validateParams;
-const eventUtils = require('./event.utils');
-const authUtils = require('../auth/auth.utils');
+var   EventModel        = new require('./event.model');
+const validateParams    = require('../utils/index').validateParams;
+const eventUtils        = require('./event.utils');
+const authUtils         = require('../auth/auth.utils');
+const postWorkflowEvent = require('../newEvents/newEvent.utils').postWorkflowEvent;
 
 
 /* CRUD API -----------------------------------------------------------------*/
@@ -43,19 +44,15 @@ router.post('/',
     //validateParams,
     authUtils.checkSession,
     authUtils.retrieveSession,
-    //eventUtils.postWorkflowEvent
+    postWorkflowEvent
     //EventModel.saveEventMiddleware
   ], 
   (request, response) => response.status(201).json({
     "message"         : "Success",
-    "form_id"         : process.env.FORM_ID,
-    "token"           : request.uiowa_access_token,
+    "error"           : false,
     "session"         : request.session,
     "cookies"         : request.cookies,
-    "ip"              : request.user_ip_address,
-    "body"            : request.body,
-    "headers"         : request.headers,
-    "workflowResponse": request.workflowResponse
+    "workflowResponse": request.workflow_options
   })
 );
 
