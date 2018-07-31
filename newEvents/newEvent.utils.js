@@ -15,7 +15,7 @@ const URI = process.env.REDIRECT_URI;
 
 
 // post workflow
-export async function postWorkflowEvent(request, response, next) {
+async function postWorkflowEvent(request, response, next) {
   // Grab data from the request
   let form_data = request.body;
   let workflow_data = {
@@ -42,6 +42,9 @@ export async function postWorkflowEvent(request, response, next) {
   request.workflow_options = options;
   next();
 }
+
+
+exports.postWorkflowEvent = postWorkflowEvent;
 /*
 rp(options)
   .then(res => JSON.parse(res))
