@@ -72,7 +72,7 @@ async function postDynamoEvent(request, response, next) {
 
   // Create the entry in DynamoDB using our model
   EventModel.create(new_event, (error, data) => {
-    if (error) response.status(400).json({ error });
+    if (error) response.status(400).json({ error: JSON.stringify(error) });
     else {
       request.dynamo_response = data;
       next();

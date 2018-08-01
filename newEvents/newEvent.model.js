@@ -17,8 +17,8 @@ const table_name      = 'events';
 /* MODEL --------------------------------------------------------------------*/
 const EventModel = dynamo.define('Event', {
   // Primary keys
-  hashKey : 'package_id',
-  rangeKey: 'date',
+  hashKey   : 'package_id',
+  rangeKey  : 'date',
 
   // Timestamps
   timestamps: true,
@@ -44,7 +44,7 @@ const EventModel = dynamo.define('Event', {
     // Auxillary information
     references_course: Joi.boolean().required().default(false),
     referenced_course: Joi.string().allow("").default("").when("references_course", {
-        is: true,
+        is  : true,
         then: Joi.string().required()
     }),
 
@@ -56,11 +56,11 @@ const EventModel = dynamo.define('Event', {
 
     food_drink_required: Joi.boolean().required().default(false),
     food_provider      : Joi.string().trim().allow("").default("").when("food_drink_required", {
-      is: true,
+      is  : true,
       then: Joi.string().min(5)
     }),
     alcohol_provider   : Joi.string().trim().allow("").default("").when("food_drink_required", {
-      is: true,
+      is  : true,
       then: Joi.string().min(5)
     })
   },
