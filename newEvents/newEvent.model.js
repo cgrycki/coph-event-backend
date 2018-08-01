@@ -29,37 +29,37 @@ const EventModel = dynamo.define('Event', {
 
     // Contact information
     user_email       : Joi.string().email().regex(/uiowa\.edu$/).required(),
-    contact_email    : Joi.string().email(),
-    coph_email       : Joi.string().email().regex(/uiowa\.edu$/),
+    contact_email    : Joi.string().email().allow("").default(""),
+    coph_email       : Joi.string().email().regex(/uiowa\.edu$/).allow("").default(""),
 
     // Event Information
     event_name       : Joi.string().min(3).max(75).trim().required(),
-    comments         : Joi.string().trim().max(3000).default(""),
+    comments         : Joi.string().trim().max(3000).allow("").default(""),
     date             : Joi.date().iso().required(),
     start_time       : Joi.string().trim().min(7).max(8).required(),
     end_time         : Joi.string().trim().min(7).max(8).required(),
-    room_number      : Joi.string().alphanum().required(),
+    room_number      : Joi.string().alphanum().max(10).required(),
     num_people       : Joi.number().min(1).max(206).required().default(1),
 
     // Auxillary information
     references_course: Joi.boolean().required().default(false),
-    referenced_course: Joi.string().default("").when("references_course", {
+    referenced_course: Joi.string().allow("").default("").when("references_course", {
         is: true,
         then: Joi.string().required()
     }),
 
     setup_required: Joi.boolean().required().default(false),
-    setup_mfk     : Joi.string().alphanum().allow("").when("setup_required", {
+    setup_mfk     : Joi.string().alphanum().allow("").default("").when("setup_required", {
       is  : true,
       then: Joi.string().alphanum().required()
     }),
 
     food_drink_required: Joi.boolean().required().default(false),
-    food_provider      : Joi.string().trim().default("").when("food_drink_required", {
+    food_provider      : Joi.string().trim().allow("").default("").when("food_drink_required", {
       is: true,
       then: Joi.string().min(5)
     }),
-    alcohol_provider   : Joi.string().trim().default("").when("food_drink_required", {
+    alcohol_provider   : Joi.string().trim().allow("").default("").when("food_drink_required", {
       is: true,
       then: Joi.string().min(5)
     })

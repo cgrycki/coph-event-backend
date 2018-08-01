@@ -22,26 +22,28 @@ function getWorkflowURI() {
 async function postWorkflowEvent(request, response, next) {
   // Grab data from the request
   let form_data = request.body;
+
+  // Create a Workflow formatted JSON object
   let workflow_data = {
-    // Required by workflow
     state: 'ROUTING',
     subType: null,
     emailContent: null,
     entry: { ...form_data }
+    //entry: {select fields here}
   };
 
-  // Setup uri and POST options
+  // URI and POST call options
   let options = {
-    method: 'POST',
-    uri: getWorkflowURI(),
-    json: true,
-    headers: {
+    method  : 'POST',
+    uri     : getWorkflowURI(),
+    json    : true,
+    headers : {
       'Accept'              : 'application/vnd.workflow+json;version=1.1',
       'Authorization'       : 'Bearer ' + request.uiowa_access_token,
       'X-Client-Remote-Addr': request.user_ip_address
     },
-    body: workflow_data
-  }
+    body    : workflow_data
+  };
 
 
   // STUB FUNCTION, add package_id as a random int
