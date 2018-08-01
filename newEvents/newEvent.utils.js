@@ -65,8 +65,8 @@ async function postDynamoEvent(request, response, next) {
   /* Saves an event to our DynamoDB after receiving Workflow's response */
 
   // Combine the form data and the package_id Workflow responded to our POST with
-  let { package_id, body } = request;
-  let new_event = { ...package_id, ...body };
+  let package_id = request.package_id;
+  let new_event = { package_id, ...request.body };
 
   // Create the entry in DynamoDB using our model
   EventModel.create(new_event, (error, data) => {

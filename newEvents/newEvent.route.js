@@ -37,7 +37,7 @@ router.post('/',
     postDynamoEvent
   ],
   (request, response) => response.status(201).json({
-    message         : "Sucess!",
+    message         : "Success!",
     form_id         : process.env.FORM_ID,
     ip              : request.user_ip_address,
     body            : request.body,
