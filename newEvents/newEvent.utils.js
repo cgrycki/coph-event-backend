@@ -1,8 +1,14 @@
 /**
  * Event Utilities
  */
-const rp = require('request-promise');
+const rp         = require('request-promise');
+const EventModel = require('./newEvent.model');
+const URI        = process.env.REDIRECT_URI;
 
+
+/**
+ * Returns an URL pointing to our Workflow endpoint
+ */
 function getWorkflowURI() {
   const env_type = process.env.EENV;
   const form_id  = process.env.FORM_ID;
@@ -11,10 +17,8 @@ function getWorkflowURI() {
   const workflowURI = `${base_uri}/workflow/${env_type}/api/developer/forms/${form_id}/packages`;
   return workflowURI;
 }
-const URI = process.env.REDIRECT_URI;
 
 
-// post workflow
 async function postWorkflowEvent(request, response, next) {
   // Grab data from the request
   let form_data = request.body;
@@ -39,21 +43,41 @@ async function postWorkflowEvent(request, response, next) {
     body: workflow_data
   }
 
-  request.workflow_options = options;
+
   // STUB FUNCTION, add package_id as a random int
+  request.workflow_options = options;
   request.package_id = Math.floor(Math.random() * (1000 - 1 + 1)) + 1;
   
+  /*rp(options)
+    .then(res => JSON.parse(res))
+    .then(res => {
+      request.workflow_response = res;
+      next();
+    })
+    .catch(err => response.status(400).json(err))*/
+  
+
   next();
 }
 
 
+async function postDynamoEvent(request, response, next) {
+  /* Saves an event to our DynamoDB after receiving Workflow's response */
+
+  // Combine the form data and the package_id Workflow responded to our POST with
+  let { package_id, body } = request;
+  let new_event = { ...package_id, ...body };
+
+  // Create the entry in DynamoDB using our model
+  EventModel.create(new_event, (error, data) => {
+    if (error) response.status(400).json({ error });
+    else {
+      request.dynamo_response = data;
+      next();
+    };
+  });
+}
+
+
 exports.postWorkflowEvent = postWorkflowEvent;
-/*
-rp(options)
-  .then(res => JSON.parse(res))
-  .then(res => {
-    request.workflow_response = res;
-    next();
-  })
-  .catch(err => response.status(400).json(err))
-*/
+exports.postDynamoEvent   = postDynamoEvent;
