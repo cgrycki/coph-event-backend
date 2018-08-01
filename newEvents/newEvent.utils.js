@@ -40,6 +40,9 @@ async function postWorkflowEvent(request, response, next) {
   }
 
   request.workflow_options = options;
+  // STUB FUNCTION, add package_id as a random int
+  request.package_id = Math.floor(Math.random() * (1000 - 1 + 1)) + 1;
+  
   next();
 }
 
