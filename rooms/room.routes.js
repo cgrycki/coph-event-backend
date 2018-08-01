@@ -43,8 +43,14 @@ router.get('/:room_number/:date', utils.validateParams, (request, response) => {
   roomUtils.getRoomSchedule(room_number, start_date, end_date)
     .then(res => res.text())
     .then(text => text.length ? JSON.parse(text) : [])
-    .then(data => response.status(200).json(data))
-    .catch(err => response.status(400).json(err));
+    .then(data => response.status(200).json({
+      status: 'success',
+      data: data
+    }))
+    .catch(err => {
+      if (err === 204) response.status(200).json([]);
+      else response.status(400).json(err);
+    });
 });
 
 
