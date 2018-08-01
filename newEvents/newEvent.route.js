@@ -5,16 +5,21 @@ var   router  = express.Router();
 
 
 /* Created dependencies -----------------------------------------------------*/
-const { checkSessionExists, retrieveSessionInfo } = require('../auth/auth.utils');
-const EventModel = require('./newEvent.model');
-const { validateParams } = require('../utils/index');
-const { postWorkflowEvent } = require('./newEvent.utils');
+const EventModel          = require('./newEvent.model');
+const { validateParams }  = require('../utils/index');
+const { 
+  postWorkflowEvent,
+  postDynamoEvent
+}                         = require('./newEvent.utils');
+const { 
+  checkSessionExists, 
+  retrieveSessionInfo 
+}                         = require('../auth/auth.utils');
+
 
 /* Routes -------------------------------------------------------------------*/
-
 // GET: Returns a list of events from our DynamoDB
 // loggedIn, tokenValid, isAdmin, return
-
 
 // GET/:id: Returns an event from our DynamoDB
 // loggedIn, tokenValid, isAdmin/hasOwnership, eventExists, return
@@ -28,7 +33,8 @@ router.post('/',
     checkSessionExists,
     retrieveSessionInfo,
     //validateParams
-    postWorkflowEvent
+    postWorkflowEvent,
+    postDynamoEvent
   ],
   (request, response) => response.status(201).json({
     message         : "Sucess!",
@@ -37,14 +43,14 @@ router.post('/',
     body            : request.body,
     cookies         : request.cookies,
     workflow_options: request.workflow_options,
-    package_id      : request.package_id
+    package_id      : request.package_id,
+    dynamo_response : request.dynamo_response
   })
 );
 
 
 // PATCH/:id: Update a given event
 // loggedIn, tokenValid, eventExists, isAdmin/hasOwnership, updateDynamoDB, patchOffice365, return
-
 
 // DELETE/:id: Delete a given event
 // loggedIn, tokenValid, eventExists, isAdmin, hasOwnership, deleteDynamoDB, deleteOffice365, return
