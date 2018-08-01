@@ -7,7 +7,7 @@ var   router  = express.Router();
 /* Created dependencies -----------------------------------------------------*/
 // Event model
 // Event utilities
-import { checkSession, retrieveSession } from '../events/event.utils';
+import { checkSessionExists, retrieveSessionInfo } from '../events/event.utils';
 import { validateParams } from '../utils/index';
 
 
@@ -26,8 +26,8 @@ import { validateParams } from '../utils/index';
 router.post('/',
   [
     multer.fields([]),
-    checkSession,
-    //retrieveSession,
+    checkSessionExists,
+    retrieveSessionInfo,
     // params
     validateParams
   ],

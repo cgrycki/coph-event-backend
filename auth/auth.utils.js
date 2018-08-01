@@ -130,7 +130,7 @@ async function authenticateCode(request, response, next) {
 }
 
 // Checks if a request is verified or not. 
-async function checkSession(request, response, next) {
+async function checkSessionExists(request, response, next) {
   let sess = request.session;
 
   // Check if they've been here before
@@ -166,7 +166,7 @@ async function checkSession(request, response, next) {
 }
 
 // Middelware refreshing a session auth, and passing the user details for /events
-function retrieveSession(request, response, next) {
+function retrieveSessionInfo(request, response, next) {
   try {
     // Define and load the session
     let sess = request.session;
@@ -206,6 +206,6 @@ function clearTokensFromSession(request, response, next) {
 module.exports.validParamCode         = validParamCode;
 module.exports.getAuthURL             = getAuthURL;
 module.exports.clearTokensFromSession = clearTokensFromSession;
-module.exports.checkSession           = checkSession;
+module.exports.checkSessionExists           = checkSessionExists;
 module.exports.authenticateCode       = authenticateCode;
-module.exports.retrieveSession        = retrieveSession;
+module.exports.retrieveSessionInfo        = retrieveSessionInfo;
