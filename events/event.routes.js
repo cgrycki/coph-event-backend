@@ -40,8 +40,8 @@ router.post('/',
   [
     multer.fields([]),
     //validateParams,
-    authUtils.checkSession,
-    authUtils.retrieveSession,
+    authUtils.checkSessionExists,
+    authUtils.retrieveSessionInfo,
     postWorkflowEvent
     //EventModel.saveEventMiddleware
   ], 
