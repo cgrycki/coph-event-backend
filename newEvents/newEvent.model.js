@@ -30,7 +30,7 @@ const EventModel = dynamo.define('Event', {
     // Contact information
     user_email       : Joi.string().email().regex(/uiowa\.edu$/).required(),
     contact_email    : Joi.string().email().allow("").default(""),
-    coph_email       : Joi.string().email().regex(/uiowa\.edu$/).allow("").default(""),
+    coph_email       : Joi.string().allow("").email().regex(/uiowa\.edu$/).default(""),
 
     // Event Information
     event_name       : Joi.string().min(3).max(75).trim().required(),
