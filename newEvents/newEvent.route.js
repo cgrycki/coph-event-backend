@@ -5,11 +5,10 @@ var   router  = express.Router();
 
 
 /* Created dependencies -----------------------------------------------------*/
-// Event model
-// Event utilities
-import { checkSession, retrieveSession } from '../events/event.utils';
-import { validateParams } from '../utils/index';
-
+const { checkSessionExists, retrieveSessionInfo } = require('../auth/auth.utils');
+const EventModel = require('./newEvent.model');
+const { validateParams } = require('../utils/index');
+const { postWorkflowEvent } = require('./newEvent.utils');
 
 /* Routes -------------------------------------------------------------------*/
 
@@ -26,16 +25,19 @@ import { validateParams } from '../utils/index';
 router.post('/',
   [
     multer.fields([]),
-    checkSession,
-    //retrieveSession,
-    // params
-    validateParams
+    checkSessionExists,
+    retrieveSessionInfo,
+    //validateParams
+    postWorkflowEvent
   ],
   (request, response) => response.status(201).json({
-    message: "Sucess!",
-    form_id: process.env.FORM_ID,
-    ip     : request.user_ip_address,
-    body   : request.body
+    message         : "Sucess!",
+    form_id         : process.env.FORM_ID,
+    ip              : request.user_ip_address,
+    body            : request.body,
+    cookies         : request.cookies,
+    workflow_options: request.workflow_options,
+    package_id      : request.package_id
   })
 );
 
@@ -46,3 +48,6 @@ router.post('/',
 
 // DELETE/:id: Delete a given event
 // loggedIn, tokenValid, eventExists, isAdmin, hasOwnership, deleteDynamoDB, deleteOffice365, return
+
+
+module.exports = router;

@@ -39,11 +39,9 @@ router.get('/:id',
 router.post('/', 
   [
     multer.fields([]),
-    //eventUtils.validParamTextField,
-    //eventUtils.validParamUserEmail,
     //validateParams,
-    authUtils.checkSession,
-    authUtils.retrieveSession,
+    authUtils.checkSessionExists,
+    authUtils.retrieveSessionInfo,
     postWorkflowEvent
     //EventModel.saveEventMiddleware
   ], 

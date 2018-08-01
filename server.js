@@ -46,7 +46,7 @@ if (process.env.NODE_ENV) {
 
 /* ROUTES -------------------------------------------------------------------*/
 app.use('/',       require('./utils/indexRoute'));
-app.use('/events', require('./events/event.routes'));
+app.use('/events', require('./newEvents/newEvent.route'));
 app.use('/rooms',  require('./rooms/room.routes'));
 app.use('/auth',   require('./auth/auth.routes'));
 
