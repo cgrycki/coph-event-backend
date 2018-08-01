@@ -16,18 +16,63 @@ const table_name      = 'events';
 
 /* MODEL --------------------------------------------------------------------*/
 const EventModel = dynamo.define('Event', {
-  // Primary key
-  hashKey: 'id',
+  // Primary keys
+  hashKey : 'package_id',
+  rangeKey: 'date',
 
   // Timestamps
   timestamps: true,
 
   schema: {
+    // Workflow and DynamoDB primary key
+    package_id       : Joi.number().required(),
 
+    // Contact information
+    user_email       : Joi.string().email().regex(/uiowa\.edu$/).required(),
+    contact_email    : Joi.string().email(),
+    coph_email       : Joi.string().email().regex(/uiowa\.edu$/),
+
+    // Event Information
+    event_name       : Joi.string().min(3).max(75).trim().required(),
+    comments         : Joi.string().trim().max(3000).default(""),
+    date             : Joi.date().iso().required(),
+    start_time       : Joi.string().trim().min(7).max(8).required(),
+    end_time         : Joi.string().trim().min(7).max(8).required(),
+    room_number      : Joi.string().alphanum().required(),
+    num_people       : Joi.number().min(1).max(206).required().default(1),
+
+    // Auxillary information
+    references_course: Joi.boolean().required().default(false),
+    referenced_course: Joi.string().default("").when("references_course", {
+        is: true,
+        then: Joi.string().required()
+    }),
+
+    setup_required: Joi.boolean().required().default(false),
+    setup_mfk     : Joi.string().alphanum().allow("").when("setup_required", {
+      is  : true,
+      then: Joi.string().alphanum().required()
+    }),
+
+    food_drink_required: Joi.boolean().required().default(false),
+    food_provider      : Joi.string().trim().default("").when("food_drink_required", {
+      is: true,
+      then: Joi.string().min(5)
+    }),
+    alcohol_provider   : Joi.string().trim().default("").when("food_drink_required", {
+      is: true,
+      then: Joi.string().min(5)
+    })
   },
 
-  // Dynamic table names
-  tableName: createTableName(client_id, env_type, table_name)
+  // Dynamic table names depending on our Node environment
+  tableName: createTableName(client_id, env_type, table_name),
+
+  // Indices for faster queries
+  indexes: [
+    {hashKey: 'package_id', rangeKey: 'user_email', name: 'EventUserIndex', type: 'global'},
+    {hashKey: 'package_id', rangeKey: 'room_number', name: 'EventRoomIndex', type: 'global'}
+  ]
 });
 
 
