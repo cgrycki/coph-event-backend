@@ -29,7 +29,7 @@ const EventModel = dynamo.define('Event', {
 
     // Contact information
     user_email       : Joi.string().email().regex(/uiowa\.edu$/).required(),
-    contact_email    : Joi.string().optional().allow("").email().default(""),
+    contact_email    : Joi.string().optional().allow("").email(),
     coph_email       : Joi.string().optional().allow("").email().regex(/uiowa\.edu$/),
 
     // Event Information
@@ -49,17 +49,17 @@ const EventModel = dynamo.define('Event', {
     }),
 
     setup_required: Joi.boolean().required().default(false),
-    setup_mfk     : Joi.string().alphanum().allow("").default("").when("setup_required", {
+    setup_mfk     : Joi.string().alphanum().allow("").when("setup_required", {
       is  : true,
       then: Joi.string().alphanum().required()
     }),
 
     food_drink_required: Joi.boolean().required().default(false),
-    food_provider      : Joi.string().trim().allow("").default("").when("food_drink_required", {
+    food_provider      : Joi.string().trim().allow("").when("food_drink_required", {
       is  : true,
       then: Joi.string().min(5)
     }),
-    alcohol_provider   : Joi.string().trim().allow("").default("").when("food_drink_required", {
+    alcohol_provider   : Joi.string().trim().allow("").when("food_drink_required", {
       is  : true,
       then: Joi.string().min(5)
     })
