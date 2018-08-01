@@ -48,3 +48,6 @@ router.post('/',
 
 // DELETE/:id: Delete a given event
 // loggedIn, tokenValid, eventExists, isAdmin, hasOwnership, deleteDynamoDB, deleteOffice365, return
+
+
+module.exports = router;
