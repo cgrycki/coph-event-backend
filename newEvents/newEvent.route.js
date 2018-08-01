@@ -5,11 +5,10 @@ var   router  = express.Router();
 
 
 /* Created dependencies -----------------------------------------------------*/
-// Event model
-// Event utilities
-import { checkSessionExists, retrieveSessionInfo } from '../events/event.utils';
-import { validateParams } from '../utils/index';
-
+const { checkSessionExists, retrieveSessionInfo } = require('../auth/auth.utils');
+const EventModel = require('./newEvent.model');
+const { validateParams } = require('../utils/index');
+const { postWorkflowEvent } = require('./newEvent.utils');
 
 /* Routes -------------------------------------------------------------------*/
 
@@ -28,14 +27,17 @@ router.post('/',
     multer.fields([]),
     checkSessionExists,
     retrieveSessionInfo,
-    // params
-    validateParams
+    //validateParams
+    postWorkflowEvent
   ],
   (request, response) => response.status(201).json({
-    message: "Sucess!",
-    form_id: process.env.FORM_ID,
-    ip     : request.user_ip_address,
-    body   : request.body
+    message         : "Sucess!",
+    form_id         : process.env.FORM_ID,
+    ip              : request.user_ip_address,
+    body            : request.body,
+    cookies         : request.cookies,
+    workflow_options: request.workflow_options,
+    package_id      : request.package_id
   })
 );
 
