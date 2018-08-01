@@ -42,10 +42,16 @@ router.get('/:room_number/:date', utils.validateParams, (request, response) => {
   // Make the call and return the JSON room schedule
   roomUtils.getRoomSchedule(room_number, start_date, end_date)
     .then(res => JSON.parse(res))
-    .then(res => response.status(200).json(res))
+    .then(res => response.status(200).json({
+      message: `${res.length} events found`,
+      events: res
+    }))
     .catch(err => {
-
-      response.json({errorReturnd: JSON.parse(err) });
+      // MAUI returns a 204 if no events are found
+      response.status(200).json({
+        message: 'No events found',
+        events: []
+      })
     });
 });
 
