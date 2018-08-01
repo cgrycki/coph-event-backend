@@ -41,6 +41,16 @@ router.get('/:room_number/:date', utils.validateParams, (request, response) => {
 
   // Make the call and return the JSON room schedule
   roomUtils.getRoomSchedule(room_number, start_date, end_date)
+    .then(res => res.text())
+    .then(text => text.length ? JSON.parse(text) : [])
+    .then(data => response.status(200).json(data))
+    .catch(err => response.status(400).json(err));
+});
+
+
+module.exports = router;
+
+/*
     .then(res => JSON.parse(res))
     .then(res => response.status(200).json(res))
     .catch(err => {
@@ -50,7 +60,4 @@ router.get('/:room_number/:date', utils.validateParams, (request, response) => {
       //response.status(404).json(err);
       response.status(200).json(err);
     });
-});
-
-
-module.exports = router;
+    */
