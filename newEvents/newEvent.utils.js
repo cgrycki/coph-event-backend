@@ -1,9 +1,11 @@
 /**
  * Event Utilities
  */
-const rp         = require('request-promise');
-const EventModel = require('./newEvent.model');
-const URI        = process.env.REDIRECT_URI;
+const rp            = require('request-promise');
+const Joi           = require('joi');
+const {ModelSchema} = require('./newEvent.schema');
+const EventModel    = require('./newEvent.model');
+const URI           = process.env.REDIRECT_URI;
 
 
 /**
@@ -16,6 +18,18 @@ function getWorkflowURI() {
 
   const workflowURI = `${base_uri}/workflow/${env_type}/api/developer/forms/${form_id}/packages`;
   return workflowURI;
+}
+
+function prepareWorkflowEvent(request, response, next) {
+  /* Prepares form data by setting any empty fields and validating existing fields. */
+
+  // The data
+  let info = { ...request.body };
+  let JoiSchema = Joi.object().keys(ModelSchema);
+  let { error, value } = Joi.validate(info, JoiSchema);
+
+  if (error !== null) response.send(422).json({ error, value});
+  else next();
 }
 
 
