@@ -20,6 +20,7 @@ function getWorkflowURI() {
   return workflowURI;
 }
 
+
 function prepareWorkflowEvent(request, response, next) {
   /* Prepares form data by setting any empty fields and validating existing fields. */
 
@@ -28,7 +29,7 @@ function prepareWorkflowEvent(request, response, next) {
   let JoiSchema = Joi.object().keys(ModelSchema);
   let { error, value } = Joi.validate(info, JoiSchema);
 
-  if (error !== null) response.send(422).json({ error, value});
+  if (error !== null) response.send(422).json({ error, value, message: 'PIPELINE IS WORKING'});
   else next();
 }
 
