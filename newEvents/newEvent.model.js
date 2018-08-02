@@ -2,8 +2,8 @@
  * Event DynamoDB model
  */
 /* DEPENDENCIES -------------------------------------------------------------*/
-const Joi   = require('joi');
-var dynamo  = require('dynamodb');
+const { ModelSchema } = require('./newEvent.schema'); 
+var dynamo            = require('dynamodb');
 dynamo.AWS.config.update({ region: process.env.AWS_DEFAULT_REGION });
 
 
@@ -23,7 +23,25 @@ const EventModel = dynamo.define('Event', {
   // Timestamps
   timestamps: true,
 
-  schema: {
+  // Schema defined in current directory
+  schema: ModelSchema,
+
+  // Dynamic table names depending on our Node environment
+  tableName: createTableName(client_id, env_type, table_name),
+
+  // Indices for faster queries
+  indexes: [
+    {hashKey: 'package_id', rangeKey: 'user_email', name: 'EventUserIndex', type: 'global'},
+    {hashKey: 'package_id', rangeKey: 'room_number', name: 'EventRoomIndex', type: 'global'}
+  ]
+});
+
+
+module.exports = EventModel;
+
+
+/* OLD SCHEMA
+{
     // Workflow and DynamoDB primary key
     package_id    : Joi.number().required(),
 
@@ -52,16 +70,4 @@ const EventModel = dynamo.define('Event', {
     food_provider       : Joi.string().trim().allow("").required(),
     alcohol_provider    : Joi.string().trim().allow("").required()
   },
-
-  // Dynamic table names depending on our Node environment
-  tableName: createTableName(client_id, env_type, table_name),
-
-  // Indices for faster queries
-  indexes: [
-    {hashKey: 'package_id', rangeKey: 'user_email', name: 'EventUserIndex', type: 'global'},
-    {hashKey: 'package_id', rangeKey: 'room_number', name: 'EventRoomIndex', type: 'global'}
-  ]
-});
-
-
-module.exports = EventModel;
+  */
