@@ -99,5 +99,6 @@ async function postDynamoEvent(request, response, next) {
 }
 
 
-exports.postWorkflowEvent = postWorkflowEvent;
-exports.postDynamoEvent   = postDynamoEvent;
+exports.prepareWorkflowEvent = prepareWorkflowEvent;
+exports.postWorkflowEvent    = postWorkflowEvent;
+exports.postDynamoEvent      = postDynamoEvent;
