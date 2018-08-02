@@ -8,6 +8,7 @@ var   router  = express.Router();
 const EventModel          = require('./newEvent.model');
 const { validateParams }  = require('../utils/index');
 const { 
+  prepareWorkflowEvent,
   postWorkflowEvent,
   postDynamoEvent
 }                         = require('./newEvent.utils');
@@ -33,6 +34,7 @@ router.post('/',
     checkSessionExists,
     retrieveSessionInfo,
     //validateParams
+    prepareWorkflowEvent,
     postWorkflowEvent,
     postDynamoEvent
   ],
