@@ -49,7 +49,7 @@ describe('Event Schema (Individual)', function() {
   describe('#coph_email', function() {
     let scheme = Schema.coph_email;
 
-    runJoiTest('Should not validate a null value.',     {coph_email: null}, scheme, null);
+    runJoiTest('Should validate a null value as an empty string.',     {coph_email: null}, scheme, Error);
     runJoiTest('Should allow an empty string.',         {coph_email: ""}, scheme, Error);
     runJoiTest('Should not allow an NON U Iowa email.', {coph_email: "test@gmail.com"}, scheme, null);
     runJoiTest('Should allow a U Iowa email.',          {coph_email: "test@uiowa.edu"}, scheme, Error);
@@ -70,7 +70,7 @@ describe('Event Schema (Individual)', function() {
     let scheme = Schema.time;
 
     runJoiTest('Should not validate a null value.', {time: null}, scheme, null);
-    runJoiTest('Should allow an empty string.',     {time: ""}, scheme, Error);
+    runJoiTest('Should not allow an empty string.',     {time: ""}, scheme, null);
     runJoiTest('Should not allow HH:MM format.',    {time: "23:00"}, scheme, null);
     runJoiTest('Should allow H:MM A format (with two hour digits).',       {time: "12:30 PM"}, scheme, Error);
     runJoiTest('Should allow H:MM A format (with one hour digits).',       {time: "8:30 PM"}, scheme, Error);
@@ -91,7 +91,7 @@ describe('Event Schema (Individual)', function() {
       {references_course: null, referenced_course: ""},
       scheme, null);
     runJoiTest(
-      'Should not allow empty values for referenced_course',
+      'Should allow empty values for referenced_course',
       {references_course: false, referenced_course: null},
       scheme, null);
     runJoiTest(
