@@ -20,15 +20,17 @@ function getWorkflowURI() {
   return workflowURI;
 }
 
-function prepareWorkflowEvent(request, response, next) {
+function prepareEvent(request, response, next) {
   /* Prepares form data by setting any empty fields and validating existing fields. */
 
   // The data
   let info = { ...request.body };
+  
+  // Create a Joi object and validate
   let JoiSchema = Joi.object().keys(ModelSchema);
   let { error, value } = Joi.validate(info, JoiSchema);
 
-  if (error !== null) response.send(422).json({ error, value});
+  if (error !== null) response.send(422).json({ error, value });
   else next();
 }
 
@@ -99,6 +101,6 @@ async function postDynamoEvent(request, response, next) {
 }
 
 
-exports.prepareWorkflowEvent = prepareWorkflowEvent;
-exports.postWorkflowEvent    = postWorkflowEvent;
-exports.postDynamoEvent      = postDynamoEvent;
+exports.prepareEvent      = prepareEvent;
+exports.postWorkflowEvent = postWorkflowEvent;
+exports.postDynamoEvent   = postDynamoEvent;
