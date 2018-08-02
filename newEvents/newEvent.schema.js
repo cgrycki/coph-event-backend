@@ -13,21 +13,14 @@ const time    = jString.regex(/^(1[0-2]|0?[1-9]):([0-5]?[0-9])(●?[AP]M)?$/).re
 
 
 /* SCHEMA + CASES ------------------------------------------------------------*/
-const package_id = Joi.number().required();
-
-const user_email = email.regex(/uiowa\.edu$/).required();
-
+const package_id    = Joi.number().required();
+const user_email    = email.regex(/uiowa\.edu$/).required();
 const contact_email = email;
-
-const coph_email = email.regex(/uiowa\.edu$/);
-
-const event_name = jString.min(5).max(75).trim().required();
-
-const comments = jString.allow("").max(3000).required();
-
-const room_number = jString.alphanum().max(10).required();
-
-const num_people = Joi.number().min(1).max(206).required();
+const coph_email    = email.regex(/uiowa\.edu$/).default("");
+const event_name    = jString.min(5).max(75).trim().required();
+const comments      = jString.allow("").max(3000).required();
+const room_number   = jString.alphanum().max(10).required();
+const num_people    = Joi.number().min(1).max(206).required();
 
 const course = Joi.object().keys({
   references_course: Joi.boolean().required(),
