@@ -5,7 +5,6 @@
 /* Dependencies -------------------------------------------------------------*/
 require('dotenv').config();             // Environment variables
 var express      = require('express');
-var path         = require('path');
 var cors         = require('cors');
 var customCors   = require('./utils/customCors').cors_options;
 var helmet       = require('helmet');
@@ -37,7 +36,7 @@ app.set('trust proxy', 1);
 app.use(session);
 
 // Only use Xray in production environment
-if (process.env.NODE_ENV) {
+if (process.env.NODE_ENV === 'production') {
   var xray = require('./utils/xray');
   app.use(xray.startTrace);
   app.use(xray.requestTrace);

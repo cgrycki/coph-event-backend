@@ -72,7 +72,7 @@ async function postWorkflowEvent(request, response, next) {
       request.workflow_response = res;
       next();
     })
-    .catch(err => response.status(400).json(err))*/
+    .catch(err => response.status(400).json({ err, workflow_data }))*/
   
 
   next();
