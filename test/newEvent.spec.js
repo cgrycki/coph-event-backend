@@ -76,6 +76,7 @@ describe('Event Schema (Individual)', function() {
     runJoiTest('Should allow H:MM A format (with one hour digits).',       {time: "8:30 PM"}, scheme, Error);
     runJoiTest('Should allow H:MM A format (with AM).',       {time: "12:30 AM"}, scheme, Error);
     runJoiTest('Should allow H:MM A format (with PM).',       {time: "10:30 PM"}, scheme, Error);
+    runJoiTest('Should allow "9:30 AM"',                {time: " 9:30 AM"}, scheme, Error)
   });
 
   // Course reference
