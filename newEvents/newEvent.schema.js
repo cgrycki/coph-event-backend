@@ -3,13 +3,14 @@
  */
 
 const Joi = require('joi');
+const options_time = require('../utils/time.constants');
 
 /* BASE --------------------------------------------------------------------*/
 const jString = Joi.string();
 const jBool   = Joi.boolean().required();
 const email   = jString.allow("").email();
 const date    = Joi.date().iso().required();
-const time    = jString.regex(/^(?:1[0-2]|0?[0-9]):[0-5][0-9]:[0-5][0-9]$/).required();
+const time    = jString.allow(options_time).required();
 
 
 /* SCHEMA + CASES ------------------------------------------------------------*/
