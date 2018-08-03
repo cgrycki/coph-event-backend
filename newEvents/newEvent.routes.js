@@ -31,10 +31,10 @@ const {
 router.post('/',
   [
     multer.fields([]),
-    checkSessionExists,
-    retrieveSessionInfo,
+    //checkSessionExists,
+    //retrieveSessionInfo,
     //validateParams
-    prepareEvent,
+    //prepareEvent,
     postWorkflowEvent,
     postDynamoEvent
   ],

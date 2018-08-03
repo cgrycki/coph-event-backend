@@ -31,7 +31,7 @@ function prepareEvent(request, response, next) {
   let { error, value } = Joi.validate(info, JoiSchema);
 
   if (error !== null) {
-    response.send(422).json({ 
+    response.json({ 
       error: JSON.stringify(error), 
       value: JSON.stringify(value), 
       message: 'PIPELINE IS WORKING'
