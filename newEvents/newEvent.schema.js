@@ -14,7 +14,7 @@ const time    = jString.allow(options_time).required();
 
 
 /* SCHEMA + CASES ------------------------------------------------------------*/
-const package_id    = Joi.number().required();
+const package_id    = jString.alphanum().required();
 const user_email    = email.regex(/uiowa\.edu$/).required();
 const contact_email = email;
 const coph_email    = email.regex(/uiowa\.edu$/).default("");
