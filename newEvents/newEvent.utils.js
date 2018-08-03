@@ -71,7 +71,7 @@ async function postWorkflowEvent(request, response, next) {
 
   // STUB FUNCTION, add package_id as a random int
   request.workflow_options = options;
-  request.package_id = Math.floor(Math.random() * (1000 - 1 + 1)) + 1;
+  request.package_id = (Math.floor(Math.random() * (1000 - 1 + 1)) + 1).toString();
   
   /*rp(options)
     .then(res => JSON.parse(res))
