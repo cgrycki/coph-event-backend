@@ -30,7 +30,11 @@ function prepareEvent(request, response, next) {
   let JoiSchema = Joi.object().keys(ModelSchema);
   let { error, value } = Joi.validate(info, JoiSchema);
 
-  if (error !== null) response.send(422).json({ error, value, message: 'PIPELINE IS WORKING'});
+  if (error !== null) response.send(422).json({ 
+    error: JSON.stringify(error), 
+    value: JSON.stringify(value), 
+    message: 'PIPELINE IS WORKING'
+  });
   else next();
 }
 
