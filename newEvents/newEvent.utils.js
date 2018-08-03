@@ -97,8 +97,8 @@ async function postDynamoEvent(request, response, next) {
   EventModel.create(new_event, (error, data) => {
     if (error) {
       response.status(400).json({ 
-        error: JSON.stringify(error),
-        new_event: new_event
+        error,
+        new_event
       });
     } else {
       request.dynamo_response = data;
