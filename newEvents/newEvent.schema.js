@@ -9,7 +9,7 @@ const jString = Joi.string();
 const jBool   = Joi.boolean().required();
 const email   = jString.allow("").email();
 const date    = Joi.date().iso().required();
-const time    = jString.regex(/^(1[0-2]|0?[1-9]):([0-5]?[0-9])(●?[AP]M)?$/).required();
+const time    = jString.regex(/^(?:1[0-2]|0?[0-9]):[0-5][0-9]:[0-5][0-9]$/).required();
 
 
 /* SCHEMA + CASES ------------------------------------------------------------*/
