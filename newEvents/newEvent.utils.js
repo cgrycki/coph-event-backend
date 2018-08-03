@@ -20,6 +20,7 @@ function getWorkflowURI() {
   return workflowURI;
 }
 
+
 function prepareEvent(request, response, next) {
   /* Prepares form data by setting any empty fields and validating existing fields. */
 
@@ -106,6 +107,48 @@ async function postDynamoEvent(request, response, next) {
     };
   });
 }
+
+
+async function getWorkflowEvent(request, response, next) {
+  /* TO BE DONE */
+};
+
+
+async function getDynamoEvent(request, response, next) {
+  /* Gets a single event from DynamoDB */
+  let package_id = request.body.package_id;
+
+  EventModel.query(package_id)
+    .exec((error, data) => {
+      // Return errors if encountered
+      if (error) response.sendStatus(404).json({ error });
+
+      // Otherwise check if this is a POST request, and return an error if it exists
+      else if ((request.method === 'POST') && (data.Items.length !== 0)) response.status(400).json({ error: "Event `{id} exists"});
+
+      // No event found: Return error
+      else if (data.Items.length === 0) return response.status(404).json({ error: "Not found"});
+
+      // Exists and we're not trying to create, next middleware!
+      else {
+        request.item = data.Items[0];
+        next();
+      };
+    });
+}
+
+async function getDynamoEvents(request, response, next) {
+  /* Gets a list of events from DynamoDB for populating dashboards. */
+  EventModel.scan()
+    .exec((error, data) => {
+      if (error) response.sendStatus(404).json({ error, stack: error.stack });
+      else {
+        request.items = data.Items;
+        next();
+      };
+    });
+}
+
 
 
 exports.prepareEvent      = prepareEvent;
