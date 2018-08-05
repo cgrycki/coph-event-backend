@@ -31,9 +31,9 @@ const EventModel = dynamo.define('Event', {
 
   // Indices for faster queries
   indexes: [
-    {hashKey: 'package_id', rangeKey: 'user_email', name: 'EventUserIndex', type: 'global'},
-    {hashKey: 'package_id', rangeKey: 'room_number', name: 'EventRoomIndex', type: 'global'},
-    {hashKey: 'package_id', rangeKey: 'approved', name: 'EventApprovedIndex', type: 'global'}
+    {hashKey: 'package_id', rangeKey: 'user_email',  name: 'EventUserIndex',     type: 'global'},
+    {hashKey: 'package_id', rangeKey: 'room_number', name: 'EventRoomIndex',     type: 'global'},
+    {hashKey: 'package_id', rangeKey: 'approved',    name: 'EventApprovedIndex', type: 'global'}
   ]
 });
 

@@ -38,6 +38,8 @@ function prepareEvent(request, response, next) {
       message: 'PIPELINE IS WORKING'
     });
   } else {
+    // Add the extracted workflow information to the request and send along
+    //request.workflow_info = {...};
     next();
   };
 }
@@ -80,7 +82,7 @@ async function postWorkflowEvent(request, response, next) {
       request.workflow_response = res;
       next();
     })
-    .catch(err => response.status(400).json({ err, workflow_data }))*/
+    .catch(error => response.status(400).json({ error, workflow_data }))*/
   
 
   next();
@@ -109,22 +111,22 @@ async function postDynamoEvent(request, response, next) {
 }
 
 
-async function getWorkflowEvent(request, response, next) {
+function getWorkflowEvent(request, response, next) {
   /* TO BE DONE */
 };
 
 
-async function getDynamoEvent(request, response, next) {
+function getDynamoEvent(request, response, next) {
   /* Gets a single event from DynamoDB */
   let package_id = request.body.package_id;
 
   EventModel.query(package_id)
     .exec((error, data) => {
       // Return errors if encountered
-      if (error) response.sendStatus(404).json({ error });
+      if (error) response.sendStatus(422).json({ error });
 
       // Otherwise check if this is a POST request, and return an error if it exists
-      else if ((request.method === 'POST') && (data.Items.length !== 0)) response.status(400).json({ error: "Event `{id} exists"});
+      else if ((request.method === 'POST') && (data.Items.length !== 0)) response.status(400).json({ error: "Event already exists"});
 
       // No event found: Return error
       else if (data.Items.length === 0) return response.status(404).json({ error: "Not found"});
@@ -137,7 +139,7 @@ async function getDynamoEvent(request, response, next) {
     });
 }
 
-async function getDynamoEvents(request, response, next) {
+function getDynamoEvents(request, response, next) {
   /* Gets a list of events from DynamoDB for populating dashboards. */
   EventModel.scan()
     .exec((error, data) => {
@@ -150,7 +152,11 @@ async function getDynamoEvents(request, response, next) {
 }
 
 
-
+/* EXPORTS ------------------------------------------------------------------*/
+// POST functions
 exports.prepareEvent      = prepareEvent;
 exports.postWorkflowEvent = postWorkflowEvent;
 exports.postDynamoEvent   = postDynamoEvent;
+// GET functions
+exports.getDynamoEvent    = getDynamoEvent;
+exports.getDynamoEvents   = getDynamoEvents;
