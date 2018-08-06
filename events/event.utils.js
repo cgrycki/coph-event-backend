@@ -76,7 +76,7 @@ function postWorkflowEvent(request, response, next) {
   rp(options)
     .then(res => {
       request.workflow_response = res;
-      request.package_id = res.actions.package_id;
+      request.package_id = res.actions.packageId;
       next();
     })
     .catch(error => response.status(400).json({ error, workflow_options }));
