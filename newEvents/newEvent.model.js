@@ -31,43 +31,11 @@ const EventModel = dynamo.define('Event', {
 
   // Indices for faster queries
   indexes: [
-    {hashKey: 'package_id', rangeKey: 'user_email', name: 'EventUserIndex', type: 'global'},
-    {hashKey: 'package_id', rangeKey: 'room_number', name: 'EventRoomIndex', type: 'global'}
+    {hashKey: 'package_id', rangeKey: 'user_email',  name: 'EventUserIndex',     type: 'global'},
+    {hashKey: 'package_id', rangeKey: 'room_number', name: 'EventRoomIndex',     type: 'global'},
+    {hashKey: 'package_id', rangeKey: 'approved',    name: 'EventApprovedIndex', type: 'global'}
   ]
 });
 
 
 module.exports = EventModel;
-
-
-/* OLD SCHEMA
-{
-    // Workflow and DynamoDB primary key
-    package_id    : Joi.number().required(),
-
-    // Contact information
-    user_email    : Joi.string().email().regex(/uiowa\.edu$/).required(),
-    contact_email : Joi.string().optional().allow("").email(),
-    coph_email    : Joi.string().optional().allow("").email().regex(/uiowa\.edu$/),
-
-    // Event Information
-    event_name    : Joi.string().min(3).max(75).trim().required(),
-    comments      : Joi.string().trim().allow("").max(3000).required(),
-    date          : Joi.date().iso().required(),
-    start_time    : Joi.string().trim().min(7).max(8).required(),
-    end_time      : Joi.string().trim().min(7).max(8).required(),
-    room_number   : Joi.string().alphanum().max(10).required(),
-    num_people    : Joi.number().min(1).max(206).required().default(1),
-
-    // Auxillary information
-    references_course   : Joi.boolean().required().default(false),
-    referenced_course   : Joi.string().allow("").required(),
-
-    setup_required      : Joi.boolean().required().default(false),
-    setup_mfk           : Joi.string().alphanum().allow("").required(),
-
-    food_drink_required : Joi.boolean().required().default(false),
-    food_provider       : Joi.string().trim().allow("").required(),
-    alcohol_provider    : Joi.string().trim().allow("").required()
-  },
-  */

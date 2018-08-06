@@ -15,6 +15,7 @@ const time    = jString.allow(options_time).required();
 
 /* SCHEMA + CASES ------------------------------------------------------------*/
 const package_id    = jString.alphanum().required();
+const approved      = Joi.boolean().optional().default(false);
 const user_email    = email.regex(/uiowa\.edu$/).required();
 const contact_email = email;
 const coph_email    = email.regex(/uiowa\.edu$/).default("");
@@ -50,7 +51,9 @@ const setup = Joi.object().keys({
 });
 
 const ModelSchema = {
-  package_id: package_id,
+  // Workflow attributes
+  package_id  : package_id,
+  approved    : approved,
 
   // Contact information
   user_email   : user_email,
