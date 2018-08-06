@@ -39,8 +39,9 @@ function prepareEvent(request, response, next) {
       approved      : "false",
       date          : info.date,
       setup_required: info.setup_required.toString(),
-      user_email    : value.user_email,
-      contact_email : value.contact_email
+      user_email    : info.user_email,
+      contact_email : info.contact_email,
+      room_number   : info.room_number
     };
     next();
   };
