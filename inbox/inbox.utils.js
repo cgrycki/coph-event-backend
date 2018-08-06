@@ -3,7 +3,7 @@ const FRONTEND_URI = process.env.FRONTEND_URI;
 /**
  * Creates a frontend redirect URL for a given package
  */
-const getInboxRedirect = (form_id, package_id, signature_id=undefined) => {
+const getInboxRedirect = (package_id, signature_id=undefined) => {
   // Create our base URL
   let base_uri = `${FRONTEND_URI}/events/${package_id}`;
   if (signature_id !== undefined) return `${base_uri}/${signature_id}`;
