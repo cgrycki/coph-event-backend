@@ -2,7 +2,10 @@
  * Event DynamoDB model
  */
 /* DEPENDENCIES -------------------------------------------------------------*/
-const { ModelSchema } = require('./event.schema'); 
+const { 
+  ModelSchema,
+  package_id
+}                     = require('./event.schema'); 
 var dynamo            = require('dynamodb');
 dynamo.AWS.config.update({ region: process.env.AWS_DEFAULT_REGION });
 
@@ -24,7 +27,7 @@ const EventModel = dynamo.define('Event', {
   timestamps: true,
 
   // Schema defined in current directory
-  schema: ModelSchema,
+  schema: { package_id, ...ModelSchema },
 
   // Dynamic table names depending on our Node environment
   tableName: createTableName(client_id, env_type, table_name),

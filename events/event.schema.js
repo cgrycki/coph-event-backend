@@ -52,7 +52,8 @@ const setup = Joi.object().keys({
 
 const ModelSchema = {
   // Workflow attributes
-  package_id  : package_id,
+  //package_id Added in the DynamoDB definition, so that we can
+  // validate objects before they're POSTed to Workflow
   approved    : approved,
 
   // Contact information
