@@ -42,6 +42,7 @@ router.post('/',
     ip               : request.user_ip_address,
     body             : request.body,
     cookies          : request.cookies,
+    workflow_entry   : request.workflow_entry,
     workflow_response: request.workflow_response,
     package_id       : request.package_id,
     dynamo_response  : request.dynamo_response
