@@ -63,8 +63,8 @@ Room.getRooms = function(request, response) {
     .where('reservable').equals(true)
     .attributes(['roomNumber', 'floor', 'rmType', 'roomName', 'maxOccupancy'])
     .exec((err, data) => {
-      if (err) response.sendStatus(404).json(err);
-      else response.sendStatus(200).json(data.Items);
+      if (err) response.status(404).json(err);
+      else response.status(200).json(data.Items);
     });
 }
 
@@ -76,8 +76,8 @@ Room.getRoom = function(request, response) {
     .query(roomNumber)
     .limit(1)
     .exec((err, data) => {
-      if (err) response.sendStatus(404).json(err);
-      else response.sendStatus(200).json(data.Items);
+      if (err) response.status(404).json(err);
+      else response.status(200).json(data.Items);
     });
 }
 

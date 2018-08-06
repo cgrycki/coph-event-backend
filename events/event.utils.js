@@ -113,7 +113,7 @@ function getDynamoEvent(request, response, next) {
   EventModel.query(package_id)
     .exec((error, data) => {
       // Return errors if encountered
-      if (error) response.sendStatus(422).json({ error });
+      if (error) response.status(422).json({ error });
 
       // Otherwise check if this is a POST request, and return an error if it exists
       else if ((request.method === 'POST') && (data.Items.length !== 0)) response.status(400).json({ error: "Event already exists"});
@@ -133,7 +133,7 @@ function getDynamoEvents(request, response, next) {
   /* Gets a list of events from DynamoDB for populating dashboards. */
   EventModel.scan()
     .exec((error, data) => {
-      if (error) response.sendStatus(404).json({ error, stack: error.stack });
+      if (error) response.status(404).json({ error, stack: error.stack });
       else {
         request.items = data.Items;
         next();
