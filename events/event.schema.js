@@ -14,7 +14,8 @@ const time    = jString.allow(options_time).required();
 
 
 /* SCHEMA + CASES ------------------------------------------------------------*/
-const package_id    = jString.alphanum().required();
+const package_id    = Joi.number().integer().required();
+const approved      = Joi.boolean().optional().default(false);
 const user_email    = email.regex(/uiowa\.edu$/).required();
 const contact_email = email;
 const coph_email    = email.regex(/uiowa\.edu$/).default("");
@@ -50,7 +51,10 @@ const setup = Joi.object().keys({
 });
 
 const ModelSchema = {
-  package_id: package_id,
+  // Workflow attributes
+  //package_id Added in the DynamoDB definition, so that we can
+  // validate objects before they're POSTed to Workflow
+  approved    : approved,
 
   // Contact information
   user_email   : user_email,
