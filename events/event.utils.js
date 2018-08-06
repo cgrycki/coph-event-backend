@@ -1,125 +1,162 @@
 /**
- * Event Utility Functions
- * A collection of helper functions to be used as middleware in our /events api.
+ * Event Utilities
  */
+const rp            = require('request-promise');
+const Joi           = require('joi');
+const {ModelSchema} = require('./event.schema');
+const EventModel    = require('./event.model');
+const URI           = process.env.REDIRECT_URI;
 
-/* Dependencies -------------------------------------------------------------*/
-const { check } = require('express-validator/check');
-const rp        = require('request-promise');
-
-
-/* Parameter Utils ----------------------------------------------------------*/
-/**
- * textField Validation.
- * @param {string} value The textField value passed to our api.
- * @returns {boolean} 
- */
-const validParamTextField = check('textField')
-  .exists()
-  .isString()
-  .isLength({min: 1, max: 50})
-  .trim()
-  .escape();
 
 /**
- * User Email validation.
+ * Returns an URL pointing to our Workflow endpoint
  */
-const validParamUserEmail = check('userEmail')
-  .exists()         // Required
-  .isString()       // Formatted correctly
-  .isEmail()        // Follows email regex.
-  .withMessage('You must have a valid email')
-  .trim()           // Remove whitespace
-  .normalizeEmail(); // Normalize
+function getWorkflowURI() {
+  const env_type = process.env.EENV;
+  const form_id  = process.env.FORM_ID;
+  const base_uri = 'https://apps.its.uiowa.edu';
 
-/**
- * Validate Event id.
- */
-const validParamId = check('id')
-  .exists()
-  .withMessage('You must include a valid ID')
-  .isUUID()
-  .escape();
+  const workflowURI = `${base_uri}/workflow/${env_type}/api/developer/forms/${form_id}/packages`;
+  return workflowURI;
+}
 
 
-/* Middleware utils ---------------------------------------------------------*/
-/**
- * Submits a GET request to workflow for a specified package.
- * Endpoint takes the format: GET /workflow/{env}/api/developer/forms/{form_id}/packages/{package_id}/entry
- */
-const getWorkflowEvent = (request, response, next) => {
-  let endpoint = process.env.EENV + '/api/developer/forms/' +
-    process.env.FORM_ID + '/packages/' + request.params.id +
-    'entry';
+function prepareEvent(request, response, next) {
+  /* Prepares form data by setting any empty fields and validating existing fields. */
 
-  // Options from https://workflow.uiowa.edu/help/article/62/7
-  let options = {
-    method: 'GET',
-    uri: '',
-    headers: {
-      Accept: 'application/vnd.workflow+json;version=1.1',
-      Authorization: 'Bearer ' + request.USER_ACCESS_TOKEN,
-      'X-Client-Remote-Addr': request.ip
-    }
+  // The data
+  let info = { ...request.body };
+  
+  // Create a Joi object and validate
+  let JoiSchema = Joi.object().keys(ModelSchema);
+  let { error, value } = Joi.validate(info, JoiSchema);
+
+  if (error !== null) {
+    response.json({ 
+      error: JSON.stringify(error), 
+      value: JSON.stringify(value), 
+      message: 'PIPELINE IS WORKING'
+    });
+  } else {
+    // Add the extracted workflow information to the request and send along
+    //request.workflow_info = {...};
+    next();
   };
 }
 
-/**
- * Submits a workflow routing package.
- * POST submission takes the form of: POST /workflow/{env}/api/developer/forms/{form_id}/packages
- */
-const postWorkflowEvent = async (request, response, next) => {
-  let endpoint = '/workflow/' + process.env.EENV + '/api/developer/forms/' +
-    process.env.FORM_ID + '/packages'
 
-  // Options for our POST request from https://workflow.uiowa.edu/help/article/62/7
-  var options = {
-    method: 'POST',
-    uri: 'https://apps.its.uiowa.edu' + endpoint,
-    headers: {
-      Accept: 'application/vnd.workflow+json;version=1.1',
-      Authorization: 'Bearer ' + request.session.uiowa_access_token,
-      'X-Client-Remote-Addr': request.user_ip_address
-    },
-    body: {
-      // REQUIRED by workflow
-      state: 'ROUTING',
-      subType: null,
-      emailContent: null,
-      // Form data, all fields REQUIRED or null
-      entry: {
-        textField: request.params.textField,
-        userEmail: request.params.userEmail
-      }
-    },
-    json: true
+async function postWorkflowEvent(request, response, next) {
+  // Grab data from the request
+  let form_data = request.body;
+
+  // Create a Workflow formatted JSON object
+  let workflow_data = {
+    state: 'ROUTING',
+    subType: null,
+    emailContent: null,
+    entry: { ...form_data }
+    //entry: {select fields here}
   };
 
-  await rp(options)
-    .then(function (parsedBody) {
-        // POST succeeded, pass on the packageId from the response to our save events middleware
-        let packageId = parsedBody.id;
-        request.packageId = packageId;
+  // URI and POST call options
+  let options = {
+    method  : 'POST',
+    uri     : getWorkflowURI(),
+    json    : true,
+    headers : {
+      'Accept'              : 'application/vnd.workflow+json;version=1.1',
+      'Authorization'       : 'Bearer ' + request.uiowa_access_token,
+      'X-Client-Remote-Addr': request.user_ip_address
+    },
+    body    : workflow_data
+  };
 
-        // Add the whole response so we can take a peek
-        request.workflowResponse = parsedBody;
-        next();
+
+  // STUB FUNCTION, add package_id as a random int
+  request.workflow_options = options;
+  request.package_id = (Math.floor(Math.random() * (1000 - 1 + 1)) + 1).toString();
+  
+  /*rp(options)
+    .then(res => JSON.parse(res))
+    .then(res => {
+      request.workflow_response = res;
+      next();
     })
-    .catch(function (err) {
-        // POST failed...
-        response.status(422).json({ 
-          err: err, 
-          stack: err.stack,
-          request: options
-        });
-    });
+    .catch(error => response.status(400).json({ error, workflow_data }))*/
+  
+
+  next();
+}
+
+
+async function postDynamoEvent(request, response, next) {
+  /* Saves an event to our DynamoDB after receiving Workflow's response */
+
+  // Combine the form data and the package_id Workflow responded to our POST with
+  let package_id = request.package_id;
+  let new_event = { package_id, ...request.body };
+
+  // Create the entry in DynamoDB using our model
+  EventModel.create(new_event, (error, data) => {
+    if (error) {
+      response.status(400).json({ 
+        error,
+        new_event
+      });
+    } else {
+      request.dynamo_response = data;
+      next();
+    };
+  });
+}
+
+
+function getWorkflowEvent(request, response, next) {
+  /* TO BE DONE */
 };
 
-//const saveEvent = (request, response, next) => {}
+
+function getDynamoEvent(request, response, next) {
+  /* Gets a single event from DynamoDB */
+  let package_id = request.body.package_id;
+
+  EventModel.query(package_id)
+    .exec((error, data) => {
+      // Return errors if encountered
+      if (error) response.sendStatus(422).json({ error });
+
+      // Otherwise check if this is a POST request, and return an error if it exists
+      else if ((request.method === 'POST') && (data.Items.length !== 0)) response.status(400).json({ error: "Event already exists"});
+
+      // No event found: Return error
+      else if (data.Items.length === 0) return response.status(404).json({ error: "Not found"});
+
+      // Exists and we're not trying to create, next middleware!
+      else {
+        request.item = data.Items[0];
+        next();
+      };
+    });
+}
+
+function getDynamoEvents(request, response, next) {
+  /* Gets a list of events from DynamoDB for populating dashboards. */
+  EventModel.scan()
+    .exec((error, data) => {
+      if (error) response.sendStatus(404).json({ error, stack: error.stack });
+      else {
+        request.items = data.Items;
+        next();
+      };
+    });
+}
 
 
-
-exports.validParamTextField = validParamTextField;
-exports.validParamUserEmail = validParamUserEmail;
-exports.validParamId = validParamId;
+/* EXPORTS ------------------------------------------------------------------*/
+// POST functions
+exports.prepareEvent      = prepareEvent;
 exports.postWorkflowEvent = postWorkflowEvent;
+exports.postDynamoEvent   = postDynamoEvent;
+// GET functions
+exports.getDynamoEvent    = getDynamoEvent;
+exports.getDynamoEvents   = getDynamoEvents;
