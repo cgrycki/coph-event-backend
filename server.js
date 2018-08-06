@@ -45,6 +45,7 @@ if (process.env.NODE_ENV === 'production') {
 
 /* ROUTES -------------------------------------------------------------------*/
 app.use('/events', require('./events/event.routes'));
+app.use('/inbox',  require('./inbox/inbox.routes'));
 app.use('/rooms',  require('./rooms/room.routes'));
 app.use('/auth',   require('./auth/auth.routes'));
 app.use('/',       require('./utils/indexRoute'));
