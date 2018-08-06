@@ -6,6 +6,8 @@ const Joi           = require('joi');
 const {ModelSchema} = require('./event.schema');
 const EventModel    = require('./event.model');
 const URI           = process.env.REDIRECT_URI;
+const JoiSchema     = Joi.object().keys(ModelSchema);
+
 
 
 /**
@@ -24,38 +26,34 @@ function getWorkflowURI() {
 function prepareEvent(request, response, next) {
   /* Prepares form data by setting any empty fields and validating existing fields. */
 
-  // The data
+  // The data parsed from Multer
   let info = { ...request.body };
   
-  // Create a Joi object and validate
-  let JoiSchema = Joi.object().keys(ModelSchema);
+  // Create a Joi object and validate the submitted info
   let { error, value } = Joi.validate(info, JoiSchema);
 
-  if (error !== null) {
-    response.json({ 
-      error: JSON.stringify(error), 
-      value: JSON.stringify(value), 
-      message: 'PIPELINE IS WORKING'
-    });
-  } else {
-    // Add the extracted workflow information to the request and send along
-    //request.workflow_info = {...};
+  if (error !== null) response.status(400).json({ error, value, message: 'PIPELINE IS WORKING' });
+  else {
+    // Add the extracted workflow inbox information to the request and send along
+    request.workflow_entry = {
+      approved      : "false",
+      date          : info.date,
+      setup_required: info.setup_required.toString(),
+      user_email    : value.user_email,
+      contact_email : value.contact_email
+    };
     next();
   };
 }
 
 
-async function postWorkflowEvent(request, response, next) {
-  // Grab data from the request
-  let form_data = request.body;
-
+function postWorkflowEvent(request, response, next) {
   // Create a Workflow formatted JSON object
   let workflow_data = {
-    state: 'ROUTING',
-    subType: null,
+    state       : 'ROUTING',
+    subType     : null,
     emailContent: null,
-    entry: { ...form_data }
-    //entry: {select fields here}
+    entry       : request.workflow_entry
   };
 
   // URI and POST call options
@@ -64,32 +62,27 @@ async function postWorkflowEvent(request, response, next) {
     uri     : getWorkflowURI(),
     json    : true,
     headers : {
+      // Workflow accepts JSON
       'Accept'              : 'application/vnd.workflow+json;version=1.1',
+      // Required to POST an event to workflow
       'Authorization'       : 'Bearer ' + request.uiowa_access_token,
       'X-Client-Remote-Addr': request.user_ip_address
     },
     body    : workflow_data
   };
-
-
-  // STUB FUNCTION, add package_id as a random int
-  request.workflow_options = options;
-  request.package_id = (Math.floor(Math.random() * (1000 - 1 + 1)) + 1).toString();
   
-  /*rp(options)
-    .then(res => JSON.parse(res))
+  // Post the event, and add the event's package ID to the request before we save
+  rp(options)
     .then(res => {
       request.workflow_response = res;
+      request.package_id = res.actions.package_id;
       next();
     })
-    .catch(error => response.status(400).json({ error, workflow_data }))*/
-  
-
-  next();
+    .catch(error => response.status(400).json({ error, workflow_options }));
 }
 
 
-async function postDynamoEvent(request, response, next) {
+function postDynamoEvent(request, response, next) {
   /* Saves an event to our DynamoDB after receiving Workflow's response */
 
   // Combine the form data and the package_id Workflow responded to our POST with
@@ -98,12 +91,8 @@ async function postDynamoEvent(request, response, next) {
 
   // Create the entry in DynamoDB using our model
   EventModel.create(new_event, (error, data) => {
-    if (error) {
-      response.status(400).json({ 
-        error,
-        new_event
-      });
-    } else {
+    if (error) response.status(400).json({ error, new_event });
+    else {
       request.dynamo_response = data;
       next();
     };

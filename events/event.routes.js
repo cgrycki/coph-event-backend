@@ -5,8 +5,6 @@ var   router  = express.Router();
 
 
 /* Created dependencies -----------------------------------------------------*/
-const EventModel          = require('./event.model');
-const { validateParams }  = require('../utils/index');
 const { 
   prepareEvent,
   postWorkflowEvent,
@@ -31,22 +29,22 @@ const {
 router.post('/',
   [
     multer.fields([]),
-    //checkSessionExists,
-    //retrieveSessionInfo,
+    checkSessionExists,
+    retrieveSessionInfo,
     //validateParams
-    //prepareEvent,
-    postWorkflowEvent,
-    postDynamoEvent
+    prepareEvent,
+    //postWorkflowEvent,
+    //postDynamoEvent
   ],
   (request, response) => response.status(201).json({
-    message         : "Success!",
-    form_id         : process.env.FORM_ID,
-    ip              : request.user_ip_address,
-    body            : request.body,
-    cookies         : request.cookies,
-    workflow_options: request.workflow_options,
-    package_id      : request.package_id,
-    dynamo_response : request.dynamo_response
+    message          : "Success!",
+    form_id          : process.env.FORM_ID,
+    ip               : request.user_ip_address,
+    body             : request.body,
+    cookies          : request.cookies,
+    workflow_response: request.workflow_response,
+    package_id       : request.package_id,
+    dynamo_response  : request.dynamo_response
   })
 );
 
