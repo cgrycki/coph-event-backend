@@ -61,10 +61,10 @@ function postWorkflowEvent(request, response, next) {
   let options = {
     method  : 'POST',
     uri     : getWorkflowURI(),
-    json    : true,
     headers : {
       // Workflow accepts JSON
       'Accept'              : 'application/vnd.workflow+json;version=1.1',
+      'Content-Type'        : 'application/json',
       // Required to POST an event to workflow
       'Authorization'       : 'Bearer ' + request.uiowa_access_token,
       'X-Client-Remote-Addr': request.user_ip_address

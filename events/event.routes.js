@@ -33,8 +33,8 @@ router.post('/',
     retrieveSessionInfo,
     //validateParams
     prepareEvent,
-    //postWorkflowEvent,
-    //postDynamoEvent
+    postWorkflowEvent,
+    postDynamoEvent
   ],
   (request, response) => response.status(201).json({
     message          : "Success!",
