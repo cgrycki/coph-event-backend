@@ -48,7 +48,7 @@ function prepareEvent(request, response, next) {
 }
 
 
-function postWorkflowEvent(request, response, next) {
+async function postWorkflowEvent(request, response, next) {
   // Create a Workflow formatted JSON object
   let workflow_data = {
     state       : 'ROUTING',
@@ -73,13 +73,13 @@ function postWorkflowEvent(request, response, next) {
   };
   
   // Post the event, and add the event's package ID to the request before we save
-  rp(options)
-    .then(res => {
-      request.workflow_response = res;
-      request.package_id = res.actions.packageId;
-      next();
-    })
-    .catch(error => response.status(400).json({ error, workflow_options }));
+  const { error, workflow_response } = await rp(options);
+  if (error) response.status(400).json({ error, stack: error.stack, workflow_options });
+  else {
+    request.workflow_response = workflow_response;
+    request.package_id = workflow_response.actions.package_id;
+    next();
+  };
 }
 
 
