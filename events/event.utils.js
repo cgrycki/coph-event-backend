@@ -41,7 +41,7 @@ function prepareEvent(request, response, next) {
       setup_required: info.setup_required.toString(),
       user_email    : info.user_email,
       contact_email : info.contact_email,
-      //room_number   : info.room_number
+      room_number   : info.room_number
     };
     next();
   };
