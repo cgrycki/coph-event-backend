@@ -98,6 +98,7 @@ async function postWorkflowEvent(request, response, next) {
           message: formatError.message,
           stack  : formatError.stack,
           options: options,
+          response: workflow_response,
           stage: 'formatting response'
         });
       };
