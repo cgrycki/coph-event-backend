@@ -12,7 +12,7 @@ const FORM_ID      = process.env.FORM_ID;
  */
 const getInboxRedirect = (package_id, signature_id=undefined) => {
   // Create our base URL
-  let base_uri = `${FRONTEND_URI}/events/${package_id}`;
+  let base_uri = `${FRONTEND_URI}/event/${package_id}`;
   if (signature_id !== undefined) return `${base_uri}/${signature_id}`;
   else return base_uri;
 };
