@@ -41,7 +41,7 @@ function prepareEvent(request, response, next) {
       setup_required: info.setup_required.toString(),
       user_email    : info.user_email,
       contact_email : info.contact_email,
-      room_number   : info.room_number
+      //room_number   : info.room_number
     };
     next();
   };
@@ -51,7 +51,7 @@ function prepareEvent(request, response, next) {
 async function postWorkflowEvent(request, response, next) {
   // Create a Workflow formatted JSON object
   let workflow_data = {
-    //state       : 'ROUTING',
+    state       : 'ROUTING',
     subType     : null,
     emailContent: null,
     entry       : request.workflow_entry
