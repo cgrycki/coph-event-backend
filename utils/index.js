@@ -50,6 +50,17 @@ const validateParams = (request, response, next) => {
 const createTableName = (app, env, table) => app +'-'+env+'-'+table;
 
 
-exports.errorFormatter = errorFormatter;
-exports.validateParams = validateParams;
+/**
+ * Wrapper for asynchronous promises
+ * @param {function} fn Promise function to resolve
+ */
+const promiseWrapper = fn => (request, response, next) => 
+  Promise
+    .resolve(fn(request, response, next))
+    .catch(next);
+
+
+exports.errorFormatter  = errorFormatter;
+exports.validateParams  = validateParams;
 exports.createTableName = createTableName;
+exports.promiseWrapper  = promiseWrapper;

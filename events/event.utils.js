@@ -1,12 +1,13 @@
 /**
  * Event Utilities
  */
-const rp            = require('request-promise');
-const Joi           = require('joi');
-const {ModelSchema} = require('./event.schema');
-const EventModel    = require('./event.model');
-const URI           = process.env.REDIRECT_URI;
-const JoiSchema     = Joi.object().keys(ModelSchema);
+const rp                 = require('request-promise');
+const Joi                = require('joi');
+const {ModelSchema}      = require('./event.schema');
+const EventModel         = require('./event.model');
+const { promiseWrapper } = require('../utils/index');
+const URI                = process.env.REDIRECT_URI;
+const JoiSchema          = Joi.object().keys(ModelSchema);
 
 
 
@@ -50,6 +51,7 @@ function prepareEvent(request, response, next) {
 
 async function postWorkflowEvent(request, response, next) {
   // Create a Workflow formatted JSON object
+  let workflow_response;
   let workflow_data = {
     state       : 'ROUTING',
     subType     : null,
@@ -62,11 +64,9 @@ async function postWorkflowEvent(request, response, next) {
     method  : 'POST',
     uri     : getWorkflowURI(),
     headers : {
-      // Workflow accepts JSON
       'Accept'              : 'application/vnd.workflow+json;version=1.1',
       'Content-Type'        : 'application/json',
-      // Required to POST an event to workflow
-      'Authorization'       : 'Bearer ' + request.uiowa_access_token,
+      'Authorization'       : `Bearer ${request.uiowa_access_token}`,
       'X-Client-Remote-Addr': request.user_ip_address
     },
     body                   : JSON.stringify(workflow_data),
@@ -76,14 +76,13 @@ async function postWorkflowEvent(request, response, next) {
   
   try {
     // Post the event, and add the event's package ID to the request before we save
-    const { workflow_response } = await rp(options);
-
+    workflow_response = await rp(options);
 
     //request.workflow_response = workflow_response;
     //request.package_id = workflow_response.actions.packageId;
     //next();
-    return response.status(200).json({
-      response: workflow_response
+    response.status(200).json({
+      workflow_response
     });
 
   } catch(requestError) {
