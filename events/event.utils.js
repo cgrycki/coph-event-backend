@@ -93,7 +93,8 @@ async function postWorkflowEvent(request, response, next) {
         //request.package_id = workflow_response.actions.packageId;
         //next();
         response.status(200).json({
-          response: workflow_response
+          response: workflow_response,
+          responseError: responseError
         });
       } catch(formatError) {
         response.status(400).json({
