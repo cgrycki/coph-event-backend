@@ -19,7 +19,7 @@ const {
 
 /* RESTful functions --------------------------------------------------------*/
 // GET: forward workflow inbox redirect to frontend
-router.get('/', (request, response) => {
+router.get('/inbox', (request, response) => {
   // Grab query params from workflow call
   let { package_id, signature_id } = request.query;
 
