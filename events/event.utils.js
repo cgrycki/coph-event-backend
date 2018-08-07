@@ -70,21 +70,16 @@ async function postWorkflowEvent(request, response, next) {
       'X-Client-Remote-Addr': request.user_ip_address
     },
     body                   : JSON.stringify(workflow_data),
-    //simple                 : false,
-    //resolveWithFullResponse: true
   };
   
   try {
-    // Post the event, and add the event's package ID to the request before we save
+    // Post the event 
     workflow_response = await rp(options);
 
-    //request.workflow_response = workflow_response;
-    //request.package_id = workflow_response.actions.packageId;
-    //next();
-    response.status(200).json({
-      workflow_response,
-      options
-    });
+    // add the event's package ID to the request before DynamoDB
+    request.workflow_response = workflow_response;
+    request.package_id = workflow_response.actions.packageId;
+    next();
 
   } catch(requestError) {
     response.status(400).json({
