@@ -21,7 +21,8 @@ const {
 // GET: forward workflow inbox redirect to frontend
 router.get('/inbox', (request, response) => {
   // Grab query params from workflow call
-  let { package_id, signature_id } = request.query;
+  const package_id = request.query.packageId;
+  const signature_id = request.query.signatureId;
 
   // Create specific event URL from query params
   let event_uri = getInboxRedirect(package_id, signature_id);
