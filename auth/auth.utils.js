@@ -193,9 +193,7 @@ function retrieveSessionInfo(request, response, next) {
 
 // Clears a user's session from the database on logout/timeout
 function clearTokensFromSession(request, response, next) {
-  if (request.session && request.session.uiowa_access_token) {
-    request.session.destroy();
-  }
+  if (request.session) request.session.destroy();
 
   // Clear the frontend cookie regardless if they're logged in or not
   response.clearCookie('connect.sid');
@@ -206,6 +204,6 @@ function clearTokensFromSession(request, response, next) {
 module.exports.validParamCode         = validParamCode;
 module.exports.getAuthURL             = getAuthURL;
 module.exports.clearTokensFromSession = clearTokensFromSession;
-module.exports.checkSessionExists           = checkSessionExists;
+module.exports.checkSessionExists     = checkSessionExists;
 module.exports.authenticateCode       = authenticateCode;
-module.exports.retrieveSessionInfo        = retrieveSessionInfo;
+module.exports.retrieveSessionInfo    = retrieveSessionInfo;
