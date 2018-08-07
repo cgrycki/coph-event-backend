@@ -20,7 +20,7 @@ router.get('/', utils.authenticateCode,
 
 // GET /auth/logout -- Ends a user's session and redirects them to the login URL.
 router.get('/logout', utils.clearTokensFromSession, 
-  (request, response) => response.status(200).json({ 'redirect': process.env.REDIRECT_URI }));
+  (request, response) => response.status(200).redirect(process.env.REDIRECT_URI));
 
 // GET /auth/validate -- Returns a boolean indicating if the user is logged in
 router.get('/validate', (request, response) => {
