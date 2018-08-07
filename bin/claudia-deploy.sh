@@ -15,7 +15,8 @@ if [ -n "$JSON" ] && [[ -n "$ROLE" ]]; then
      --deploy-proxy-api \
      --region us-east-1 \
      --set-env-from-json $JSON \
-     --role $ROLE
+     --role $ROLE \
+     --version dev
 else
     echo "argument error"
 fi
