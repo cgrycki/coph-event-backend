@@ -90,7 +90,7 @@ async function postWorkflowEvent(request, response, next) {
       // Try extracting the response
       try {
         request.workflow_response = workflow_response;
-        request.package_id = workflow_response.actions.package_id;
+        request.package_id = workflow_response.actions.packageId;
         next();
       } catch(formatError) {
         response.status(400).json({
