@@ -12,21 +12,23 @@
 const express      = require('express');
 var   router       = express.Router();
 const { 
-  getInboxRedirect 
-}                  = require('./inbox.utils');
+  getInboxRedirect,
+  fetchUserPermissions
+}                  = require('./workflow.utils');
 
 
 /* RESTful functions --------------------------------------------------------*/
- router.get('/', (request, response) => {
+// GET: forward workflow inbox redirect to frontend
+router.get('/inbox', (request, response) => {
   // Grab query params from workflow call
-  let { pacakge_id, signature_id } = request.params;
-  
+  let { package_id, signature_id } = request.query;
+
   // Create specific event URL from query params
-  let event_uri = getInboxRedirect(pacakge_id, signature_id);
+  let event_uri = getInboxRedirect(package_id, signature_id);
 
   // Redirect the response to our frontend
   response.status(200).redirect(event_uri);
- });
+});
 
 
 module.exports = router;
