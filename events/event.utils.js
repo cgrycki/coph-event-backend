@@ -75,10 +75,11 @@ async function postWorkflowEvent(request, response, next) {
   try {
     // Post the event 
     workflow_response = await rp(options);
+    let data = JSON.parse(workflow_response);
 
     // add the event's package ID to the request before DynamoDB
-    request.workflow_response = workflow_response;
-    request.package_id = workflow_response.actions.packageId;
+    request.workflow_response = data;
+    request.package_id = data.actions.packageId;
     next();
 
   } catch(requestError) {
