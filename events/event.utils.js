@@ -51,7 +51,7 @@ function prepareEvent(request, response, next) {
 async function postWorkflowEvent(request, response, next) {
   // Create a Workflow formatted JSON object
   let workflow_data = {
-    state       : 'ROUTING',
+    //state       : 'ROUTING',
     subType     : null,
     emailContent: null,
     entry       : request.workflow_entry
