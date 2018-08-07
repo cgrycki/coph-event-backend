@@ -69,16 +69,33 @@ async function postWorkflowEvent(request, response, next) {
       'Authorization'       : 'Bearer ' + request.uiowa_access_token,
       'X-Client-Remote-Addr': request.user_ip_address
     },
-    body    : workflow_data
+    body                   : JSON.stringify(workflow_data),
+    simple                 : false,
+    resolveWithFullResponse: true
   };
   
-  // Post the event, and add the event's package ID to the request before we save
-  const { error, workflow_response } = await rp(options);
-  if (error) response.status(400).json({ error, stack: error.stack, workflow_options });
-  else {
-    request.workflow_response = workflow_response;
-    request.package_id = workflow_response.actions.package_id;
-    next();
+  try {
+    // Post the event, and add the event's package ID to the request before we save
+    const { responseError, workflow_response } = await rp(options);
+
+    if (responseError) response.status(400).json({ 
+      error  : responseError,
+      message: responseError.message,
+      stack  : responseError.stack,
+      workflow_options
+    });
+    else {
+      request.workflow_response = workflow_response;
+      request.package_id = workflow_response.actions.package_id;
+      next();
+    };
+  } catch(requestError) {
+    response.status(400).json({
+      error  : requestError,
+      message: requestError.message,
+      stack  : requestError.stack,
+      workflow_options
+    });
   };
 }
 
