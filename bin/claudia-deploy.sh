@@ -15,9 +15,7 @@ if [ -n "$JSON" ] && [[ -n "$ROLE" ]]; then
      --deploy-proxy-api \
      --region us-east-1 \
      --set-env-from-json $JSON \
-     --role $ROLE \
-     --version dev \
-     --config dev.claudia.json
+     --role $ROLE 
 else
     echo "argument error"
 fi
