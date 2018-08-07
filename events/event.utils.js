@@ -89,9 +89,13 @@ async function postWorkflowEvent(request, response, next) {
 
       // Try extracting the response
       try {
-        request.workflow_response = workflow_response;
-        request.package_id = workflow_response.actions.packageId;
-        next();
+        //request.workflow_response = workflow_response;
+        //request.package_id = workflow_response.actions.packageId;
+        //next();
+        response.status(200).json({
+          response: workflow_response,
+          responseJson: JSON.parse(workflow_response)
+        });
       } catch(formatError) {
         response.status(400).json({
           error  : formatError,
