@@ -70,8 +70,8 @@ async function postWorkflowEvent(request, response, next) {
       'X-Client-Remote-Addr': request.user_ip_address
     },
     body                   : JSON.stringify(workflow_data),
-    simple                 : false,
-    resolveWithFullResponse: true
+    //simple                 : false,
+    //resolveWithFullResponse: true
   };
   
   try {
