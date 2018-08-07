@@ -82,7 +82,7 @@ async function postWorkflowEvent(request, response, next) {
       error  : responseError,
       message: responseError.message,
       stack  : responseError.stack,
-      workflow_options,
+      options: options,
       stage: 'error in response'
     });
     else {
@@ -97,7 +97,7 @@ async function postWorkflowEvent(request, response, next) {
           error  : formatError,
           message: formatError.message,
           stack  : formatError.stack,
-          workflow_options,
+          options: options,
           stage: 'formatting response'
         });
       };
@@ -107,7 +107,7 @@ async function postWorkflowEvent(request, response, next) {
       error  : requestError,
       message: requestError.message,
       stack  : requestError.stack,
-      workflow_options,
+      options: options,
       stage: 'error in request'
     });
   };
