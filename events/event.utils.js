@@ -76,37 +76,17 @@ async function postWorkflowEvent(request, response, next) {
   
   try {
     // Post the event, and add the event's package ID to the request before we save
-    const { responseError, workflow_response } = await rp(options);
+    const { workflow_response } = await rp(options);
 
-    if (responseError) response.status(400).json({ 
-      error  : responseError,
-      message: responseError.message,
-      stack  : responseError.stack,
-      options: options,
-      stage: 'error in response'
+
+    //request.workflow_response = workflow_response;
+    //request.package_id = workflow_response.actions.packageId;
+    //next();
+    return response.status(200).json({
+      response: workflow_response,
+      responseError: responseError
     });
-    else {
 
-      // Try extracting the response
-      try {
-        //request.workflow_response = workflow_response;
-        //request.package_id = workflow_response.actions.packageId;
-        //next();
-        response.status(200).json({
-          response: workflow_response,
-          responseError: responseError
-        });
-      } catch(formatError) {
-        response.status(400).json({
-          error  : formatError,
-          message: formatError.message,
-          stack  : formatError.stack,
-          options: options,
-          response: workflow_response,
-          stage: 'formatting response'
-        });
-      };
-    };
   } catch(requestError) {
     response.status(400).json({
       error  : requestError,
