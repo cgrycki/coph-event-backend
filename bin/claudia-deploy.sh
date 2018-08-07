@@ -16,7 +16,8 @@ if [ -n "$JSON" ] && [[ -n "$ROLE" ]]; then
      --region us-east-1 \
      --set-env-from-json $JSON \
      --role $ROLE \
-     --version dev
+     --version dev \
+     --config dev.claudia.json
 else
     echo "argument error"
 fi
