@@ -82,19 +82,33 @@ async function postWorkflowEvent(request, response, next) {
       error  : responseError,
       message: responseError.message,
       stack  : responseError.stack,
-      workflow_options
+      workflow_options,
+      stage: 'error in response'
     });
     else {
-      request.workflow_response = workflow_response;
-      request.package_id = workflow_response.actions.package_id;
-      next();
+
+      // Try extracting the response
+      try {
+        request.workflow_response = workflow_response;
+        request.package_id = workflow_response.actions.package_id;
+        next();
+      } catch(formatError) {
+        response.status(400).json({
+          error  : formatError,
+          message: formatError.message,
+          stack  : formatError.stack,
+          workflow_options,
+          stage: 'formatting response'
+        });
+      };
     };
   } catch(requestError) {
     response.status(400).json({
       error  : requestError,
       message: requestError.message,
       stack  : requestError.stack,
-      workflow_options
+      workflow_options,
+      stage: 'error in request'
     });
   };
 }
@@ -107,14 +121,23 @@ function postDynamoEvent(request, response, next) {
   let package_id = request.package_id;
   let new_event = { package_id, ...request.body };
 
-  // Create the entry in DynamoDB using our model
-  EventModel.create(new_event, (error, data) => {
-    if (error) response.status(400).json({ error, new_event });
-    else {
-      request.dynamo_response = data;
-      next();
-    };
-  });
+  try {
+    // Create the entry in DynamoDB using our model
+    EventModel.create(new_event, (error, data) => {
+      if (error) response.status(400).json({ error, new_event });
+      else {
+        request.dynamo_response = data;
+        next();
+      };
+    });
+  } catch(saveError) {
+    response.status(400).json({
+      error  : saveError,
+      stack  : saveError.stack,
+      message: saveError.message,
+      event  : new_event
+    });
+  };
 }
 
 
