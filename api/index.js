@@ -7,16 +7,10 @@ const router        = require('express').Router();
 const url           = require('url');
 
 // Our routes
-const authRoute     = require('./auth/auth.routes');
-const eventRoute    = require('./events/event.routes');
-const mauiRoute     = require('./maui/maui.routes');
-const workflowRoute = require('./workflow/workflow.routes');
-
-
-router.use('/auth',       authRoute);
-router.use('/events',     eventRoute);
-router.use('/maui',       mauiRoute);
-router.use('/workflow',   workflowRoute);
+router.use('/auth',       require('./auth/auth.routes'));
+router.use('/events',     require('./events/event.routes'));
+router.use('/maui',       require('./maui/maui.routes'));
+router.use('/workflow',   require('./workflow/workflow.routes'));
 
 /**
  *  GET home page. Behavior is as follows:
