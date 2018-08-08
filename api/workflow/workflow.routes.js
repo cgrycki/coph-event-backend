@@ -9,8 +9,7 @@
  */
 
 /* Router dependencies ------------------------------------------------------*/
-const express      = require('express');
-var   router       = express.Router();
+const router      = require('express').Router();
 const { 
   getInboxRedirect,
   fetchUserPermissions
