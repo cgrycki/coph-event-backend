@@ -14,7 +14,7 @@ var DynamoDBStore = require('connect-dynamodb')({ session: session });
 
 // Options for our DB
 const dynamo_options = { 
-  table: createTableName(app_name, env_type, table),
+  table: createTableName(table),
   AWSConfigJSON: {
     accessKeyId    : process.env.MY_AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.MY_AWS_SECRET_ACCESS_KEY,
