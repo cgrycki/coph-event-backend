@@ -42,13 +42,20 @@ const validateParams = (request, response, next) => {
 
 
 /**
- * Creates a table name from three different parts
- * @param {string} app Describes the application client_id
- * @param {string} env Environment: test or prod
+ * Creates a table name from our environment and a table param.
  * @param {string} table Which table should we create this for?
- * @returns {string} Table Name formatted for our environment.
+ * @returns {string} table_name Formatted DynamoDB table name for our environment.
  */
-const createTableName = (app, env, table) => `${app}-${env}-${table}`;
+const createTableName = (table) => {
+  // Describes the application client_id and name from our schema
+  let app = process.env.APP_NAME;
+
+  // Environment: {test, dev, prod}
+  let env = process.env.EENV;
+  
+  const table_name = `${app}-${env}-${table}`;
+  return table_name;
+};
 
 
 exports.errorFormatter  = errorFormatter;
