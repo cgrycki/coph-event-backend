@@ -7,7 +7,6 @@
 const rp        = require('request-promise');
 const { check } = require('express-validator/check');
 const moment    = require('moment');
-//const Room      = require('./room.model');
 
 
 /* Paramater Validation -----------------------------------------------------*/
