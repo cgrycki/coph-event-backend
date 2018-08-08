@@ -4,7 +4,7 @@
 
 const assert = require('assert');
 const Joi    = require('joi');
-const Schema = require('../events/event.schema');
+const Schema = require('../api/events/event.schema');
 
 
 /**
