@@ -3,10 +3,8 @@
  */
 
 // Session database table name
-const app_name        = process.env.APP_NAME;
-const env_type        = process.env.EENV;
-const table           = 'sessions';
-const createTableName = require('../utils').createTableName;
+const table               = 'sessions';
+const { createTableName } = require('../utils');
 
 // Session middleware
 const session = require('express-session');
