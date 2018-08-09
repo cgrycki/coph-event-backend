@@ -1,6 +1,5 @@
 /**
  * Authentication Utilities/Middleware
- * TBD: Office365 credentials and authentication 'flow'
  */
 
 /* Dependencies -------------------------------------------------------------*/
@@ -30,18 +29,45 @@ const validParamCode = check('code').exists().isAlphanumeric();
 
 
 /* Utilities ----------------------------------------------------------------*/
-// Get authorization URL for logging in and redirecting back to  API w/ code.
+/**
+ * Returns an URL for authorizing against Workflow.
+ * @returns {string} authURL - URL formatted with redirect endpoint and scopes.
+ */
 function getAuthURL() {
-  const returnVal = oauth_uiowa.authorizationCode.authorizeURL({
+  const authURL = oauth_uiowa.authorizationCode.authorizeURL({
     type         : 'web_server',
     response_type: 'code',
     redirect_uri : process.env.REDIRECT_URI,
     scope        : process.env.UIOWA_SCOPES
   });
-  return returnVal;
+  return authURL;
 }
 
-// Preform server handshake with code from getAuthURL(), saves callback data to session
+/**
+ * Completes an authentication handshake with server, and saves user information to session.
+ * 
+ * @async
+ * @param {string} auth_code - User's temporary OAuth2 token from Workflow login callback. 
+ * @param {object} request - HTTP request from Workflow login callback.
+ * @returns {object} token - User's OAuth2 token containing access key, refresh key, and information.
+ * 
+ * @example
+ * 
+ * Example token returned, from the [Workflow documentation](https://workflow.uiowa.edu/help/article/26/6):
+ * ```
+ * {
+ *  "access_token":"USER_ACCESS_TOKEN",
+ *  "refresh_token":"USER_REFRESH_TOKEN",
+ *  "token_type":"bearer",
+ *  "expires_in":2592000,
+ *  "params":{
+ *    "hawkID": USER_HAWKID,
+ *    "uid": USER_UNIVERSITY_ID,
+ *    "scope": YOUR_SCOPE,
+ *    "issued_to" => YOUR_CLIENT_ID
+ * }
+ * ```
+ */
 async function getAuthTokenFromCode(auth_code, request) {
   /* POST https://login.uiowa.edu/uip/token.page?
     grant_type    = authorization_code&
@@ -69,20 +95,13 @@ async function getAuthTokenFromCode(auth_code, request) {
   return token;
 }
 
-// Saves a user token values to their session
+
+/**
+ * Saves a user's OAuth2 token to a DynamoDB session. 
+ * @param {object} token - User's OAuth2 token information. 
+ * @param {object} request - HTTP request from workflow login callback. 
+ */
 function saveTokenToSession(token, request) {
-  /* Token = {
-    "access_token":"USER_ACCESS_TOKEN",
-    "refresh_token":"USER_REFRESH_TOKEN",
-    "token_type":"bearer",
-    "expires_in":2592000,
-    "params":{
-      "hawkID": USER_HAWKID,
-      "uid": USER_UNIVERSITY_ID,
-      "scope": YOUR_SCOPE,
-      "issued_to" => YOUR_CLIENT_ID
-    }
-  }*/
   let sess = request.session;
   
   // Save the access token to session
@@ -101,7 +120,12 @@ function saveTokenToSession(token, request) {
 
 
 /* Middlewares --------------------------------------------------------------*/
-// Authentication handshake with the U. Iowa servers
+/**
+ * Completes the authentication handshake with U. Iowa servers.
+ * @param {object} request - Workflow callback HTTP request after successful user login. 
+ * @param {object} response - HTTP response to return.
+ * @param {function} next - Next function in our middleware stack. 
+ */
 async function authenticateCode(request, response, next) {
   const code = request.query.code;
   if (code) {
@@ -129,7 +153,13 @@ async function authenticateCode(request, response, next) {
   }
 }
 
-// Checks if a request is verified or not. 
+
+/**
+ * Checks a request to ensure it is authenticated.
+ * @param {object} request - HTTP request from our frontend website.
+ * @param {object} response - HTTP response to return to frontend.
+ * @param {Function} next - Next function in our middleware stack.
+ */
 async function checkSessionExists(request, response, next) {
   let sess = request.session;
 
@@ -165,7 +195,13 @@ async function checkSessionExists(request, response, next) {
   response.status(401).json({ error: true, message: "You are not logged in" });
 }
 
-// Middelware refreshing a session auth, and passing the user details for /events
+
+/**
+ * Middleware function to retrieve a request's user information (OAuth2 token + IP Address).
+ * @param {object} request - HTTP request originating from our frontend website.
+ * @param {object} response - HTTP response to return to frontend.
+ * @param {Function} next - Next function in our middleware stack.
+ */
 function retrieveSessionInfo(request, response, next) {
   try {
     // Define and load the session
@@ -191,7 +227,13 @@ function retrieveSessionInfo(request, response, next) {
   }
 }
 
-// Clears a user's session from the database on logout/timeout
+
+/**
+ * Destroys a user session and unsets our identification cookie.
+ * @param {object} request - HTTP request originating from our frontend website.
+ * @param {object} response - HTTP response to send to frontend.
+ * @param {Function} next - Next function in our middleware stack.
+ */
 function clearTokensFromSession(request, response, next) {
   if (request.session) request.session.destroy();
 
