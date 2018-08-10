@@ -1,10 +1,10 @@
 /**
- * Utility middleware functions for our API.
+ * Utilty functions shared by our API routes.
  */
 
-/* Dependencies -------------------------------------------------------------*/
-const { check, validationResult } = require('express-validator/check');
 
+/* Dependencies -------------------------------------------------------------*/
+const { validationResult } = require('express-validator/check');
 
 /* Utilities ----------------------------------------------------------------*/
 
@@ -42,25 +42,22 @@ const validateParams = (request, response, next) => {
 
 
 /**
- * Creates a table name from three different parts
- * @param {string} app Describes the application client_id
- * @param {string} env Environment: test or prod
+ * Creates a table name from our environment and a table param.
  * @param {string} table Which table should we create this for?
+ * @returns {string} table_name Formatted DynamoDB table name for our environment.
  */
-const createTableName = (app, env, table) => app +'-'+env+'-'+table;
+const createTableName = (table) => {
+  // Describes the application client_id and name from our schema
+  let app = process.env.APP_NAME;
 
-
-/**
- * Wrapper for asynchronous promises
- * @param {function} fn Promise function to resolve
- */
-const promiseWrapper = fn => (request, response, next) => 
-  Promise
-    .resolve(fn(request, response, next))
-    .catch(next);
+  // Environment: {test, dev, prod}
+  let env = process.env.EENV;
+  
+  const table_name = `${app}-${env}-${table}`;
+  return table_name;
+};
 
 
 exports.errorFormatter  = errorFormatter;
 exports.validateParams  = validateParams;
 exports.createTableName = createTableName;
-exports.promiseWrapper  = promiseWrapper;

@@ -5,12 +5,12 @@
   "private": true,
   "scripts": {
     "start": "nodemon ./bin/www",
+    "populate-rooms": "node -r dotenv/config bin/rooms/populate-database.js",
     "test": "mocha",
     "predeploy": "claudia generate-serverless-express-proxy --express-module server",
     "deploy": "npm run predeploy && exec bin/claudia-deploy.sh",
     "update": "npm run predeploy && TMPDIR=/tmp claudia update --set-env-from-json",
-    "set-prod": "claudia set-version --version prod",
-    "populate-rooms": "node -r dotenv/config bin/rooms/populate-database.js"
+    "set-prod": "claudia set-version --version prod"
   },
   "repository": {
     "type": "git",

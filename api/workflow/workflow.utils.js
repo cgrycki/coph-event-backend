@@ -23,6 +23,7 @@ async function fetchUserPermissions(request, response, next) {
   // executing this function. Call comes from our front end.
   const user_ip_address = request.user_ip_address;
   const uiowa_access_token = request.uiowa_access_token;
+  
   // Package ID is taken from params
   const { package_id } = request.query;
 

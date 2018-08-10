@@ -5,8 +5,6 @@ const rp                 = require('request-promise');
 const Joi                = require('joi');
 const {ModelSchema}      = require('./event.schema');
 const EventModel         = require('./event.model');
-const { promiseWrapper } = require('../utils/index');
-const URI                = process.env.REDIRECT_URI;
 const JoiSchema          = Joi.object().keys(ModelSchema);
 
 
