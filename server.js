@@ -4,16 +4,17 @@
 
 /* Dependencies -------------------------------------------------------------*/
 require('dotenv').config();             // Environment variables
-var express      = require('express');
-var cors         = require('cors');
-var customCors   = require('./utils/customCors').cors_options;
-var helmet       = require('helmet');
-var cookieParser = require('cookie-parser');
-var bodyParser   = require('body-parser');
-var session      = require('./auth/auth.session');
-var validator    = require('express-validator');
-var logger       = require('morgan');
-var app          = express();
+var express          = require('express');
+var cors             = require('cors');
+var helmet           = require('helmet');
+var cookieParser     = require('cookie-parser');
+var bodyParser       = require('body-parser');
+var validator        = require('express-validator');
+var logger           = require('morgan');
+
+var { cors_options } = require('./config/customCors');
+var session          = require('./api/auth/auth.session');
+var app              = express();
 
 
 /* Further App Configurations -----------------------------------------------*/
@@ -22,7 +23,7 @@ app.use(logger('dev'));
 app.use(helmet());
 
 // CORS: Cross origin resource sharing, so we can talk to our frontend
-app.use(cors(customCors));
+app.use(cors(cors_options));
 app.options('*', cors());
 
 // Parsing HTTP Requests: cookies, application/json, application/www-url, and validation
@@ -35,20 +36,18 @@ app.use(validator());
 app.set('trust proxy', 1);
 app.use(session);
 
-// Only use Xray in production environment
-if (process.env.NODE_ENV === 'production') {
-  var xray = require('./utils/xray');
-  app.use(xray.startTrace);
-  app.use(xray.requestTrace);
-}
-
 
 /* ROUTES -------------------------------------------------------------------*/
-app.use('/events', require('./events/event.routes'));
-app.use('/inbox',  require('./inbox/inbox.routes'));
-app.use('/rooms',  require('./rooms/room.routes'));
-app.use('/auth',   require('./auth/auth.routes'));
-app.use('/',       require('./utils/indexRoute'));
+// Only use Xray in production environment
+if (process.env.NODE_ENV === 'production') {
+  var xray = require('./config/xray');
+  app.use(xray.startTrace);
+  app.use(xray.requestTrace);
+};
 
-if (process.env.NODE_ENV) app.use(xray.endTrace); // Close Xray
+app.use('/', require('./api'));
+
+// Close Xray
+if (process.env.NODE_ENV === 'production') app.use(xray.endTrace);
+
 module.exports = app;

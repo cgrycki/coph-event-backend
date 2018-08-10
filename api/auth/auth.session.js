@@ -3,10 +3,8 @@
  */
 
 // Session database table name
-const app_name        = process.env.APP_NAME;
-const env_type        = process.env.EENV;
-const table           = 'sessions';
-const createTableName = require('../utils').createTableName;
+const table               = 'sessions';
+const { createTableName } = require('../utils');
 
 // Session middleware
 const session = require('express-session');
@@ -16,7 +14,7 @@ var DynamoDBStore = require('connect-dynamodb')({ session: session });
 
 // Options for our DB
 const dynamo_options = { 
-  table: createTableName(app_name, env_type, table),
+  table: createTableName(table),
   AWSConfigJSON: {
     accessKeyId    : process.env.MY_AWS_ACCESS_KEY_ID,
     secretAccessKey: process.env.MY_AWS_SECRET_ACCESS_KEY,

@@ -20,15 +20,13 @@ dynamo.AWS.config.update({ region: process.env.AWS_REGION });
 const Joi    = require('joi');
 
 // Utility to create our database name
-const createTableName = require('../utils/index').createTableName;
-const name            = process.env.APP_NAME;
-const env             = process.env.EENV;
-const table           = 'rooms';
+const { createTableName } = require('../utils/index');
+const table               = 'rooms';
 
 
 /* MODEL --------------------------------------------------------------------*/
 var Room = dynamo.define('Room', {
-  tableName: createTableName(name, env, table),
+  tableName: createTableName(table),
   hashKey: 'roomNumber',
   schema: {
     buildingName   : Joi.string().required(),

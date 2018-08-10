@@ -2,19 +2,17 @@
  * Event DynamoDB model
  */
 /* DEPENDENCIES -------------------------------------------------------------*/
+var dynamo            = require('dynamodb');
+dynamo.AWS.config.update({ region: process.env.AWS_DEFAULT_REGION });
 const { 
   ModelSchema,
   package_id
 }                     = require('./event.schema'); 
-var dynamo            = require('dynamodb');
-dynamo.AWS.config.update({ region: process.env.AWS_DEFAULT_REGION });
 
 
 // Create table names depending on environment
-const createTableName = require('../utils/index').createTableName;
-const client_id       = process.env.APP_NAME;
-const env_type        = process.env.EENV;
-const table_name      = 'events';
+const { createTableName } = require('../utils/index');
+const table_name          = 'events';
 
 
 /* MODEL --------------------------------------------------------------------*/
@@ -30,7 +28,7 @@ const EventModel = dynamo.define('Event', {
   schema: { package_id, ...ModelSchema },
 
   // Dynamic table names depending on our Node environment
-  tableName: createTableName(client_id, env_type, table_name),
+  tableName: createTableName(table_name),
 
   // Indices for faster queries
   indexes: [

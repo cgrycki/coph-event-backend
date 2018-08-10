@@ -2,8 +2,9 @@
  * Event Schema for DynamoDB
  */
 
-const Joi = require('joi');
-const options_time = require('../utils/time.constants');
+const Joi           = require('joi');
+const options_time  = require('../utils/time.constants');
+
 
 /* BASE --------------------------------------------------------------------*/
 const jString = Joi.string();

@@ -1,7 +1,6 @@
 /* Router dependencies ------------------------------------------------------*/
-const express = require('express');
+const router = require('express').Router();
 const multer  = require('multer')();
-var   router  = express.Router();
 
 
 /* Created dependencies -----------------------------------------------------*/

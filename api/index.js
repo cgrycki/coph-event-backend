@@ -1,7 +1,16 @@
-var express   = require('express');
-var router    = express.Router();
-var url       = require('url');
-var authUtils = require('../auth/auth.utils');
+/**
+ * Router Entry point
+ */
+
+// Dependencies
+const router        = require('express').Router();
+const url           = require('url');
+
+// Our routes
+router.use('/auth',       require('./auth/auth.routes'));
+router.use('/events',     require('./events/event.routes'));
+router.use('/maui',       require('./maui/maui.routes'));
+router.use('/workflow',   require('./workflow/workflow.routes'));
 
 /**
  *  GET home page. Behavior is as follows:
