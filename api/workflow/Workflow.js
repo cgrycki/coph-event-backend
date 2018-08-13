@@ -2,7 +2,7 @@
  * Workflow Helper class.
  */
 
-import * as rp from 'request-promise';
+const rp = require('request-promise');
 const { FORM_ID, UIOWA_SECRET_ACCESS_KEY, EENV } = process.env;
 const BASE_URI = 'https://apps.its.uiowa.edu/workflow';
 
@@ -166,4 +166,5 @@ class Workflow {
 
 };
 
-export default Workflow(FORM_ID, UIOWA_SECRET_ACCESS_KEY, EENV);
+const wf = new Workflow(FORM_ID, UIOWA_SECRET_ACCESS_KEY, EENV);
+module.exports = wf;
