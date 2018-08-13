@@ -2,7 +2,7 @@
  * Workflow Helper class.
  */
 
-import * as rp from 'request-promise';
+const rp = require('request-promise');
 const { FORM_ID, UIOWA_SECRET_ACCESS_KEY, EENV } = process.env;
 const BASE_URI = 'https://apps.its.uiowa.edu/workflow';
 
@@ -28,8 +28,8 @@ class Workflow {
    * @returns {string} uri - URI endpoint.
    */
   constructURI(tools=false) {
-    const uri = `${this.base_uri}/${this.env_type}/api/developer/` +
-      (tools === false) ? '' : 'tools/' +
+    const base = `${this.base_uri}/${this.env_type}/api/developer/`;
+    const uri = base + ((tools === false) ? '' : 'tools/') +
       `forms/${this.form_id}/packages`;
     return uri;
   }
@@ -166,4 +166,6 @@ class Workflow {
 
 };
 
-export default Workflow(FORM_ID, UIOWA_SECRET_ACCESS_KEY, EENV);
+const wf = new Workflow(FORM_ID, UIOWA_SECRET_ACCESS_KEY, EENV);
+
+module.exports = wf;
