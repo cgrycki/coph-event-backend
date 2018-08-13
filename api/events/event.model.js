@@ -39,4 +39,25 @@ const EventModel = dynamo.define('Event', {
 });
 
 
+/* RESTful functions --------------------------------------------------------*/
+/**
+ * Returns a list of events, filtered by params.
+ * @param {string} field Field to filter upon
+ * @param {any} value Value to constrain filter
+ */
+EventModel.filterEvents = function(field, value) {
+  let results, error;
+
+  EventModel
+    .scan()
+    .where(field).equals(value)
+    .exec((err, data) => {
+      if (err) error = err;
+      else results = data.Items;
+    });
+  
+  return { results, error };
+}
+
+
 module.exports = EventModel;

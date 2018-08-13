@@ -7,6 +7,7 @@ const router = require('express').Router();
 const {
   validParamCode,
   authenticateCode,
+  retrieveSessionInfo,
   clearTokensFromSession
 }            = require('./auth.utils');
 
@@ -25,12 +26,17 @@ router.get('/logout', clearTokensFromSession,
   (request, response) => response.status(200).redirect(process.env.FRONTEND_URI));
 
 // GET /auth/validate -- Returns a boolean indicating if the user is logged in
-router.get('/validate', (request, response) => {
+router.get('/validate', retrieveSessionInfo, (request, response) => {
   let session = request.session;
 
   if ((request.get('origin') === 'http://localhost:3000') || 
       (session && session.uiowa_access_token)) {
-    response.status(200).json({ loggedIn: true });
+        let hawkid = session.hawkid || 'LOCALHOST';
+
+        response.status(200).json({ 
+          loggedIn: true,
+          hawkid: hawkid
+        });
   }
   else response.status(200).json({ loggedIn: false });
 });

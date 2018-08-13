@@ -14,8 +14,8 @@ const Room                = require('./room.model');
 /* Parameters ---------------------------------------------------------------*/
 router.param('room_number', mauiUtils.validRoomNum);
 router.param('date',        mauiUtils.validDate);
-router.param('startTime',   mauiUtils.validStartTime);
-router.param('endTime',     mauiUtils.validEndTime);
+router.param('startDate',   mauiUtils.validStartDate);
+router.param('endDate',     mauiUtils.validEndDate);
 
 
 /* REST ---------------------------------------------------------------------*/
@@ -36,8 +36,7 @@ router.get('/rooms/:room_number/:date', validateParams, (request, response) => {
 
   // Create start and end date parameters for MAUI.
   let start_date = request.params.date;
-  let end_date   = mauiUtils.getNextDay(start_date);
-  if (end_date === false) response.json({ error: 'Error while coercing date', date: start_date});
+  let end_date = request.params.date;
 
   // Make the call and return the JSON room schedule
   mauiUtils.getRoomSchedule(room_number, start_date, end_date)
@@ -54,5 +53,7 @@ router.get('/rooms/:room_number/:date', validateParams, (request, response) => {
       })
     });
 });
+
+
 
 module.exports = router;

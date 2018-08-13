@@ -25,17 +25,15 @@ const validDate = check('date')
   .isString().withMessage('Date should be a date-coercable string')
   .isISO8601().withMessage('Date param should be formatted YYYY-mm-dd')
   .trim();
-
-// startTime
-const validStartTime = check('start_time')
-  .exists().withMessage('Must have a start time')
-  .isString()
+const validStartDate = check('startDate')
+  .exists().withMessage('You need a date param')
+  .isString().withMessage('Date should be a date-coercable string')
+  .isISO8601().withMessage('Date param should be formatted YYYY-mm-dd')
   .trim();
-
-// endTime
-const validEndTime = check('end_time')
-  .exists()
-  .isString()
+const validEndDate = check('endDate')
+  .exists().withMessage('You need a date param')
+  .isString().withMessage('Date should be a date-coercable string')
+  .isISO8601().withMessage('Date param should be formatted YYYY-mm-dd')
   .trim();
 
 
@@ -76,7 +74,7 @@ function getRoomSchedule(roomNumber, startDate, endDate) {
 
 exports.validRoomNum   = validRoomNum;
 exports.validDate      = validDate;
-exports.validStartTime = validStartTime;
-exports.validEndTime   = validEndTime;
+exports.validStartDate = validStartTime;
+exports.validEndDate   = validEndTime;
 exports.getNextDay     = getNextDay;
 exports.getRoomSchedule = getRoomSchedule;

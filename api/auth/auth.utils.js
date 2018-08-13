@@ -188,11 +188,12 @@ async function checkSessionExists(request, response, next) {
   // Check if this request is being sent to /auth with a valid token
   if (request.path.endsWith('/auth') && request.query.code) next();
 
-  // No authenticated session token? send them to entry point
-  //response.status(403).redirect(getAuthURL());
-
   // No authenticated session? Expired?
-  response.status(401).json({ error: true, message: "You are not logged in" });
+  response.status(403).json({
+    error: true,
+    loggedIn: false,
+    message: "You are not logged in"
+  });
 }
 
 
@@ -203,6 +204,9 @@ async function checkSessionExists(request, response, next) {
  * @param {Function} next - Next function in our middleware stack.
  */
 function retrieveSessionInfo(request, response, next) {
+  // Localhost gets forwarded
+  if (request.get('origin') === 'http://localhost:3000') next();
+
   try {
     // Define and load the session
     let sess = request.session;
@@ -216,6 +220,9 @@ function retrieveSessionInfo(request, response, next) {
       request.connection.remoteAddress ||
       request.socket.remoteAddress ||
       request.connection.socket.remoteAddress).split(",")[0];
+
+    // Add HawkID for login response
+    request.hawkid = sess.hawkid;
 
     next();
   } catch (error) {
