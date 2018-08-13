@@ -72,9 +72,9 @@ function getRoomSchedule(roomNumber, startDate, endDate) {
 
 
 
-exports.validRoomNum   = validRoomNum;
-exports.validDate      = validDate;
-exports.validStartDate = validStartTime;
-exports.validEndDate   = validEndTime;
-exports.getNextDay     = getNextDay;
+exports.validRoomNum    = validRoomNum;
+exports.validDate       = validDate;
+exports.validStartDate  = validStartDate;
+exports.validEndDate    = validEndDate;
+exports.getNextDay      = getNextDay;
 exports.getRoomSchedule = getRoomSchedule;
