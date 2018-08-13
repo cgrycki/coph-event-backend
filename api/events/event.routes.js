@@ -7,7 +7,11 @@ const multer  = require('multer')();
 const { 
   prepareEvent,
   postWorkflowEvent,
-  postDynamoEvent
+  postDynamoEvent,
+
+  // TESTING
+  getDynamoEvent,
+  getDynamoEvents
 }                         = require('./event.utils');
 const { 
   checkSessionExists, 
@@ -16,6 +20,15 @@ const {
 
 
 /* Routes -------------------------------------------------------------------*/
+
+// GET:package_id
+router.get('/:package_id', getDynamoEvent, (req, res) => res.status(200).json(req.item));
+
+router.get('/', getDynamoEvents, (req, res) => res.status(200).json(res.items));
+
+
+
+
 // GET: Returns a list of events from our DynamoDB
 // loggedIn, tokenValid, isAdmin, return
 
