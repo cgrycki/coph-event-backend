@@ -126,11 +126,9 @@ function getWorkflowEvent(request, response, next) {
 
 function getDynamoEvent(request, response, next) {
   /* Gets a single event from DynamoDB */
-  let package_id = request.query.package_id;
+  let package_id = request.body.package_id;
 
-  EventModel
-    .query(package_id)
-    .limit(1)
+  EventModel.query(package_id)
     .exec((error, data) => {
       // Return errors if encountered
       if (error) response.status(422).json({ error });
