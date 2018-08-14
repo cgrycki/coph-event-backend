@@ -37,20 +37,24 @@ router.get('/inbox', (request, response) => {
 
 
 // DELETE package
-router.delete("/:package_id", [checkSessionExists, retrieveSessionInfo],
-  async (req, res) => {
+router.delete('/', [checkSessionExists, retrieveSessionInfo],
+  (req, res) => {
     // Gather params for calling RESTful Workflow endpoint
-    const { uiowa_access_token, user_ip_address } = req.session;
-    const { package_id } = req.params;
+    const { uiowa_access_token, user_ip_address } = req;
+    const { package_id } = req.body;
 
-    // Wait for the workflow call
-    const { error, result } 
-      = await Workflow.removePackage(uiowa_access_token, user_ip_address, package_id);
-    
+    /* Wait for the workflow call
+    //const { error, result } 
+    //  = await Workflow.removePackage(uiowa_access_token, user_ip_address, package_id);
     if (error) res.status(400).json(error);
     else res.status(200).json(result);
+    */
+    res.status(200).json({
+      uiowa_access_token,
+      user_ip_address,
+      package_id
+    });
   });
-
 
 
 
