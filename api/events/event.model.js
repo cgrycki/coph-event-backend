@@ -48,6 +48,10 @@ const EventModel = dynamo.define('Event', {
 EventModel.filterEvents = function(field, value) {
   let results, error;
 
+  const indexMap = {
+    'approved': 'EventApprovedIndex'
+  };
+
   const filterExpressionMap = {
     'approved': '#approve = :false'
   };
@@ -76,8 +80,8 @@ EventModel.filterEvents = function(field, value) {
     });
   */
   EventModel
-    .query()
-    .where(field).equals(value)
+    .query(value)
+    .usingIndex(indexMap[field])
     .loadAll()
     .exec((err, data) => {
       if (err) error = err;
