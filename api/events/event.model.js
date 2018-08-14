@@ -48,9 +48,24 @@ const EventModel = dynamo.define('Event', {
 EventModel.filterEvents = function(field, value) {
   let results, error;
 
-  EventModel
+  const fieldIndexMap = {
+    'user': 'EventUserIndex',
+    'room': 'EventRoomIndex',
+    'approved': 'EventApprovedIndex'
+  };
+
+  /*EventModel
     .scan()
     .where(field.toString()).equals(value)
+    .exec((err, data) => {
+      if (err) error = err;
+      else results = data.Items;
+    });
+    */
+
+  EventModel
+    .query(value)
+    .usingIndex(fieldIndexMap[field])
     .exec((err, data) => {
       if (err) error = err;
       else results = data.Items;
