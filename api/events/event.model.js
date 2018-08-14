@@ -70,12 +70,20 @@ EventModel.filterEvents = function(field, value) {
     'approved': '#approve'
   };
 
-  EventModel
+  /*EventModel
     .scan()
     .filterExpression(filterExpressionMap[field])
     .expressionAttributeValues(expressionValueMap[field])
     .expressionAttributeNames(expressionNameMap[field])
-    .projectionExpression(expressionProjectionMap(field))
+    .projectionExpression(expressionProjectionMap[field])
+    .exec((err, data) => {
+      if (err) error = err;
+      else results = data.Items;
+    });
+  */
+  EventModel
+    .scan()
+    .filter(field).equals(value)
     .exec((err, data) => {
       if (err) error = err;
       else results = data.Items;
