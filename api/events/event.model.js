@@ -82,6 +82,7 @@ EventModel.filterEvents = function(field, value) {
   EventModel
     .query(value)
     .usingIndex(indexMap[field])
+    .expressionAttributeValues(expressionValueMap[field])
     .loadAll()
     .exec((err, data) => {
       if (err) error = err;
