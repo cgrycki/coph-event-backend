@@ -99,23 +99,19 @@ function postDynamoEvent(request, response, next) {
   let package_id = request.package_id;
   let new_event = { package_id, ...request.body };
 
-  try {
-    // Create the entry in DynamoDB using our model
-    EventModel.create(new_event, (error, data) => {
-      if (error) response.status(400).json({ error, new_event });
-      else {
-        request.dynamo_response = data;
-        next();
-      };
+  // Create the entry in DynamoDB using our model
+  EventModel.create(new_event, (error, data) => {
+    if (error) return response.status(400).json({ 
+      error: error, 
+      new_event: new_event,
+      stack: error.stack,
+      message: error.message
     });
-  } catch(saveError) {
-    response.status(400).json({
-      error  : saveError,
-      stack  : saveError.stack,
-      message: saveError.message,
-      event  : new_event
-    });
-  };
+    else {
+      request.dynamo_response = data;
+      next();
+    };
+  });
 }
 
 
