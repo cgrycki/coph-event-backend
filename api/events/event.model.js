@@ -48,18 +48,12 @@ const EventModel = dynamo.define('Event', {
 EventModel.filterEvents = function(field, value) {
   let results, error;
 
-  const fieldIndexMap = {
-    'user': 'EventUserIndex',
-    'room': 'EventRoomIndex',
-    'approved': 'EventApprovedIndex'
-  };
-
   const filterExpressionMap = {
     'approved': '#approve = :false'
   };
 
   const expressionValueMap = {
-    'approved': {':false': false}
+    'approved': {':false': false, ':package_id': 'package_id'}
   };
 
   const expressionNameMap = {
@@ -70,7 +64,7 @@ EventModel.filterEvents = function(field, value) {
     'approved': '#approve'
   };
 
-  /*EventModel
+  EventModel
     .scan()
     .filterExpression(filterExpressionMap[field])
     .expressionAttributeValues(expressionValueMap[field])
@@ -80,14 +74,16 @@ EventModel.filterEvents = function(field, value) {
       if (err) error = err;
       else results = data.Items;
     });
-  */
+  /*
   EventModel
     .scan()
     .filter(field).equals(value)
+    .loadAll()
     .exec((err, data) => {
       if (err) error = err;
       else results = data.Items;
     });
+  */
   
   return { results, error };
 }
