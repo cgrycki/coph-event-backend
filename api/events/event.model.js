@@ -55,7 +55,7 @@ EventModel.filterEvents = function(field, value) {
   };
 
   const filterExpressionMap = {
-    'approved': '#approve IS :false'
+    'approved': '#approve = :false'
   };
 
   const expressionValueMap = {
