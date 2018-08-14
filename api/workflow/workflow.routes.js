@@ -14,13 +14,18 @@ const {
   getInboxRedirect,
   fetchUserPermissions
 }                  = require('./workflow.utils');
+const Workflow     = require('./Workflow');
+const {
+  checkSessionExists,
+  retrieveSessionInfo
+}                  = require("../auth/auth.utils");
 
 
 /* RESTful functions --------------------------------------------------------*/
 // GET: forward workflow inbox redirect to frontend
 router.get('/inbox', (request, response) => {
   // Grab query params from workflow call
-  const package_id = request.query.packageId;
+  const package_id   = request.query.packageId;
   const signature_id = request.query.signatureId;
 
   // Create specific event URL from query params
@@ -29,6 +34,28 @@ router.get('/inbox', (request, response) => {
   // Redirect the response to our frontend
   response.status(200).redirect(event_uri);
 });
+
+
+// DELETE package
+router.delete("/:package_id", [checkSessionExists, retrieveSessionInfo],
+  async (req, res) => {
+    // Gather params for calling RESTful Workflow endpoint
+    const { uiowa_access_token, user_ip_address } = req.session;
+    const { package_id } = req.params;
+
+    // Wait for the workflow call
+    const { error, result } 
+      = await Workflow.removePackage(uiowa_access_token, user_ip_address, package_id);
+    
+    if (error) res.status(400).json(error);
+    else res.status(200).json(result);
+  });
+
+
+
+
+// CALLBACK ROUTE
+
 
 
 module.exports = router;
