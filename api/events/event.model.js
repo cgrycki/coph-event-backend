@@ -54,18 +54,28 @@ EventModel.filterEvents = function(field, value) {
     'approved': 'EventApprovedIndex'
   };
 
-  /*EventModel
-    .scan()
-    .where(field.toString()).equals(value)
-    .exec((err, data) => {
-      if (err) error = err;
-      else results = data.Items;
-    });
-    */
+  const filterExpressionMap = {
+    'approved': '#approve IS :false'
+  };
+
+  const expressionValueMap = {
+    'approved': {':false': false}
+  };
+
+  const expressionNameMap = {
+    'approved': { '#approve': 'approved' }
+  };
+
+  const expressionProjectionMap = {
+    'approved': '#approve'
+  };
 
   EventModel
-    .query(value)
-    .usingIndex(fieldIndexMap[field])
+    .scan()
+    .filterExpression(filterExpressionMap[field])
+    .expressionAttributeValues(expressionValueMap[field])
+    .expressionAttributeNames(expressionNameMap[field])
+    .projectionExpression(expressionProjectionMap(field))
     .exec((err, data) => {
       if (err) error = err;
       else results = data.Items;
