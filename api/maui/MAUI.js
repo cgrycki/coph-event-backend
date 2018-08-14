@@ -36,8 +36,7 @@ MAUI.prototype.request = async function(options) {
   try {
     response = await rp(options);
   } catch (err) {
-    response = err;
-    response.error = true;
+    response = { error: true, message: err.message, stack: err.stack };
   };
 
   return response;
@@ -57,14 +56,14 @@ MAUI.prototype.getRoomSchedule = async function(roomNumber, start, end) {
     `${start}/${end}/CPHB/${roomNumber}`;
 
   const options = {
-    method: 'GET',
-    uri: uri,
-    headers: this.headers()
+    method : 'GET',
+    uri    : uri,
+    headers: this.headers(),
+    json   : true
   };
 
   const result = await this.request(options);
-  const data = JSON.parse(result);
-  return data;
+  return result;
 }
 
 

@@ -69,20 +69,20 @@ Workflow.prototype.constructURI = function(tools=false) {
  * Executes an asynchronous Promise to the Workflow API.
  * @param {object} options - Request options: uri, method, headers, body
  * @param {function} callback - Optional function to use after request completes. 
- * @returns {object} result - A successful response or error.
+ * @returns {object} response - A successful response or error.
  */
 Workflow.prototype.request = async function(options) {
   // Create a mutable pointer to hold REST response or error, respectively.
-  let error, result;
+  let response;
 
   try {
     // Try synchronously calling the REST API.
-    result = await rp(options);
+    response = await rp(options);
   } catch (err) {
     // If we error out, create a meaningful error response
-    error = { error: err, message: err.message, stack: err.stack };
+    response = { error: true, message: err.message, stack: err.stack };
   };
-  return { error, result };
+  return response;
 }
 
 /**
@@ -169,9 +169,11 @@ Workflow.prototype.voidPackage = async function(user_token, ip_address, package_
  */
 Workflow.prototype.removePackage = async function(user_token, ip_address, package_id) {
   const options = {
-    method: 'PUT',
-    uri    : `${this.constructURI(tools=true)}/${package_id}/remove`,
-    headers: this.headers(user_token, ip_address)
+    method         : 'PUT',
+    uri            : `${this.constructURI(tools=true)}/${package_id}/remove`,
+    headers        : this.headers(user_token, ip_address),
+    withCredentials: true,
+    json           : true
   };
 
   const result = await this.request(options);
