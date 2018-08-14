@@ -50,7 +50,7 @@ EventModel.filterEvents = function(field, value) {
 
   EventModel
     .scan()
-    .where(field).equals(value)
+    .where(field.toString()).equals(value)
     .exec((err, data) => {
       if (err) error = err;
       else results = data.Items;
