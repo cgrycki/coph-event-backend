@@ -64,7 +64,7 @@ EventModel.filterEvents = function(field, value) {
     'approved': '#approve'
   };
 
-  EventModel
+  /*EventModel
     .scan()
     .filterExpression(filterExpressionMap[field])
     .expressionAttributeValues(expressionValueMap[field])
@@ -74,16 +74,16 @@ EventModel.filterEvents = function(field, value) {
       if (err) error = err;
       else results = data.Items;
     });
-  /*
+  */
   EventModel
-    .scan()
-    .filter(field).equals(value)
+    .query()
+    .where(field).equals(value)
     .loadAll()
     .exec((err, data) => {
       if (err) error = err;
       else results = data.Items;
     });
-  */
+  
   
   return { results, error };
 }
