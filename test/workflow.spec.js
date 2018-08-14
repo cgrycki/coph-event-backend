@@ -7,12 +7,13 @@ const assert = require('assert');
 const Workflow = require('../api/workflow/Workflow');
 
 describe('Workflow REST class', function() {
+  let faux_user_token = 'AAABBBCCC',
+      faux_ip_address = '001.001.001.001',
+      faux_package_id = 123;
 
   // Headers
   describe('#headers', function() {
-    let faux_user_token = 'AAABBBCCC',
-        faux_ip_address = '001.001.001.001',
-        correct_header = {
+    let correct_header = {
         'Accept': 'application/vnd.workflow+json;version=1.1',
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${faux_user_token}`,
@@ -50,6 +51,16 @@ describe('Workflow REST class', function() {
       
       let authURL = Workflow.getAuthURL();
       assert.equal(faux_auth_url, authURL);
+    });
+  });
+
+  // Requests
+  describe('#requests', function() {
+    it('Creates correct headers for removing a package', async function() {
+      let remove_result = await Workflow.removePackage(
+        faux_user_token, faux_ip_address, faux_package_id);
+      
+      assert.notEqual(remove_result.error, true);
     });
   });
 });
