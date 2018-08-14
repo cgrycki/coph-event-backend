@@ -28,8 +28,8 @@ describe('Workflow REST class', function() {
 
   // URLs
   describe('#URI', function() {
-    let correct_base_uri = 'https://apps.its.uiowa.edu/workflow/dev/api/developer/forms/6025/packages',
-        correct_tool_uri = 'https://apps.its.uiowa.edu/workflow/dev/api/developer/tools/forms/6025/packages';
+    let correct_base_uri = 'https://apps.its.uiowa.edu/workflow/test/api/developer/forms/6025/packages',
+        correct_tool_uri = 'https://apps.its.uiowa.edu/workflow/test/api/developer/tools/forms/6025/packages';
 
     it('Should create the correct URI to POST an event', function() {
       let faux_base_uri = Workflow.constructURI();
@@ -39,6 +39,17 @@ describe('Workflow REST class', function() {
     it('Should create the correct URI to interact with workflow tools', function() {
       let faux_tool_uri = Workflow.constructURI(true);
       assert.equal(faux_tool_uri, correct_tool_uri);
-    })
+    });
+
+    it('Creates the correct authorization endpoint for appliction token', function() {
+      let faux_auth_url = 'https://login.uiowa.edu/uip/token.page?' +
+        'grant_type=client_credentials&' +
+        `scope=${process.env.UIOWA_SCOPES}&` +
+        `client_id=${process.env.UIOWA_ACCESS_KEY_ID}&` +
+        `client_secret=${process.env.UIOWA_SECRET_ACCESS_KEY}`;
+      
+      let authURL = Workflow.getAuthURL();
+      assert.equal(faux_auth_url, authURL);
+    });
   });
 });
