@@ -4,7 +4,6 @@
 
 const rp = require('request-promise');
 const { FORM_ID, UIOWA_SECRET_ACCESS_KEY, EENV } = process.env;
-const BASE_URI = 'https://apps.its.uiowa.edu/workflow';
 
 
 class Workflow {
@@ -40,19 +39,18 @@ class Workflow {
    * @param {function} callback - Optional function to use after request completes. 
    * @returns {object} result - A successful response or error.
    */
-  async request(options, callback=undefined) {
+  async request(options) {
     // Create a mutable pointer to hold REST response or error, respectively.
-    let result;
+    let error, result;
 
     try {
       // Try synchronously calling the REST API.
-      result = await rp(options)
-        .finally(res => (callback !== undefined) ? callback(res) : res);
-    } catch (error) {
+      result = await rp(options);
+    } catch (err) {
       // If we error out, create a meaningful error response
-      result = { error: error, message: error.message, stack: error.stack };
+      error = { error: err, message: err.message, stack: err.stack };
     };
-    return result;
+    return { error, result };
   }
 
   /**
@@ -105,9 +103,6 @@ class Workflow {
   }
 
 
-  // PATCH package entry
-
-
   /**
    * Void a package so that it is no longer routing.
    * @param {string} user_token - User OAuth2 token taken from session.
@@ -119,9 +114,9 @@ class Workflow {
   async voidPackage(user_token, ip_address, package_id, voidReason) {
     const options = {
       method: 'PUT',
-      uri: `${this.constructURI(tools=true)}/${package_id}`,
+      uri    : `${this.constructURI(tools=true)}/${package_id}`,
       headers: this.headers(user_token, ip_address),
-      body: JSON.stringify({
+      body   : JSON.stringify({
         id        : package_id,
         state     : 'VOID',
         voidReason: voidReason
@@ -132,10 +127,24 @@ class Workflow {
     return result;
   }
 
-  // GET packages
-  
-  // GET:package_id pacakge entry
-  
+  /**
+   * Remove a package so that it is no longer routing.
+   * @param {string} user_token - User OAuth2 token taken from session.
+   * @param {string} ip_address - Originating IP Address taken from request.
+   * @param {integer} package_id - Package ID
+   * @returns {object} result - Response object from Workflow if successful or error.
+   */
+  async removePackage(user_token, ip_address, package_id) {
+    const options = {
+      method: 'PUT',
+      uri    : `${this.constructURI(tools=true)}/${package_id}/remove`,
+      headers: this.headers(user_token, ip_address)
+    };
+
+    const result = await this.request(options);
+    return result;
+  }
+
 
   /**
    * Get user's permissions for a package. Useful for authenticating editing and approval.
@@ -161,9 +170,11 @@ class Workflow {
     return null;
   }
 
-
-
-
+  // GET packages
+  
+  // GET:package_id pacakge entry
+  
+  // PATCH package entry
 };
 
 const wf = new Workflow(FORM_ID, UIOWA_SECRET_ACCESS_KEY, EENV);

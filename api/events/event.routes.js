@@ -26,15 +26,10 @@ router.get('/', getDynamoEvents, (req, res) => res.status(200).json(req.items));
 
 
 // Get specific package
+// check user session, retrieve session info, get permissions, 
 router.get('/:package_id', getDynamoEvent, (req, res) => res.status(200).json(req.item));
 
-// Get unapproved events
-router.get('/unapproved', (req, res) => {
-  let { results, error } = EventModel.filterEvents("approved", false);
-  
-  if (error) res.status(400).json({ error: true, message: error.message });
-  else res.status(200).json(results);
-});
+
 
 
 // POST: Dispatch create event 
@@ -61,6 +56,17 @@ router.post('/',
     dynamo_response  : request.dynamo_response
   })
 );
+
+
+// Get unapproved events
+/*
+router.get('/unapproved', (req, res) => {
+  let { results, error } = EventModel.filterEvents("approved", false);
+  
+  if (error) res.status(400).json({ error: true, message: error.message });
+  else res.status(200).json(results);
+});
+*/
 
 // GET/:date date(s) events
 // loggedIn, tokenValid, filterEvents, return
