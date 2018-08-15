@@ -11,10 +11,9 @@ const {
   getDynamoEvent,
   getDynamoEvents
 }                         = require('./event.utils');
-const EventModel          = require('./event.model');
 const { 
-  checkSessionExists, 
-  retrieveSessionInfo 
+  checkSessionExistsMiddleware, 
+  retrieveSessionInfoMiddleware 
 }                         = require('../auth/auth.utils');
 
 
@@ -37,8 +36,8 @@ router.get('/:package_id', getDynamoEvent, (req, res) => res.status(200).json(re
 router.post('/',
   [
     multer.fields([]),
-    checkSessionExists,
-    retrieveSessionInfo,
+    checkSessionExistsMiddleware,
+    retrieveSessionInfoMiddleware,
     //validateParams
     prepareEvent,
     postWorkflowEvent,
