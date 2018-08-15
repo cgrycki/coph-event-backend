@@ -65,7 +65,7 @@ async function getAppAuthToken() {
   if (code) return code;
   */
   let result;
-  const token_config = { scope: process.env.UIOWA_SCOPE };
+  const token_config = { scope: process.env.UIOWA_SCOPES };
   
   try {
     result = await oauth_uiowa.clientCredentials.getToken(token_config);
