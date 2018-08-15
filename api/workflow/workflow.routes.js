@@ -11,8 +11,7 @@
 /* Router dependencies ------------------------------------------------------*/
 const router      = require('express').Router();
 const { 
-  getInboxRedirect,
-  fetchUserPermissions
+  getInboxRedirect
 }                  = require('./workflow.utils');
 const Workflow     = require('./Workflow');
 const {
