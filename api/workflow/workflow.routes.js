@@ -38,7 +38,7 @@ router.get('/inbox', (request, response) => {
 
 // DELETE package
 router.delete('/', [checkSessionExists, retrieveSessionInfo],
-  (req, res) => {
+  async (req, res) => {
     // Gather params for calling RESTful Workflow endpoint
     const { uiowa_access_token, user_ip_address } = req;
     const { package_id } = req.body;
