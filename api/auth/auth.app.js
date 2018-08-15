@@ -109,3 +109,46 @@ async function getUserAuthToken(auth_code) {
 }
 
 
+/**
+ * Saves a user's OAuth2 token to a DynamoDB session. 
+ * @param {object} token - User's OAuth2 token information. 
+ * @param {object} request - HTTP request from workflow login callback. 
+ */
+function setUserAuthToken(token, request) {
+  let sess = request.session;
+  
+  // Save the access token to session
+  sess.uiowa_access_token = token.token.access_token;
+  // Save refresh token
+  sess.uiowa_refresh_token = token.token.refresh_token;
+  // Save the expiration time
+  sess.expires_in = token.token.expires_in;
+
+  // Save alphanumeric HawkID
+  sess.hawkid = token.token.hawkid;
+
+  // Save University ID interger
+  sess.uid = token.token.uid;
+}
+
+
+/**
+ * Destroys a User's session, unsetting the Oauth credentials in the process.
+ * @param {object} request - HTTP Request object
+ */
+function unsetUserAuthToken(request) {
+  if (request.session) request.session.destroy();
+  response.clearCookie('connect.sid');
+
+  return null; 
+}
+
+
+
+module.exports = {
+  getAppAuthToken,
+  getUserAuthURL,
+  getUserAuthToken,
+  setUserAuthToken,
+  unsetUserAuthToken
+};
