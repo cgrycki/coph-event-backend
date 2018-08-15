@@ -3,6 +3,8 @@
  */
 
 const rp = require('request-promise');
+const { getAppAuthToken } = require('../auth/auth.app');
+
 
 class Workflow {
   /**
@@ -18,9 +20,12 @@ class Workflow {
   };
 };
 
+
 /**
- * Create the authentication URL for Workflow application tokens.
- * @returns {string} authURL - Authentication endpoint.
+ * Create the authentication token for our Workflow app.
+ * 
+ * @async
+ * @returns {object} token - Authentication token.
  * 
  * @example
  * 
@@ -32,23 +37,10 @@ class Workflow {
  *     client_secret=YOUR_CLIENT_SECRET
  * ```
  */
-Workflow.prototype.getAuthURL = function() {
-  const authURL = 'https://login.uiowa.edu/uip/token.page?' +
-    'grant_type=client_credentials&' +
-    `scope=${this.scope}&` +
-    `client_id=${this.client_id}&` +
-    `client_secret=${this.client_secret}`;
-
-  const config = {
-    grant_type: 'client_credentials',
-    scope: this.scope,
-    client_id: this.client_id,
-    client_secret: this.client_secret
-  };
-
-  return authURL;
+Workflow.prototype.getAppToken = async function() {
+  let token = await getAppAuthToken();
+  return token;
 }
-
 
 
 /**
@@ -84,6 +76,7 @@ Workflow.prototype.request = async function(options) {
   };
   return response;
 }
+
 
 /**
  * Creates the formatted authorization headers for a RESTful call to Workflow
