@@ -4,6 +4,7 @@
 
 /* Dependencies -------------------------------------------------------------*/
 const oauth2    = require('simple-oauth2');
+const session   = require('./auth.session');
 
 
 /* Credentials --------------------------------------------------------------*/
@@ -33,14 +34,45 @@ const oauth_uiowa = oauth2.create({
  * 
  * ```
  * POST https://login.uiowa.edu/uip/token.page?grant_type=client_credentials&scope=YOUR_APPLICATION_SCOPE&client_id=YOUR_CLIENT_ID&client_secret=YOUR_CLIENT_SECRET
+ * =>
+ * {
+ *   "access_token": APPLICATION_ACCESS_TOKEN,
+ *   "scope": YOUR_APPLICATION_SCOPE,
+ *   "issued_to": YOUR_CLIENT_ID,
+ *   "user_type": "client_id,
+ *   "client_id": YOUR_CLIENT_ID,
+ *   "expires_in":3599,
+ *   "token_type":"bearer",   
+ *   "authenticator":"OAuth2 Service Auth",
+ *   "authenticationDomain":"PASSPORT_SERVICE"
+ * }
  * ```
  */
 async function getAppAuthToken() {
+  
+  /*
+  // Save a pointer to our DynamoDBStore
+  const store = session.store;
+
+  // Try accessing store
+  const SID = 'APPLICATIONSESSION';
+  const code = store.get(SID, (err, sess) => {
+    if (err) return undefined;
+    else return sess.uiowa_access_token;
+  });
+
+  // Return access code if defined. Otherwise create it
+  if (code) return code;
+  */
   let result;
   const token_config = { scope: process.env.UIOWA_SCOPE };
   
   try {
     result = await oauth_uiowa.clientCredentials.getToken(token_config);
+    
+    // Save application token
+    //setAppAuthToken(result);
+
   } catch (error) {
     result = {
       error  : true,
@@ -48,6 +80,40 @@ async function getAppAuthToken() {
       stack  : error.stack
     };
   }
+
+  return result;
+}
+
+
+// Sets the application auth token to a persistent session
+function setAppAuthToken(token) {
+
+  // Save a pointer to our DynamoDBStore
+  const store = session.store;
+
+  // Create a session
+  const ONE_HOUR = 3600000,
+        EIGHT_HOURS = 8 * ONE_HOUR,
+        SID = 'APPPLICATIONSESSION';
+
+  const application_session = {
+    cookie: { maxAge: EIGHT_HOURS },
+    uiowa_access_token: token.token.access_token,
+    expires: ONE_HOUR
+  };
+
+  // Save application token to session
+  let result = store.set(SID, session, (err, data) => {
+    if (err) return { 
+      error: true, 
+      message: err.message,
+      stack: err.stack
+    };
+    else return {
+      error: false,
+      data: data
+    };
+  });
 
   return result;
 }
@@ -122,7 +188,7 @@ function setUserAuthToken(token, request) {
   // Save refresh token
   sess.uiowa_refresh_token = token.token.refresh_token;
   // Save the expiration time
-  sess.expires_in = token.token.expires_in;
+  sess.expires = token.token.expires_in;
 
   // Save alphanumeric HawkID
   sess.hawkid = token.token.hawkid;
