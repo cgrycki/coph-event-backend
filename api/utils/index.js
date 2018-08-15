@@ -48,10 +48,10 @@ const validateParams = (request, response, next) => {
  */
 const createTableName = (table) => {
   // Describes the application client_id and name from our schema
-  let app = process.env.APP_NAME;
+  let app = process.env.UIOWA_ACCESS_KEY_ID;
 
   // Environment: {test, dev, prod}
-  let env = process.env.EENV;
+  let env = process.env.WF_ENV;
   
   const table_name = `${app}-${env}-${table}`;
   return table_name;

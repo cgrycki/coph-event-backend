@@ -10,7 +10,7 @@ class Workflow {
    */
   constructor() {
     this.form_id       = process.env.FORM_ID;
-    this.env_type      = process.env.EENV;
+    this.env_type      = process.env.WF_ENV;
     this.client_id     = process.env.UIOWA_ACCESS_KEY_ID;
     this.client_secret = process.env.UIOWA_SECRET_ACCESS_KEY;
     this.scope         = process.env.UIOWA_SCOPES;

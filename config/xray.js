@@ -8,11 +8,11 @@ var xrayExpress = require('aws-xray-sdk-express');
 
 
 // App Name
-var app_name = 'workflow-test' || process.env.APP_NAME +'-'+ process.env.EENV;
+var UIOWA_ACCESS_KEY_ID = 'workflow-test' || process.env.UIOWA_ACCESS_KEY_ID +'-'+ process.env.WF_ENV;
 
 
 // Used as middleware before the routes are assigned.
-var startTrace = xrayAWS.express.openSegment(app_name);
+var startTrace = xrayAWS.express.openSegment(UIOWA_ACCESS_KEY_ID);
 
 
 const requestTrace = (request, response, next) => {

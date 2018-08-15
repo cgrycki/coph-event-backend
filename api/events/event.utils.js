@@ -13,7 +13,7 @@ const JoiSchema          = Joi.object().keys(ModelSchema);
  * Returns an URL pointing to our Workflow endpoint
  */
 function getWorkflowURI() {
-  const env_type = process.env.EENV;
+  const env_type = process.env.WF_ENV;
   const form_id  = process.env.FORM_ID;
   const base_uri = 'https://apps.its.uiowa.edu';
 
