@@ -10,7 +10,7 @@ const {
   checkSessionExistsMiddleware,
   retrieveSessionInfoMiddleware,
   clearTokensFromSessionMiddleware
-}            = require('./auth.middleware');
+}            = require('./auth.utils');
 
 
 /* Parameters ---------------------------------------------------------------*/
