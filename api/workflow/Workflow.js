@@ -3,6 +3,8 @@
  */
 
 const rp = require('request-promise');
+const { getAppAuthToken } = require('../auth/auth.app');
+
 
 class Workflow {
   /**
@@ -12,15 +14,19 @@ class Workflow {
     this.form_id       = process.env.FORM_ID;
     this.env_type      = process.env.WF_ENV;
     this.client_id     = process.env.UIOWA_ACCESS_KEY_ID;
-    this.client_secret = process.env.UIOWA_SECRET_ACCESS_KEY;
     this.scope         = process.env.UIOWA_SCOPES;
     this.base_uri      = "https://apps.its.uiowa.edu/workflow";
   };
 };
 
+
 /**
- * Create the authentication URL for Workflow application tokens.
- * @returns {string} authURL - Authentication endpoint.
+ * Retrieves the authentication token for our Workflow app, either by 
+ * reading Application session information OR by calling Workflow and
+ * setting the token information to a session.
+ * 
+ * @async
+ * @returns {object} token - Authentication token.
  * 
  * @example
  * 
@@ -32,23 +38,10 @@ class Workflow {
  *     client_secret=YOUR_CLIENT_SECRET
  * ```
  */
-Workflow.prototype.getAuthURL = function() {
-  const authURL = 'https://login.uiowa.edu/uip/token.page?' +
-    'grant_type=client_credentials&' +
-    `scope=${this.scope}&` +
-    `client_id=${this.client_id}&` +
-    `client_secret=${this.client_secret}`;
-
-  const config = {
-    grant_type: 'client_credentials',
-    scope: this.scope,
-    client_id: this.client_id,
-    client_secret: this.client_secret
-  };
-
-  return authURL;
+Workflow.prototype.getAppToken = async function() {
+  let token = await getAppAuthToken();
+  return token;
 }
-
 
 
 /**
@@ -85,6 +78,7 @@ Workflow.prototype.request = async function(options) {
   return response;
 }
 
+
 /**
  * Creates the formatted authorization headers for a RESTful call to Workflow
  * @param {string} user_token User's OAuth token taken from request's session
@@ -101,13 +95,13 @@ Workflow.prototype.request = async function(options) {
  * X-Client-Remote-Addr: USER_IP_ADDRESS
  * ```
  */
-Workflow.prototype.headers = function(user_token, ip_address) {
+Workflow.prototype.headers = async function(user_token, ip_address) {
   const headers = {
     'Content-Type'        : 'application/json',
     'Accept'              : 'application/vnd.workflow+json;version=1.1',
     'Authorization'       : `Bearer ${user_token}`,
     'X-Client-Remote-Addr': ip_address,
-    'X-App-Authorization' : `${this.client_secret}`
+    'X-App-Authorization' : await this.getAppToken()
   };
 
   return headers;
@@ -124,10 +118,10 @@ Workflow.prototype.headers = function(user_token, ip_address) {
 Workflow.prototype.postPackage = async function(user_token, ip_address, data) {
   // Create request options
   const options = {
-    method: 'POST',
-    uri: this.constructURI(),
-    headers: this.headers(user_token, ip_address),
-    body: JSON.stringify(data)
+    method : 'POST',
+    uri    : this.constructURI(),
+    headers: await this.headers(user_token, ip_address),
+    body   : JSON.stringify(data)
   };
 
   // Kick off request
@@ -146,9 +140,9 @@ Workflow.prototype.postPackage = async function(user_token, ip_address, data) {
  */
 Workflow.prototype.voidPackage = async function(user_token, ip_address, package_id, voidReason) {
   const options = {
-    method: 'PUT',
+    method : 'PUT',
     uri    : `${this.constructURI(tools=true)}/${package_id}`,
-    headers: this.headers(user_token, ip_address),
+    headers: await this.headers(user_token, ip_address),
     body   : JSON.stringify({
       id        : package_id,
       state     : 'VOID',
@@ -171,7 +165,7 @@ Workflow.prototype.removePackage = async function(user_token, ip_address, packag
   const options = {
     method         : 'PUT',
     uri            : `${this.constructURI(tools=true)}/${package_id}/remove`,
-    headers        : this.headers(user_token, ip_address),
+    headers        : await this.headers(user_token, ip_address),
     withCredentials: true,
     json           : true
   };
@@ -190,9 +184,9 @@ Workflow.prototype.removePackage = async function(user_token, ip_address, packag
  */
 Workflow.prototype.getPermissions = async function(user_token, ip_address, package_id) {
   const options = {
-    method: 'GET',
-    uri: `${this.constructURI()}/actions/id=${package_id}`,
-    headers: this.headers(user_token, ip_address)
+    method : 'GET',
+    uri    : `${this.constructURI()}/actions/?id=${package_id}`,
+    headers: await this.headers(user_token, ip_address)
   };
 
   let result = await this.request(options);

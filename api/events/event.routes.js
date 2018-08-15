@@ -11,10 +11,9 @@ const {
   getDynamoEvent,
   getDynamoEvents
 }                         = require('./event.utils');
-const EventModel          = require('./event.model');
 const { 
-  checkSessionExists, 
-  retrieveSessionInfo 
+  checkSessionExistsMiddleware, 
+  retrieveSessionInfoMiddleware 
 }                         = require('../auth/auth.utils');
 
 
@@ -37,8 +36,8 @@ router.get('/:package_id', getDynamoEvent, (req, res) => res.status(200).json(re
 router.post('/',
   [
     multer.fields([]),
-    checkSessionExists,
-    retrieveSessionInfo,
+    checkSessionExistsMiddleware,
+    retrieveSessionInfoMiddleware,
     //validateParams
     prepareEvent,
     postWorkflowEvent,
@@ -61,7 +60,7 @@ router.post('/',
 // Get unapproved events
 /*
 router.get('/unapproved', (req, res) => {
-  let { results, error } = EventModel.filterEvents("approved", false);
+  let { results, error } = EventModel.getEvents("approved", false);
   
   if (error) res.status(400).json({ error: true, message: error.message });
   else res.status(200).json(results);
@@ -69,7 +68,7 @@ router.get('/unapproved', (req, res) => {
 */
 
 // GET/:date date(s) events
-// loggedIn, tokenValid, filterEvents, return
+// loggedIn, tokenValid, getEvents, return
 
 // GET/:id: Returns an event from our DynamoDB
 // loggedIn, tokenValid, isAdmin/hasOwnership, eventExists, return

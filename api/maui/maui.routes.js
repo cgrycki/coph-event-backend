@@ -7,15 +7,21 @@
 /* Dependencies -------------------------------------------------------------*/
 const router              = require('express').Router();
 const { validateParams }  = require('../utils');
-const mauiUtils           = require('./maui.utils');
 const Room                = require('./room.model');
+const {
+  validRoomNum,
+  validDate,
+  validStartDate,
+  validEndDate,
+  getRoomScheduleMiddleware
+}                         = require('./maui.utils');
 
 
 /* Parameters ---------------------------------------------------------------*/
-router.param('room_number', mauiUtils.validRoomNum);
-router.param('date',        mauiUtils.validDate);
-router.param('startDate',   mauiUtils.validStartDate);
-router.param('endDate',     mauiUtils.validEndDate);
+router.param('room_number', validRoomNum);
+router.param('date',        validDate);
+router.param('startDate',   validStartDate);
+router.param('endDate',     validEndDate);
 
 
 /* REST ---------------------------------------------------------------------*/
@@ -29,31 +35,12 @@ router.get('/rooms/:room_number', validateParams, (req, res) => Room.getRoom(req
 
 
 /* GET /rooms/:room_number/:date -- Get Astra Schedule for a room */
-router.get('/rooms/:room_number/:date', validateParams, (request, response) => {
-
-  // Room number parameter
-  const room_number = request.params.room_number;
-
-  // Create start and end date parameters for MAUI.
-  let start_date = request.params.date;
-  let end_date = request.params.date;
-
-  // Make the call and return the JSON room schedule
-  mauiUtils.getRoomSchedule(room_number, start_date, end_date)
-    .then(res => JSON.parse(res))
-    .then(res => response.status(200).json({
-      message: `${res.length} events found`,
-      events: res
-    }))
-    .catch(err => {
-      // MAUI returns a 204 if no events are found
-      response.status(200).json({
-        message: 'No events found',
-        events: []
-      })
-    });
-});
-
+router.get('/rooms/:room_number/:date', 
+  validateParams, getRoomScheduleMiddleware,
+  (req, res) => res.status(200).json({
+      message: `${req.events.length} events found`,
+      events: req.events
+    }));
 
 
 module.exports = router;

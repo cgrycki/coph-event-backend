@@ -53,7 +53,7 @@ const createTableName = (table) => {
   // Environment: {test, dev, prod}
   let env = process.env.WF_ENV;
   
-  const table_name = `${app}-${env}-${table}`;
+  const table_name = `${app}-${table}-${env}`;
   return table_name;
 };
 

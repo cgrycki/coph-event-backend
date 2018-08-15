@@ -11,13 +11,12 @@
 /* Router dependencies ------------------------------------------------------*/
 const router      = require('express').Router();
 const { 
-  getInboxRedirect,
-  fetchUserPermissions
+  getInboxRedirect
 }                  = require('./workflow.utils');
 const Workflow     = require('./Workflow');
 const {
-  checkSessionExists,
-  retrieveSessionInfo
+  checkSessionExistsMiddleware,
+  retrieveSessionInfoMiddleware
 }                  = require("../auth/auth.utils");
 
 
@@ -37,17 +36,32 @@ router.get('/inbox', (request, response) => {
 
 
 // DELETE package
-router.delete('/', [checkSessionExists, retrieveSessionInfo],
+router.delete('/', 
+  [checkSessionExistsMiddleware, retrieveSessionInfoMiddleware],
   async (req, res) => {
     // Gather params for calling RESTful Workflow endpoint
     const { uiowa_access_token, user_ip_address } = req;
     const { package_id } = req.body;
 
     // Wait for the workflow call
-    const  result = await Workflow.removePackage(uiowa_access_token, user_ip_address, package_id);
+    const result = await Workflow.removePackage(uiowa_access_token, user_ip_address, package_id);
     if (result.error) res.status(400).json(result);
     else res.status(200).json(result);
   });
+
+// TEST
+router.get('/token', async (req, res) => {
+
+  try {
+    let token = await Workflow.getAppToken();
+    res.status(200).json(token);
+  } catch (err) {
+    res.status(400).json({
+      message: err.message,
+      stack: err.stack
+    });
+  }
+});
 
 
 
