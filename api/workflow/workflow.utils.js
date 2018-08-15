@@ -1,6 +1,6 @@
 const rp           = require('request-promise');
 const FRONTEND_URI = process.env.FRONTEND_URI;
-const WORKFLOW_ENV = process.env.EENV;
+const WORKFLOW_ENV = process.env.WF_ENV;
 const FORM_ID      = process.env.FORM_ID;
 
 
