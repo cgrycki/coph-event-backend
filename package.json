@@ -10,6 +10,7 @@
     "predeploy": "claudia generate-serverless-express-proxy --express-module server",
     "deploy": "npm run predeploy && exec bin/claudia-deploy.sh",
     "update": "npm run predeploy && TMPDIR=/tmp claudia update --set-env-from-json",
+    "set-dev": "claudia set-version --version dev",
     "set-prod": "claudia set-version --version prod"
   },
   "repository": {
