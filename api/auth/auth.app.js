@@ -134,13 +134,13 @@ function setUserAuthToken(token, request) {
 
 /**
  * Destroys a User's session, unsetting the Oauth credentials in the process.
- * @param {object} request - HTTP Request object
+ * @param {object} request - HTTP Request object containing session information.
+ * @param {object} response - HTTP Response object containing cookie information.
  */
-function unsetUserAuthToken(request) {
+function unsetUserAuthToken(request, response) {
   if (request.session) request.session.destroy();
   response.clearCookie('connect.sid');
-
-  return null; 
+  return; 
 }
 
 
