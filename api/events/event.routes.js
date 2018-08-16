@@ -11,6 +11,8 @@ const {
   getDynamoEvent,
   getDynamoEvents
 }                         = require('./event.utils');
+const { getDynamoEventMiddleware } = require('./event.middleware');
+
 const { 
   checkSessionExistsMiddleware, 
   retrieveSessionInfoMiddleware 
@@ -26,7 +28,10 @@ router.get('/', getDynamoEvents, (req, res) => res.status(200).json(req.items));
 
 // Get specific package
 // check user session, retrieve session info, get permissions, 
-router.get('/:package_id', getDynamoEvent, (req, res) => res.status(200).json(req.item));
+//router.get('/:package_id', getDynamoEvent, (req, res) => res.status(200).json(req.item));
+router.get('/:package_id', getDynamoEventMiddleware, (req, res) => {
+  res.status(200).json(req.evt);
+});
 
 
 
@@ -38,7 +43,6 @@ router.post('/',
     multer.fields([]),
     checkSessionExistsMiddleware,
     retrieveSessionInfoMiddleware,
-    //validateParams
     prepareEvent,
     postWorkflowEvent,
     postDynamoEvent

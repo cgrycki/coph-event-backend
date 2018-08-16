@@ -46,21 +46,19 @@ const EventModel = dynamo.define('Event', {
  * @returns {object} result - Result (data or error) of DynamoDB call. 
  */
 EventModel.getEvent = function(package_id) {
-  let result;
-
-  EventModel
-    .query(package_id)
-    .limit(1)
-    .exec((err, data) => {
-      if (err) result = {
-        error  : true,
-        message: err.message,
-        stack  : err.stack
-      };
-      else result = data.Items[0];
-    });
-
-  return result;
+  return new Promise((resolve, reject) => {
+    EventModel
+      .query(package_id)
+      .limit(1)
+      .exec((err, data) => {
+        if (err) reject({
+          error  : true,
+          message: err.message,
+          stack  : err.stack
+        });
+        else resolve(data.Items[0]);
+      });
+  });
 }
 
 
@@ -129,6 +127,7 @@ EventModel.deleteEvent = function(package_id) {
 }
 
 
-//EventModel.patchEvent = function(evt) {}
+EventModel.patchEvent = function(evt) {}
+
 
 module.exports = EventModel;
