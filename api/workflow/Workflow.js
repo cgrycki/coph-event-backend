@@ -14,6 +14,7 @@ class Workflow {
     this.form_id       = process.env.FORM_ID;
     this.env_type      = process.env.WF_ENV;
     this.client_id     = process.env.UIOWA_ACCESS_KEY_ID;
+    this.client_secret = undefined;
     this.scope         = process.env.UIOWA_SCOPES;
     this.base_uri      = "https://apps.its.uiowa.edu/workflow";
   };
@@ -39,7 +40,12 @@ class Workflow {
  * ```
  */
 Workflow.prototype.getAppToken = async function() {
-  let token = await getAppAuthToken();
+  let token;
+
+  // Check if this object has already called the auth function
+  if (this.client_secret === undefined) token = await getAppAuthToken();
+  else token = this.client_secret;
+
   return token;
 }
 
