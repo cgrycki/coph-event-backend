@@ -46,9 +46,10 @@ async function getRoomScheduleMiddleware(request, response, next) {
   // Wait for the MAUI REST call
   const result = await MAUI.getRoomSchedule(room_number, start_date, end_date);
 
-  if (result.error) return response.status(400).json(result);
+  // MAUI will return nothing if there are no events scheduled
+  if (result !== undefined && result.error) return response.status(400).json(result);
   else {
-    request.events = result;
+    request.events = (result !== undefined) ? result : [];
     next();
   };
 }
