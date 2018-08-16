@@ -38,7 +38,6 @@ router.post('/',
     multer.fields([]),
     checkSessionExistsMiddleware,
     retrieveSessionInfoMiddleware,
-    //validateParams
     prepareEvent,
     postWorkflowEvent,
     postDynamoEvent

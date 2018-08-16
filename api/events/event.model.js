@@ -129,6 +129,7 @@ EventModel.deleteEvent = function(package_id) {
 }
 
 
-//EventModel.patchEvent = function(evt) {}
+EventModel.patchEvent = function(evt) {}
+
 
 module.exports = EventModel;
