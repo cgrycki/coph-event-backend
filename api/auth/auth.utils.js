@@ -92,9 +92,9 @@ async function checkSessionExistsMiddleware(request, response, next) {
 
   // No authenticated session? Expired?
   response.status(403).json({
-    error: true,
+    error   : true,
     loggedIn: false,
-    message: "You are not logged in"
+    message : "You are not logged in"
   });
 }
 
@@ -107,7 +107,10 @@ async function checkSessionExistsMiddleware(request, response, next) {
  */
 function retrieveSessionInfoMiddleware(request, response, next) {
   // Localhost gets forwarded
-  if (request.get('origin') === 'http://localhost:3000') next();
+  if (request.get('origin') === 'http://localhost:3000') {
+    request.hawkid = 'LOCALHOST';
+    return next();
+  };
 
   try {
     // Define and load the session
@@ -128,10 +131,10 @@ function retrieveSessionInfoMiddleware(request, response, next) {
     // Add HawkID for login response
     request.hawkid = sess.hawkid;
 
-    next();
+    return next();
   } catch (error) {
     // Error in retrieving our session
-    response.status(502).json({
+    return response.status(502).json({
       error: error.message,
       stack: error.stack
     });

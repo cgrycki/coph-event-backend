@@ -48,12 +48,14 @@ router.delete('/',
     if (result.error) res.status(400).json(result);
     else res.status(200).json(result);
     */
-    res.json({ user_ip_address, package_id });
+    res.status(200).json({ 
+      ip: user_ip_address, 
+      pid: package_id 
+    });
   });
 
 // TESTING
 router.get('/token', async (req, res) => {
-
   try {
     let token = await Workflow.getAppToken();
     res.status(200).json(token);
