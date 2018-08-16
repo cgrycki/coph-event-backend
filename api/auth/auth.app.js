@@ -81,7 +81,7 @@ async function authenticateApplication() {
 function getStore() {
   return new Promise(function(resolve, reject) {
     store.get(SID, function(err, sess) {
-      if (err !== null) resolve({code: undefined, expires: undefined});
+      if (err !== null) return resolve({code: undefined, expires: undefined});
       resolve({ code: sess.uiowa_access_token, expires: sess.expires });
     });
   });
