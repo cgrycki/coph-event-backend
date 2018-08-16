@@ -56,7 +56,7 @@ EventModel.getEvent = function(package_id) {
           message: err.message,
           stack  : err.stack
         });
-        else resolve(data.Items[0]);
+        else resolve(data.Items);
       });
   });
 }

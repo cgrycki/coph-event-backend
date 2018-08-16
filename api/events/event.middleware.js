@@ -16,6 +16,8 @@ async function getDynamoEventMiddleware(request, response, next) {
 
   // If EventModel returned an error cut the response short.
   if (evt.error !== undefined) return response.status(400).json(evt);
+  // If EventModel didn't find anything, return
+  if (evt.length === 0) return response.status(404).json({ message: 'couldnt find that'});
   else {
     request.evt = evt;
     next();
