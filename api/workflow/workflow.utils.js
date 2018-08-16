@@ -50,7 +50,7 @@ async function postWorkflowEventMiddleware(request, response, next) {
   else {
     request.workflow_response = result;
     request.package_id        = result.actions.packageId;
-    next();
+    return next();
   };
 }
 

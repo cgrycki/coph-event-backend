@@ -60,13 +60,13 @@ function validateEvent(request, response, next) {
   else {
     request.workflow_entry = {
       approved      : "false",
-      date          : form_info.date,
+      //date          : form_info.date,
       setup_required: form_info.setup_required.toString(),
       user_email    : form_info.user_email,
       contact_email : form_info.contact_email,
       room_number   : form_info.room_number
     };
-    next();
+    return next();
   };
 }
 
@@ -90,7 +90,7 @@ async function postDynamoEventMiddleware(request, response, next) {
   if (result.error) return response.status(400).json(result);
   else {
     request.dynamo_response = result;
-    next();
+    return next();
   }
 }
 
