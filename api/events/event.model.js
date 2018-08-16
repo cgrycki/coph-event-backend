@@ -9,7 +9,6 @@ const {
   package_id
 }                     = require('./event.schema'); 
 
-
 // Create table names depending on environment
 const { createTableName } = require('../utils/index');
 const table_name          = 'events';
@@ -43,7 +42,7 @@ const EventModel = dynamo.define('Event', {
 /**
  * Gets a Event object from our DynamoDB `events` table.
  * @param {integer} package_id - Hash Key of DynamoDB Event document.
- * @returns {object} result - Result (data or error) of DynamoDB call. 
+ * @returns {Promise} Promise - Result (data or error) of DynamoDB call. 
  */
 EventModel.getEvent = function(package_id) {
   return new Promise((resolve, reject) => {
@@ -66,10 +65,10 @@ EventModel.getEvent = function(package_id) {
  * Returns a list of events, filtered on `field` matching given `value`.
  * @param {string} field Field to filter upon
  * @param {any} value Value to constrain filter
+ * @returns {Promise} Promise DynamoDB result.
  */
 EventModel.getEvents = function(field, value) {
-  let results, error;
-
+  // Create a lookup for our non-hashKey indices
   const indexMap = {
     'user_email' : 'EventUserIndex',
     'room_number': 'EventRoomIndex',
@@ -77,23 +76,27 @@ EventModel.getEvents = function(field, value) {
     'date'       : 'EventDateIndex'
   };
 
-  EventModel
-    .query(value)
-    .usingIndex(indexMap[field])
-    .descending()
-    .exec((err, data) => {
-      if (err) error = err;
-      else results = data.Items;
-    });
-  
-  return { results, error };
+  return new Promise(function(resolve, reject) {
+    EventModel
+      .query(value)
+      .usingIndex(indexMap[field])
+      .descending()
+      .exec((err, data) => {
+        if (err) resolve({
+          error  : true,
+          message: err.message,
+          stack  : err.stack
+        });
+        else resolve(data.Items);
+      });
+  });
 }
 
 
 /**
  * Creates an event object in our DynamoDB `events` table.
  * @param {object} evt - Object with fields matching event schema.
- * @returns {object} result - Result object containing created data or error.
+ * @returns {Promise} Promise - Promise returning object containing created data or error.
  */
 EventModel.postEvent = function(evt) {
   return new Promise(function(resolve, reject) {
@@ -112,16 +115,19 @@ EventModel.postEvent = function(evt) {
 /**
  * Destroys an event object in our DynamoDB `events` table.
  * @param {integer} package_id - HashKey of DynamoDB Event document.
- * @returns {(null|Error)} result - DynamoDB destroy result.
+ * @returns {Promise} result - Promise containing DynamoDB destroy result.
  */
 EventModel.deleteEvent = function(package_id) {
-  let result = null;
-
-  EventModel.destroy(package_id, (err) => {
-    if (err !== null) result = err;
+  return new Promise(function(resolve, reject) {
+    EventModel.destroy(package_id, (err) => {
+      if (err) resolve({
+        error  : true,
+        message: err.message,
+        stack  : err.stack
+      });
+      else resolve({});
+    });
   });
-
-  return result;
 }
 
 
