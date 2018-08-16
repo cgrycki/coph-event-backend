@@ -15,7 +15,7 @@ describe('MAUI REST class', function() {
         'Content-Type': 'application/x-www-form-urlencoded'
       };
       const test_header = MAUI.headers();
-  
+      
       assert.deepEqual(test_header, correct_header);
     });
   });
@@ -29,6 +29,15 @@ describe('MAUI REST class', function() {
       let response = await MAUI.getRoomSchedule(faux_room, faux_start, faux_end);
       assert.equal(3, response.length);
     });
+  });
 
+  describe('#sessions', function() {
+    it('Should asynchronously fetch the session ID given a date.', async function() {
+      let faux_session_date = "2018-09-27";
+      let correct_sess_id   = "20183";
+      let restful_sess_id   = await MAUI.getSessionID(faux_session_date);
+
+      assert.equal(restful_sess_id, correct_sess_id);
+    });
   });
 });
