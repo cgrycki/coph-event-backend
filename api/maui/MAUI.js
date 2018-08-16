@@ -48,7 +48,7 @@ MAUI.prototype.request = async function(options) {
  * @param {string} roomNumber - Room key matching Astra records.
  * @param {string} start - Start date formatted as YYYY-MM-DD.
  * @param {string} end - End date formatted as YYYY-MM-DD.
- * @returns {list[object]} data - List or error.
+ * @returns {(list[object]|object)} data - List or error.
  */
 MAUI.prototype.getRoomSchedule = async function(roomNumber, start, end) {
   // Create the room schedule endpoint
@@ -67,11 +67,27 @@ MAUI.prototype.getRoomSchedule = async function(roomNumber, start, end) {
 }
 
 
+MAUI.prototype.getSessionID = async function(date) {
+  const uri = `${this.base_uri}/pub/registrar/sessions/by-date?date=${date}`;
+
+  const options = {
+    method : 'GET',
+    uri    : uri,
+    headers: this.headers(),
+    json   : true
+  };
+
+  const session_info = await this.request(options);
+  const session_id   = session_info.legacyCode;
+  return session_id;
+}
+
+
 /**
  * @todo
  * @param {string} courseText - Text to search course title and text.
  */
-MAUI.prototype.getCourses = async function(courseText) {}
+//MAUI.prototype.getCourses = async function(courseText, session_id) {}
 
-const maui = new MAUI();
-module.exports = maui;
+
+module.exports = new MAUI();
