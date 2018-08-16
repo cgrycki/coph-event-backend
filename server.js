@@ -13,7 +13,7 @@ var validator        = require('express-validator');
 var logger           = require('morgan');
 
 var { cors_options } = require('./config/customCors');
-var session          = require('./api/auth/auth.session');
+var { session }      = require('./api/auth/auth.session');
 var app              = express();
 
 

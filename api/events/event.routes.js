@@ -60,7 +60,7 @@ router.post('/',
 // Get unapproved events
 /*
 router.get('/unapproved', (req, res) => {
-  let { results, error } = EventModel.filterEvents("approved", false);
+  let { results, error } = EventModel.getEvents("approved", false);
   
   if (error) res.status(400).json({ error: true, message: error.message });
   else res.status(200).json(results);
@@ -68,7 +68,7 @@ router.get('/unapproved', (req, res) => {
 */
 
 // GET/:date date(s) events
-// loggedIn, tokenValid, filterEvents, return
+// loggedIn, tokenValid, getEvents, return
 
 // GET/:id: Returns an event from our DynamoDB
 // loggedIn, tokenValid, isAdmin/hasOwnership, eventExists, return

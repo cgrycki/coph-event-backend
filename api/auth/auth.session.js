@@ -2,17 +2,15 @@
  * Authorization via DynamoDB Sessions. Persist user data to the sessions
  */
 
-// Session database table name
-const table               = 'sessions';
+/* Dependencies -------------------------------------------------------------*/
 const { createTableName } = require('../utils');
+const eSession            = require('express-session');
+var DynamoDBStore         = require('connect-dynamodb')({ session: eSession });
 
-// Session middleware
-const session = require('express-session');
 
-// Implement a DynamoDB backed session
-var DynamoDBStore = require('connect-dynamodb')({ session: session });
-
-// Options for our DB
+/* Configuration ------------------------------------------------------------*/
+const ONE_HOUR       = 60 * 60 * 1000;
+const table          = 'sessions';
 const dynamo_options = { 
   table: createTableName(table),
   AWSConfigJSON: {
@@ -22,10 +20,11 @@ const dynamo_options = {
   }
 };
 
-const ONE_HOUR = 60 * 60 * 1000;
 
-module.exports = session({
-  store            : new DynamoDBStore(dynamo_options),
+/* Store + Sessions ---------------------------------------------------------*/
+var store     = new DynamoDBStore(dynamo_options);
+const session = eSession({
+  store            : store,
   secret           : process.env.MY_AWS_SECRET_ACCESS_KEY,
   resave           : false,
   saveUninitialized: false,
@@ -36,3 +35,10 @@ module.exports = session({
   },
   proxy: true
 });
+
+
+/* Exports ------------------------------------------------------------------*/
+module.exports = {
+  store,
+  session
+};

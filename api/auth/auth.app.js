@@ -4,10 +4,11 @@
 
 /* Dependencies -------------------------------------------------------------*/
 const oauth2    = require('simple-oauth2');
-const session   = require('./auth.session');
+const { store } = require('./auth.session');
+const SID       = 'APPLICATIONTOKEN';
 
 
-/* Credentials --------------------------------------------------------------*/
+/* Credentials + Private Functions ------------------------------------------*/
 const oauth_uiowa = oauth2.create({
   client: {
     id    : process.env.UIOWA_ACCESS_KEY_ID,
@@ -28,7 +29,7 @@ const oauth_uiowa = oauth2.create({
  * Returns an Access Token for authorizing application against Workflow.
  * 
  * @async
- * @returns {string} app_token - OAuth2 Access token for application credentials.
+ * @returns {object} token - OAuth2 Access token for application credentials.
  * 
  * @example
  * 
@@ -48,22 +49,7 @@ const oauth_uiowa = oauth2.create({
  * }
  * ```
  */
-async function getAppAuthToken() {
-  
-  /*
-  // Save a pointer to our DynamoDBStore
-  const store = session.store;
-
-  // Try accessing store
-  const SID = 'APPLICATIONSESSION';
-  const code = store.get(SID, (err, sess) => {
-    if (err) return undefined;
-    else return sess.uiowa_access_token;
-  });
-
-  // Return access code if defined. Otherwise create it
-  if (code) return code;
-  */
+async function authenticateApplication() {
   let result;
   const token_config = { scope: process.env.UIOWA_SCOPES };
   
@@ -116,6 +102,67 @@ function setAppAuthToken(token) {
   });
 
   return result;
+}
+
+
+/**
+ * Saves application OAuth2 token to DynamoDB sessions table.
+ * @param {object} token - OAuth reponse from Workflow.
+ */
+function setAppAuthToken(token) {
+  // Session configuration
+  const ONE_HOUR = 3600000,
+    application_session = {
+      cookie            : { maxAge: ONE_HOUR },
+      uiowa_access_token: token.access_token
+    };
+
+  // Save application token and create a session
+  let store_result;
+  store.set(SID, application_session, (err, data) => { 
+    if (err) store_result = err;
+    else store_result = data;
+  });
+  return store_result;
+}
+
+
+/**
+ * Asynchronously reads our session store to retrieve Application Auth token.
+ * 
+ * @async
+ * @returns {Promise} Promise - Asynchronous Store read.
+ */
+function getStore() {
+  return new Promise(function(resolve, reject) {
+    store.get(SID, function(err, sess) {
+      if (err !== null) return reject(undefined);
+      resolve(sess.uiowa_access_token);
+    });
+  });
+}
+
+
+/* Exported Functions -------------------------------------------------------*/
+/**
+ * Returns Application Auth token from session (if exists) or from REST call.
+ * 
+ * @async
+ * @returns {string} code - OAuth2 Access token for application credentials.
+ */
+async function getAppAuthToken() {
+  // Access session store to see if we have an application session.
+  let code = await getStore();
+  if (code !== undefined) return code;
+  else {
+    // Wait for application to authenticate against Workflow
+    const token = await authenticateApplication();
+
+    // Save to session
+    const set_result = setAppAuthToken(token);
+
+    return token.access_token;
+  };
 }
 
 
@@ -210,7 +257,7 @@ function unsetUserAuthToken(request, response) {
 }
 
 
-
+/* Exports ------------------------------------------------------------------*/
 module.exports = {
   getAppAuthToken,
   getUserAuthURL,

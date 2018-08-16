@@ -115,10 +115,6 @@ function postDynamoEvent(request, response, next) {
 }
 
 
-function getWorkflowEvent(request, response, next) {
-  /* TO BE DONE */
-};
-
 
 function getDynamoEvent(request, response, next) {
   /* Gets a single event from DynamoDB */
