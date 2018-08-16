@@ -39,7 +39,7 @@ async function getDynamoEventMiddleware(request, response, next) {
   /date
   /user
 */
-//async function getDynamoEventsMiddleware(request, response, next) {}
+async function getDynamoEventsMiddleware(request, response, next) {}
 
 
 /* POST Functions -----------------------------------------------------------*/
