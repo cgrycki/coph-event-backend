@@ -11,7 +11,10 @@ const {
   getDynamoEvent,
   getDynamoEvents
 }                         = require('./event.utils');
-const { getDynamoEventMiddleware } = require('./event.middleware');
+const { 
+  getDynamoEventMiddleware,
+  validateEvent
+} = require('./event.middleware');
 
 const { 
   checkSessionExistsMiddleware, 
@@ -43,9 +46,9 @@ router.post('/',
     multer.fields([]),
     checkSessionExistsMiddleware,
     retrieveSessionInfoMiddleware,
-    prepareEvent,
-    postWorkflowEvent,
-    postDynamoEvent
+    validateEvent,
+    //postWorkflowEvent,
+    //postDynamoEvent
   ],
   (request, response) => response.status(201).json({
     message          : "Success!",

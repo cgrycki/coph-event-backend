@@ -2,6 +2,7 @@
  * Stub for event utils
  */
 
+
 /* Dependencies -------------------------------------------------------------*/
 const EventModel      = require('./event.model');
 const { ModelSchema } = require('./event.schema');
@@ -10,7 +11,6 @@ const EventSchema     = Joi.object().keys(ModelSchema);
 
 
 /* GET Functions ------------------------------------------------------------*/
-
 /**
  * Asynchronously calls DynamoDB `events` table. Handles extracting parameters from request and responding with respect to database result.
  * @module getDynamoEventMiddleware
@@ -33,7 +33,13 @@ async function getDynamoEventMiddleware(request, response, next) {
     next();
   };
 }
-function getDynamoEventsMiddleware(request, response, next) {}
+
+/* Might be better served with dedicated endpoints
+  /unapproved
+  /date
+  /user
+*/
+//async function getDynamoEventsMiddleware(request, response, next) {}
 
 
 /* POST Functions -----------------------------------------------------------*/
@@ -65,6 +71,7 @@ function validateEvent(request, response, next) {
     next();
   };
 }
+
 
 /**
  * Asynchronously creates an event object in DynamoDB `events` table.

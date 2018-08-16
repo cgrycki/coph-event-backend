@@ -34,8 +34,12 @@ const oauth_uiowa = oauth2.create({
  * @example
  * 
  * ```
- * POST https://login.uiowa.edu/uip/token.page?grant_type=client_credentials&scope=YOUR_APPLICATION_SCOPE&client_id=YOUR_CLIENT_ID&client_secret=YOUR_CLIENT_SECRET
- * =>
+ * POST https://login.uiowa.edu/uip/token.page?
+ *        grant_type=client_credentials&
+ *        scope=YOUR_APPLICATION_SCOPE&
+ *        client_id=YOUR_CLIENT_ID&
+ *        client_secret=YOUR_CLIENT_SECRET
+ *  =>
  * {
  *   "access_token": APPLICATION_ACCESS_TOKEN,
  *   "scope": YOUR_APPLICATION_SCOPE,
