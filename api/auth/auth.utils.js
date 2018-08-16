@@ -5,6 +5,7 @@
 /* Dependencies -------------------------------------------------------------*/
 const { check } = require('express-validator/check');
 const {
+  oauth_uiowa,
   getUserAuthURL,
   getUserAuthToken,
   setUserAuthToken,
@@ -84,11 +85,11 @@ async function checkSessionExistsMiddleware(request, response, next) {
 
     // Save new token and continue with request
     setUserAuthToken(new_token, request);
-    next();
+    return next();
   }
   
   // Check if this request is being sent to /auth with a valid token
-  if (request.path.endsWith('/auth') && request.query.code) next();
+  if (request.path.endsWith('/auth') && request.query.code) return next();
 
   // No authenticated session? Expired?
   response.status(403).json({
@@ -150,7 +151,7 @@ function retrieveSessionInfoMiddleware(request, response, next) {
  */
 function clearTokensFromSessionMiddleware(request, response, next) {
   unsetUserAuthToken(request, response);
-  next();
+  return next();
 }
 
 

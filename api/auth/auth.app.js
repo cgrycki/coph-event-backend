@@ -241,6 +241,7 @@ function unsetUserAuthToken(request, response) {
 
 /* Exports ------------------------------------------------------------------*/
 module.exports = {
+  oauth_uiowa,
   getAppAuthToken,
   getUserAuthURL,
   getUserAuthToken,
