@@ -75,7 +75,7 @@ async function checkSessionExistsMiddleware(request, response, next) {
     const expiration = new Date(parseFloat(expires - FIVE_MINUTES));
     
     // Token is fine, return next middleware
-    if (expiration > new Date()) next();
+    if (expiration > new Date()) return next();
 
     // Expired, refresh token and save values to session
     const refresh_token = sess.uiowa_refresh_token; 
