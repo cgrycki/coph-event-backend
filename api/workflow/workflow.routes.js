@@ -51,7 +51,7 @@ router.delete('/',
     res.json({ user_ip_address, package_id });
   });
 
-/* TESTING
+// TESTING
 router.get('/token', async (req, res) => {
 
   try {
@@ -64,7 +64,7 @@ router.get('/token', async (req, res) => {
     });
   }
 });
-*/
+
 
 
 
