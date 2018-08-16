@@ -207,5 +207,4 @@ Workflow.prototype.validateCallback = async function(callback) {
 
 
 
-const wf = new Workflow();
-module.exports = wf;
+module.exports = new Workflow();
