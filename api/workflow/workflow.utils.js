@@ -36,19 +36,20 @@ async function fetchUserPermissionsMiddleware(request, response, next) {
 
 
 async function postWorkflowEventMiddleware(request, response, next) {
-  // Assumes multer, checkSession, retrieveSession, prepareEvent called
+  // Assumes multer, checkSession, retrieveSession, validateEvent called
 
-  // Gather params
+  // Gather params and wait for REST Promise to resolve
   const { uiowa_access_token, user_ip_address, workflow_entry } = request;
-
   const result = await Workflow.postPackage(
     uiowa_access_token, 
     user_ip_address,
     workflow_entry);
 
+  // Either return the error or attach data to the request and pass along
   if (result.error) return response.status(400).json(result);
   else {
     request.workflow_response = result;
+    request.package_id        = result.actions.packageId;
     next();
   };
 }
