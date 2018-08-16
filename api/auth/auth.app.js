@@ -71,40 +71,6 @@ async function authenticateApplication() {
 }
 
 
-// Sets the application auth token to a persistent session
-function setAppAuthToken(token) {
-
-  // Save a pointer to our DynamoDBStore
-  const store = session.store;
-
-  // Create a session
-  const ONE_HOUR = 3600000,
-        EIGHT_HOURS = 8 * ONE_HOUR,
-        SID = 'APPPLICATIONSESSION';
-
-  const application_session = {
-    cookie: { maxAge: EIGHT_HOURS },
-    uiowa_access_token: token.token.access_token,
-    expires: ONE_HOUR
-  };
-
-  // Save application token to session
-  let result = store.set(SID, session, (err, data) => {
-    if (err) return { 
-      error: true, 
-      message: err.message,
-      stack: err.stack
-    };
-    else return {
-      error: false,
-      data: data
-    };
-  });
-
-  return result;
-}
-
-
 /**
  * Saves application OAuth2 token to DynamoDB sessions table.
  * @param {object} token - OAuth reponse from Workflow.

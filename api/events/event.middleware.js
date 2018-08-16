@@ -11,7 +11,7 @@ const EventSchema     = Joi.object().keys(ModelSchema);
 // GET
 async function getDynamoEventMiddleware(request, response, next) {
   // Gather params and make DynamoDB call.
-  const package_id = request.body.package_id;
+  const package_id = request.params.package_id;
   const evt = await EventModel.getEvent(package_id);
 
   // If EventModel returned an error cut the response short.
