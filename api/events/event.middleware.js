@@ -50,10 +50,8 @@ async function getDynamoEventsMiddleware(request, response, next) {}
  * @param {Object} next Next function in middleware stack.
  */
 function validateEvent(request, response, next) {
-  // Gather the form information parsed by Multer.
+  // Gather the form information parsed by Multer. Then validate with Joi.
   let form_info = { ...request.body };
-
-  // Validate using Joi
   let { error, valid_info } = Joi.validate(form_info, EventSchema);
 
   // If there's any invalid fields, return with information
@@ -63,7 +61,7 @@ function validateEvent(request, response, next) {
     request.workflow_entry = {
       approved      : "false",
       date          : form_info.date,
-      setup_required: info.setup_required.toString(),
+      setup_required: form_info.setup_required.toString(),
       user_email    : form_info.user_email,
       contact_email : form_info.contact_email,
       room_number   : form_info.room_number
