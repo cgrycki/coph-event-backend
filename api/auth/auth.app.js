@@ -3,9 +3,11 @@
  */
 
 /* Dependencies -------------------------------------------------------------*/
-const oauth2    = require('simple-oauth2');
-const { store } = require('./auth.session');
-const SID       = 'APPLICATIONTOKEN';
+const oauth2       = require('simple-oauth2');
+const { store }    = require('./auth.session');
+const SID          = 'APPLICATIONTOKEN';
+const ONE_HOUR     = 3600000;
+const FIVE_MINUTES = 300000;
 
 
 /* Credentials + Private Functions ------------------------------------------*/
@@ -59,10 +61,6 @@ async function authenticateApplication() {
   
   try {
     result = await oauth_uiowa.clientCredentials.getToken(token_config);
-    
-    // Save application token
-    //setAppAuthToken(result);
-
   } catch (error) {
     result = {
       error  : true,
@@ -70,30 +68,7 @@ async function authenticateApplication() {
       stack  : error.stack
     };
   }
-
   return result;
-}
-
-
-/**
- * Saves application OAuth2 token to DynamoDB sessions table.
- * @param {object} token - OAuth reponse from Workflow.
- */
-function setAppAuthToken(token) {
-  // Session configuration
-  const ONE_HOUR = 3600000,
-    application_session = {
-      cookie            : { maxAge: ONE_HOUR },
-      uiowa_access_token: token.access_token
-    };
-
-  // Save application token and create a session
-  let store_result;
-  store.set(SID, application_session, (err, data) => { 
-    if (err) store_result = err;
-    else store_result = data;
-  });
-  return store_result;
 }
 
 
@@ -106,10 +81,36 @@ function setAppAuthToken(token) {
 function getStore() {
   return new Promise(function(resolve, reject) {
     store.get(SID, function(err, sess) {
-      if (err !== null) return reject(undefined);
-      resolve(sess.uiowa_access_token);
+      if (err !== null) resolve({code: undefined, expires: undefined});
+      resolve({ code: sess.uiowa_access_token, expires: sess.expires });
     });
   });
+}
+
+
+/**
+ * Saves application OAuth2 token to DynamoDB sessions table.
+ * @param {object} token - OAuth reponse from Workflow.
+ */
+function setAppAuthToken(token) {
+  // Calculate the time token will expire, including window for diff.
+  const expire_ms  = +token.expires_in * 1000;
+  const expires_at = (new Date()).getTime() + parseFloat(expire_ms - FIVE_MINUTES);
+
+  // Session configuration
+  const application_session = {
+    cookie            : { maxAge: ONE_HOUR },
+    uiowa_access_token: token.access_token,
+    expires           : expires_at
+  };
+
+  // Save application token and create a session
+  let store_result;
+  store.set(SID, application_session, (err, data) => { 
+    if (err) store_result = err;
+    else store_result = data;
+  });
+  return store_result;
 }
 
 
@@ -122,15 +123,26 @@ function getStore() {
  */
 async function getAppAuthToken() {
   // Access session store to see if we have an application session.
-  let code = await getStore();
-  if (code !== undefined) return code;
+  let app_auth = await getStore();
+
+  // If we have a session, ensure it's not expired
+  if (app_auth.code !== undefined) {
+    const nowInSecs = (new Date()).getTime();
+    const refresh = nowInSecs >= app_auth.expires;
+
+    if (refresh) {
+      // Get new token
+      const new_token = await authenticateApplication();
+      setAppAuthToken(new_token);
+      return new_token.access_token;
+    } else {
+      return app_auth.code;
+    };
+  }
+  // Otherwise RESTfully authenticate and save credentials to a new
   else {
-    // Wait for application to authenticate against Workflow
     const token = await authenticateApplication();
-
-    // Save to session
-    const set_result = setAppAuthToken(token);
-
+    setAppAuthToken(token);
     return token.access_token;
   };
 }

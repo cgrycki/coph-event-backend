@@ -122,7 +122,7 @@ Workflow.prototype.postPackage = async function(user_token, ip_address, data) {
 
   // Kick off request
   const result = await this.request(options);
-  return result; 
+  return result;
 }
 
 

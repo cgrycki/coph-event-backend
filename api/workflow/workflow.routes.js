@@ -44,12 +44,14 @@ router.delete('/',
     const { package_id } = req.body;
 
     // Wait for the workflow call
-    const result = await Workflow.removePackage(uiowa_access_token, user_ip_address, package_id);
+    /*const result = await Workflow.removePackage(uiowa_access_token, user_ip_address, package_id);
     if (result.error) res.status(400).json(result);
     else res.status(200).json(result);
+    */
+    res.json({ user_ip_address, package_id });
   });
 
-// TEST
+/* TESTING
 router.get('/token', async (req, res) => {
 
   try {
@@ -62,6 +64,7 @@ router.get('/token', async (req, res) => {
     });
   }
 });
+*/
 
 
 
