@@ -96,18 +96,16 @@ EventModel.getEvents = function(field, value) {
  * @returns {object} result - Result object containing created data or error.
  */
 EventModel.postEvent = function(evt) {
-  let result;
-
-  EventModel.create(evt, (err, data) => {
-    if (err) result = {
-      error  : true,
-      message: err.message,
-      stack  : err.stack
-    };
-    else result = data;
+  return new Promise(function(resolve, reject) {
+    EventModel.create(evt, (err, data) => {
+      if (err) resolve({
+        error  : true,
+        message: err.message,
+        stack  : err.stack
+      });
+      else resolve(data);
+    });
   });
-
-  return result;
 }
 
 
