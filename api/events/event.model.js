@@ -68,21 +68,20 @@ EventModel.getEvent = function(package_id) {
  * @returns {Promise} Promise DynamoDB result.
  */
 EventModel.getEvents = function(field, value) {
-  // Create a lookup for our non-hashKey indices
-  const indexMap = {
-    'user_email' : 'EventUserIndex',
-    'room_number': 'EventRoomIndex',
-    'approved'   : 'EventApprovedIndex',
-    'date'       : 'EventDateIndex'
-  };
+  return new Promise((resolve, reject) => {
+    // Create a lookup for our non-hashKey indices
+    const indexMap = {
+      'user_email' : 'EventUserIndex',
+      'room_number': 'EventRoomIndex',
+      'approved'   : 'EventApprovedIndex',
+      'date'       : 'EventDateIndex'
+    };
 
-  return new Promise(function(resolve, reject) {
     EventModel
       //.query(value)
       //.usingIndex(indexMap[field])
       //.descending()
       .scan()
-      .limit(20)
       .exec((err, data) => {
         if (err) return resolve({
           error  : true,
