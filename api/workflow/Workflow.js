@@ -126,7 +126,7 @@ Workflow.prototype.postPackage = async function(user_token, ip_address, data) {
     uri    : this.constructURI(),
     headers: await this.headers(user_token, ip_address),
     json   : true,
-    body   : JSON.stringify(workflow_data)
+    body   : workflow_data
   };
 
   // Kick off request
