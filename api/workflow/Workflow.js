@@ -112,7 +112,7 @@ Workflow.prototype.headers = async function(user_token, ip_address) {
  * @returns {object} result - RESTful Promise result.
  */
 Workflow.prototype.postPackage = async function(user_token, ip_address, data) {
-  // Create POST data for Workflow entry
+  // Create POST data for Workflow package entry
   const workflow_data = {
     state       : 'ROUTING',
     subType     : null,
