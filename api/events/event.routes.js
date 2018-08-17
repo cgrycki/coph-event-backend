@@ -14,7 +14,8 @@ const {
 }                         = require('./event.utils');
 const { 
   getDynamoEventMiddleware,
-  validateEvent
+  validateEvent,
+  postDynamoEventMiddleware
 } = require('./event.middleware');
 const {
   postWorkflowEventMiddleware
@@ -39,9 +40,7 @@ router.get('/', getDynamoEvents, (req, res) => res.status(200).json(req.items));
 // Get specific package
 // check user session, retrieve session info, get permissions, 
 //router.get('/:package_id', getDynamoEvent, (req, res) => res.status(200).json(req.item));
-router.get('/:package_id', getDynamoEventMiddleware, (req, res) => {
-  res.status(200).json(req.evt);
-});
+router.get('/:package_id', getDynamoEventMiddleware, (req, res) => res.status(200).json(req.evt));
 
 
 
@@ -54,8 +53,8 @@ router.post('/',
     checkSessionExistsMiddleware,
     retrieveSessionInfoMiddleware,
     validateEvent,
-    postWorkflowEventMiddleware
-    //postDynamoEvent
+    postWorkflowEventMiddleware,
+    postDynamoEventMiddleware
   ],
   (request, response) => response.status(201).json({
     message          : "Success!",
