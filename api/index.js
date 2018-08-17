@@ -20,8 +20,8 @@ router.use('/workflow',   require('./workflow/workflow.routes'));
  */
 router.get('/', function(req, res) {
   // If the user has an access token, we've already authenticated them
-  const accessToken = req.session.uiowa_access_token;
-  if (accessToken) res.status(302).redirect(process.env.FRONTEND_URI);
+  //const accessToken = req.session.uiowa_access_token;
+  //if (accessToken) res.status(302).redirect(process.env.FRONTEND_URI);
 
   // Otherwise send them to auth. If the request contains a code it will
   // be validated by our auth route. If it doesn't it will send them to login
