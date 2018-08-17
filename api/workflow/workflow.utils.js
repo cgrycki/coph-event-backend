@@ -21,7 +21,7 @@ async function fetchUserPermissionsMiddleware(request, response, next) {
   // executing this function. Call comes from our front end.
   const auth_token = request.uiowa_access_token;
   const ip_addr    = request.user_ip_address;
-  const pid        = request.body.package_id;
+  const pid        = request.params.package_id;
 
   // Call async function
   const permissions = await Workflow.getPermissions(auth_token, ip_addr, pid);

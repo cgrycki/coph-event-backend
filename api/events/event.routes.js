@@ -33,7 +33,7 @@ router.use(session);
 // Get specific package
 // check user session, retrieve session info, get permissions, 
 router.get('/:package_id', 
-  getDynamoEventMiddleware,
+  [checkSessionExistsMiddleware, retrieveSessionInfoMiddleware, getDynamoEventMiddleware],
   (req, res) => res.status(200).json(req.evt));
 
 
