@@ -267,6 +267,9 @@ Workflow.prototype.getPermissions = async function(user_token, ip_address, packa
   };
 
   let result = await this.request(options);
+  // We only request permissions for one package at a time, so return first
+  // object from response array if there was no error.
+  if (!result.error && result.length) result = result[0];
   return result;
 }
 

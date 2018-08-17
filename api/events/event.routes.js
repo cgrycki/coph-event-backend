@@ -31,7 +31,7 @@ router.use(retrieveSessionInfoMiddleware);
 // GET package_id -- Get specific package 
 router.get('/:package_id',
   [fetchUserPermissionsMiddleware, getDynamoEventMiddleware],
-  (req, res) => res.status(200).json(req.evt));
+  (req, res) => res.status(200).json({ evt: req.evt, permissions: req.permissions }));
 
 
 // GET /my -- Get events filtered by hawkid

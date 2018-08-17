@@ -35,17 +35,36 @@ async function fetchUserPermissionsMiddleware(request, response, next) {
   // Call async function
   const permissions = await Workflow.getPermissions(auth_token, ip_addr, pid);
   
-  // Check for errors
+  // Check for errors in REST call
   if (permissions.error) return response.status(400).json(permissions);
-  // Check for permissions
-  else if (!permissions[0].canView) return response.status(403).json({ 
+  // Check permissions from REST response
+  else if (!permissions.canView) return response.status(403).json({ 
     error  : true,
     message: "You don't have permissions to view this package."
   });
-  else return next();
+  // User can view, attach any more permissions to the request
+  else {
+    request.permissions = { 
+      canEdit         : permissions.canEdit,
+      canInitiatorVoid: permissions.canInitiatorVoid,
+      canVoidAfter    : permissions.canVoidAfter,
+      canSign         : permissions.canSign,
+      sigantureId     : permissions.sigantureId
+    };
+    return next();
+  };
 };
 
 
+/**
+ * Posts a new Workflow package via a Promise. Extracts Auth token and IP address from prior middlewares.
+ * @param request {Object} - HTTP request from frontend.
+ * @params [request.uiowa_access_token] {string} OAuth token from user's authenticated session.
+ * @params [request.user_ip_address] {string} IP Address of request origin.
+ * @params [request.body] {Object} Parsed form data for submission.
+ * @param {Object} response HTTP response
+ * @param {Object} next Next functiont to be called in event route.
+ */
 async function postWorkflowEventMiddleware(request, response, next) {
   // Assumes multer, checkSession, retrieveSession, validateEvent called
 
