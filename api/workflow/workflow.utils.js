@@ -45,7 +45,9 @@ async function postWorkflowEventMiddleware(request, response, next) {
     user_ip_address,
     workflow_entry);
 
-  // Either return the error or attach data to the request and pass along
+  return response.status(200).json(result);
+
+  /* Either return the error or attach data to the request and pass along
   if (result.error) return response.status(400).json({
     result: error,
     workflow_entry: workflow_entry
@@ -54,7 +56,7 @@ async function postWorkflowEventMiddleware(request, response, next) {
     request.workflow_response = result;
     request.package_id        = result.actions.packageId;
     return next();
-  };
+  };*/
 }
 
 
