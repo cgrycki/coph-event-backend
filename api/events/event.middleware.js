@@ -60,7 +60,7 @@ function validateEvent(request, response, next) {
   else {
     request.workflow_entry = {
       approved      : "false",
-      //date          : form_info.date,
+      date          : form_info.date,
       setup_required: form_info.setup_required.toString(),
       user_email    : form_info.user_email,
       contact_email : form_info.contact_email,
