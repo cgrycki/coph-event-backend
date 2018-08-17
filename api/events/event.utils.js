@@ -29,7 +29,7 @@ async function getDynamoEventMiddleware(request, response, next) {
   // If EventModel didn't find anything, return
   if (evt.length === 0) return response.status(404).json({ message: 'couldnt find that'});
   else {
-    request.evt = evt;
+    request.evt = evt[0];
     return next();
   };
 }
