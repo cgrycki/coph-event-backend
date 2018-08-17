@@ -6,17 +6,10 @@ const { session } = require('../auth/auth.session');
 
 /* Created dependencies -----------------------------------------------------*/
 const { 
-  prepareEvent,
-  postWorkflowEvent,
-  postDynamoEvent,
-  getDynamoEvent,
-  getDynamoEvents
-}                         = require('./event.utils');
-const { 
   getDynamoEventMiddleware,
   validateEvent,
   postDynamoEventMiddleware
-} = require('./event.middleware');
+} = require('./event.utils');
 const {
   postWorkflowEventMiddleware
 } = require('../workflow/workflow.utils');
@@ -34,12 +27,12 @@ router.use(session);
 /* Routes -------------------------------------------------------------------*/
 // GET /: retrieves list of events from dynamo
 // loggedIn, tokenValid, isAdmin, return
-router.get('/', getDynamoEvents, (req, res) => res.status(200).json(req.items));
+//router.get('/', getDynamoEvents, (req, res) => res.status(200).json(req.items));
 
 
 // Get specific package
 // check user session, retrieve session info, get permissions, 
-router.get('/:package_id', getDynamoEventMiddleware, (req, res) => res.status(200).json(req.evt));
+//router.get('/:package_id', getDynamoEventMiddleware, (req, res) => res.status(200).json(req.evt));
 
 
 // POST: Dispatch create event 
@@ -50,8 +43,8 @@ router.post('/',
     checkSessionExistsMiddleware,
     retrieveSessionInfoMiddleware,
     validateEvent,
-    postWorkflowEventMiddleware
-    //postDynamoEventMiddleware
+    postWorkflowEventMiddleware,
+    postDynamoEventMiddleware
   ],
   (request, response) => response.status(201).json({
     message          : "Success!",
