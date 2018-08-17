@@ -87,7 +87,10 @@ EventModel.getEvents = function(field, value) {
         if (err) return resolve({
           error  : true,
           message: err.message,
-          stack  : err.stack
+          stack  : err.stack,
+          field: field,
+          value: value,
+          full_err: err
         });
         else resolve(data.Items);
       });
