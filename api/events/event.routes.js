@@ -11,6 +11,7 @@ const {
   postDynamoEventMiddleware
 } = require('./event.utils');
 const {
+  fetchUserPermissionsMiddleware,
   postWorkflowEventMiddleware
 } = require('../workflow/workflow.utils');
 
@@ -33,7 +34,12 @@ router.use(session);
 // Get specific package
 // check user session, retrieve session info, get permissions, 
 router.get('/:package_id', 
-  [checkSessionExistsMiddleware, retrieveSessionInfoMiddleware, getDynamoEventMiddleware],
+  [
+    checkSessionExistsMiddleware,
+    retrieveSessionInfoMiddleware,
+    fetchUserPermissionsMiddleware,
+    getDynamoEventMiddleware
+  ],
   (req, res) => res.status(200).json(req.evt));
 
 
