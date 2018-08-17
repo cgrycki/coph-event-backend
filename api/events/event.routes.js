@@ -4,7 +4,11 @@ const multer      = require('multer')();
 const { session } = require('../auth/auth.session');
 
 
-/* Created dependencies -----------------------------------------------------*/
+/* Middlewares  -------------------------------------------------------------*/
+const { 
+  checkSessionExistsMiddleware, 
+  retrieveSessionInfoMiddleware 
+} = require('../auth/auth.utils');
 const { 
   getDynamoEventMiddleware,
   getDynamoEventsMiddleware,
@@ -15,11 +19,6 @@ const {
   fetchUserPermissionsMiddleware,
   postWorkflowEventMiddleware
 } = require('../workflow/workflow.utils');
-
-const { 
-  checkSessionExistsMiddleware, 
-  retrieveSessionInfoMiddleware 
-}                         = require('../auth/auth.utils');
 
 
 /* Parameters + Sessions ----------------------------------------------------*/
@@ -34,14 +33,13 @@ router.get('/:package_id',
   [fetchUserPermissionsMiddleware, getDynamoEventMiddleware],
   (req, res) => res.status(200).json(req.evt));
 
+
+// GET /my -- Get events filtered by hawkid
 router.get('/my', getDynamoEventsMiddleware,
   (req, res) => res.status(200).json(req.evts));
 
 
-
-
-// POST -- Create package 
-// postOffice365
+// POST -- Create event in workflow, dynamoDB, and (TODO) Office365
 router.post('/',
   [
     multer.fields([]),
@@ -49,16 +47,16 @@ router.post('/',
     postWorkflowEventMiddleware,
     postDynamoEventMiddleware
   ],
-  (request, response) => response.status(201).json({
-    message          : "Success!",
-    form_id          : process.env.FORM_ID,
-    ip               : request.user_ip_address,
-    body             : request.body,
-    cookies          : request.cookies,
-    workflow_entry   : request.workflow_entry,
-    workflow_response: request.workflow_response,
-    package_id       : request.package_id,
-    dynamo_response  : request.dynamo_response
+  (req, res) => res.status(201).json({
+    message       : "Success!",
+    form_id       : process.env.FORM_ID,
+    ip            : req.user_ip_address,
+    body          : req.body,
+    cookies       : req.cookies,
+    workflow_entry: req.workflow_entry,
+    workflow_res  : req.workflow_res,
+    package_id    : req.package_id,
+    dynamo_res    : req.dynamo_res
   })
 );
 
