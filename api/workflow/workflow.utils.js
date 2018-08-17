@@ -49,7 +49,7 @@ async function fetchUserPermissionsMiddleware(request, response, next) {
       canInitiatorVoid: permissions.canInitiatorVoid,
       canVoidAfter    : permissions.canVoidAfter,
       canSign         : permissions.canSign,
-      sigantureId     : permissions.sigantureId
+      signatureId     : permissions.signatureId
     };
     return next();
   };
