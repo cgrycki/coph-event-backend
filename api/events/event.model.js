@@ -82,7 +82,7 @@ EventModel.getEvents = function(field, value) {
       .usingIndex(indexMap[field])
       .descending()
       .exec((err, data) => {
-        if (err) resolve({
+        if (err) return resolve({
           error  : true,
           message: err.message,
           stack  : err.stack
