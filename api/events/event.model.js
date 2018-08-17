@@ -101,7 +101,7 @@ EventModel.getEvents = function(field, value) {
 EventModel.postEvent = function(evt) {
   return new Promise(function(resolve, reject) {
     EventModel.create(evt, (err, data) => {
-      if (err) resolve({
+      if (err) return resolve({
         error  : true,
         message: err.message,
         stack  : err.stack
