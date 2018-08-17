@@ -14,9 +14,11 @@ const {
 }                         = require('./event.utils');
 const { 
   getDynamoEventMiddleware,
-  validateEvent,
-  postDynamoEventMiddleware
+  validateEvent
 } = require('./event.middleware');
+const {
+  postWorkflowEventMiddleware
+} = require('../workflow/workflow.utils');
 
 const { 
   checkSessionExistsMiddleware, 
