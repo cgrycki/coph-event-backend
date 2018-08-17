@@ -262,7 +262,7 @@ Workflow.prototype.getPermissions = async function(user_token, ip_address, packa
   const options = {
     method : 'GET',
     json   : true,
-    uri    : `${this.constructURI()}/actions/?id=${package_id}`,
+    uri    : `${this.constructURI()}/actions?id=${package_id}`,
     headers: await this.headers(user_token, ip_address)
   };
 
