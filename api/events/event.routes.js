@@ -14,7 +14,8 @@ const {
 }                         = require('./event.utils');
 const { 
   getDynamoEventMiddleware,
-  validateEvent
+  validateEvent,
+  postDynamoEventMiddleware
 } = require('./event.middleware');
 
 const { 
@@ -51,7 +52,7 @@ router.post('/',
     checkSessionExistsMiddleware,
     retrieveSessionInfoMiddleware,
     validateEvent,
-    postWorkflowEventMiddleware,
+    postWorkflowEventMiddleware
     //postDynamoEvent
   ],
   (request, response) => response.status(201).json({
