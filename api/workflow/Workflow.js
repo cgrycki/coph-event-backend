@@ -112,12 +112,20 @@ Workflow.prototype.headers = async function(user_token, ip_address) {
  * @returns {object} result - RESTful Promise result.
  */
 Workflow.prototype.postPackage = async function(user_token, ip_address, data) {
+  // Create POST data for Workflow entry
+  const workflow_data = {
+    state       : 'ROUTING',
+    subType     : null,
+    emailContent: null,
+    entry       : data
+  };
+  
   // Create request options
   const options = {
     method : 'POST',
     uri    : this.constructURI(),
     headers: await this.headers(user_token, ip_address),
-    body   : JSON.stringify(data)
+    body   : JSON.stringify(workflow_data)
   };
 
   // Kick off request
