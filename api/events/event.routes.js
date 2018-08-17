@@ -50,8 +50,8 @@ router.post('/',
     checkSessionExistsMiddleware,
     retrieveSessionInfoMiddleware,
     validateEvent,
-    postWorkflowEventMiddleware,
-    postDynamoEventMiddleware
+    postWorkflowEventMiddleware
+    //postDynamoEventMiddleware
   ],
   (request, response) => response.status(201).json({
     message          : "Success!",
