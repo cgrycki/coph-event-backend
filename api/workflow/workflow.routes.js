@@ -10,6 +10,7 @@
 
 /* Router dependencies ------------------------------------------------------*/
 const router      = require('express').Router();
+const { session } = require('../auth/auth.session');
 const { 
   getInboxRedirect
 }                  = require('./workflow.utils');
@@ -18,6 +19,9 @@ const {
   checkSessionExistsMiddleware,
   retrieveSessionInfoMiddleware
 }                  = require("../auth/auth.utils");
+
+
+router.use(session);
 
 
 /* RESTful functions --------------------------------------------------------*/
