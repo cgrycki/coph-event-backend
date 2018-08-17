@@ -83,8 +83,14 @@ function validateEvent(request, response, next) {
  */
 async function postDynamoEventMiddleware(request, response, next) {
   // Assumes postWorkflowEventMiddleware has been called before this
-  const evt = { package_id: request.package_id, ...request.body };
-  const result = await EventModel.postEvent(evt);
+  const pid = request.package_id;
+  const evt = { package_id: pid, ...request.body };
+
+  try {
+    const result = await EventModel.postEvent(evt);
+  } catch (ddb_err) {
+    return response.status(400).json(ddb_err);
+  };
 
   // If there was an error return, otherwise pass on the information
   if (result.error) return response.status(400).json(result);
