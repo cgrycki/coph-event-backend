@@ -37,10 +37,12 @@ async function fetchUserPermissionsMiddleware(request, response, next) {
   
   // Check for errors
   if (permissions.error) return response.status(400).json(permissions);
-  else {
-    request.permissions = permissions;
-    next();
-  };
+  // Check for permissions
+  else if (!permissions[0].canView) return response.status(403).json({ 
+    error  : true,
+    message: "You don't have permissions to view this package."
+  });
+  else return next();
 };
 
 
