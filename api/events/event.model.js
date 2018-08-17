@@ -50,7 +50,7 @@ EventModel.getEvent = function(package_id) {
       .query(package_id)
       .limit(1)
       .exec((err, data) => {
-        if (err) resolve({
+        if (err) return resolve({
           error  : true,
           message: err.message,
           stack  : err.stack

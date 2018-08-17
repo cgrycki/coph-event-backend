@@ -7,6 +7,7 @@ const { session } = require('../auth/auth.session');
 /* Created dependencies -----------------------------------------------------*/
 const { 
   getDynamoEventMiddleware,
+  getDynamoEventsMiddleware,
   validateEvent,
   postDynamoEventMiddleware
 } = require('./event.utils');
@@ -23,33 +24,27 @@ const {
 
 /* Parameters + Sessions ----------------------------------------------------*/
 router.use(session);
+router.use(checkSessionExistsMiddleware);
+router.use(retrieveSessionInfoMiddleware);
 
 
 /* Routes -------------------------------------------------------------------*/
-// GET /: retrieves list of events from dynamo
-// loggedIn, tokenValid, isAdmin, return
-//router.get('/', getDynamoEvents, (req, res) => res.status(200).json(req.items));
-
-
-// Get specific package
-// check user session, retrieve session info, get permissions, 
-router.get('/:package_id', 
-  [
-    checkSessionExistsMiddleware,
-    retrieveSessionInfoMiddleware,
-    fetchUserPermissionsMiddleware,
-    getDynamoEventMiddleware
-  ],
+// GET package_id -- Get specific package 
+router.get('/:package_id',
+  [fetchUserPermissionsMiddleware, getDynamoEventMiddleware],
   (req, res) => res.status(200).json(req.evt));
 
+router.get('/my', getDynamoEventsMiddleware,
+  (req, res) => res.status(200).json(req.evts));
 
-// POST: Dispatch create event 
-// parseFields, loggedIn, tokenValid, paramValidation, postWorkflow, saveDynamoDB, postOffice365, return
+
+
+
+// POST -- Create package 
+// postOffice365
 router.post('/',
   [
     multer.fields([]),
-    checkSessionExistsMiddleware,
-    retrieveSessionInfoMiddleware,
     validateEvent,
     postWorkflowEventMiddleware,
     postDynamoEventMiddleware
@@ -80,9 +75,6 @@ router.get('/unapproved', (req, res) => {
 
 // GET/:date date(s) events
 // loggedIn, tokenValid, getEvents, return
-
-// GET/:id: Returns an event from our DynamoDB
-// loggedIn, tokenValid, isAdmin/hasOwnership, eventExists, return
 
 // PATCH/:id: Update a given event
 // loggedIn, tokenValid, eventExists, isAdmin/hasOwnership, updateDynamoDB, patchOffice365, return

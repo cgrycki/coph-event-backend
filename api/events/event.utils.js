@@ -1,5 +1,5 @@
 /**
- * Stub for event utils
+ * Event Utilities
  */
 
 
@@ -39,7 +39,37 @@ async function getDynamoEventMiddleware(request, response, next) {
   /date
   /user
 */
-async function getDynamoEventsMiddleware(request, response, next) {}
+async function getDynamoEventsMiddleware(request, response, next) {
+  // Infer field from request path: we have different endpoints calling this 
+  // middleware function.
+  const path_to_field = {
+    '/my'        : 'user_email',
+    '/date'      : 'date',
+    '/unapproved': 'approved'
+  };
+  const path_to_value = {
+    '/my'        : `${request.hawkid}@uiowa.edu`,
+    '/date'      : request.params.date,
+    '/unapproved': false
+  };
+
+  // Fetch items from DynamoDB
+  const field  = path_to_field[request.path];
+  const value  = path_to_value[request.path];
+  const result = await EventModel.getEvents(field, value);
+
+  if (result.error) return response.status(400).json({
+    error : true,
+    result: result,
+    path  : request.path,
+    field : field,
+    value : value
+  });
+  else {
+    request.evts = result.Items;
+    return next();
+  };
+}
 
 
 /* POST Functions -----------------------------------------------------------*/
