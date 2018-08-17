@@ -88,16 +88,15 @@ async function postDynamoEventMiddleware(request, response, next) {
 
   try {
     const result = await EventModel.postEvent(evt);
+    // If there was an error return, otherwise pass on the information
+    if (result.error) return response.status(400).json(result);
+    else {
+      request.dynamo_response = result;
+      return next();
+    };
   } catch (ddb_err) {
     return response.status(400).json(ddb_err);
   };
-
-  // If there was an error return, otherwise pass on the information
-  if (result.error) return response.status(400).json(result);
-  else {
-    request.dynamo_response = result;
-    return next();
-  }
 }
 
 
