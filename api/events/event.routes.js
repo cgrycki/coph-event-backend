@@ -1,6 +1,7 @@
 /* Router dependencies ------------------------------------------------------*/
-const router = require('express').Router();
-const multer  = require('multer')();
+const router      = require('express').Router();
+const multer      = require('multer')();
+const { session } = require('../auth/auth.session');
 
 
 /* Created dependencies -----------------------------------------------------*/
@@ -22,8 +23,11 @@ const {
 }                         = require('../auth/auth.utils');
 
 
-/* Routes -------------------------------------------------------------------*/
+/* Parameters + Sessions ----------------------------------------------------*/
+router.use(session);
 
+
+/* Routes -------------------------------------------------------------------*/
 // GET /: retrieves list of events from dynamo
 // loggedIn, tokenValid, isAdmin, return
 router.get('/', getDynamoEvents, (req, res) => res.status(200).json(req.items));
@@ -47,7 +51,7 @@ router.post('/',
     checkSessionExistsMiddleware,
     retrieveSessionInfoMiddleware,
     validateEvent,
-    //postWorkflowEvent,
+    postWorkflowEventMiddleware,
     //postDynamoEvent
   ],
   (request, response) => response.status(201).json({

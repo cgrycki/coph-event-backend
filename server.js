@@ -4,17 +4,14 @@
 
 /* Dependencies -------------------------------------------------------------*/
 require('dotenv').config();             // Environment variables
-var express          = require('express');
+var app              = require('express')();
 var cors             = require('cors');
 var helmet           = require('helmet');
 var cookieParser     = require('cookie-parser');
 var bodyParser       = require('body-parser');
 var validator        = require('express-validator');
 var logger           = require('morgan');
-
 var { cors_options } = require('./config/customCors');
-var { session }      = require('./api/auth/auth.session');
-var app              = express();
 
 
 /* Further App Configurations -----------------------------------------------*/
@@ -32,9 +29,8 @@ app.use(bodyParser.json({ type: 'application/json' }));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(validator());
 
-// Reverse proxy and server sessions
+// Reverse proxy
 app.set('trust proxy', 1);
-app.use(session);
 
 
 /* ROUTES -------------------------------------------------------------------*/

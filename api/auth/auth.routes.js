@@ -3,30 +3,32 @@
  */
 
 /* Dependencies -------------------------------------------------------------*/
-const router = require('express').Router();
+const router      = require('express').Router();
+const { session } = require('./auth.session');
 const {
   validParamCode,
   authUserCodeMiddleware,
   checkSessionExistsMiddleware,
   retrieveSessionInfoMiddleware,
   clearTokensFromSessionMiddleware
-}            = require('./auth.utils');
+}                = require('./auth.utils');
 
 
-/* Parameters ---------------------------------------------------------------*/
+/* Parameters + Sessions ----------------------------------------------------*/
+router.use(session);
 router.param('code', validParamCode);
 
 
 /* RESTful Endpoints --------------------------------------------------------*/
 // GET /auth/:code -- Authenticates code sent from Campus Login tools
-router.get('/', 
+router.get('/',
   authUserCodeMiddleware, 
   (req, res) => res.status(200).redirect(process.env.FRONTEND_URI));
 
-  
+
 // GET /auth/logout -- Ends a user's session and redirects them to the login URL.
 router.get('/logout', 
-  clearTokensFromSessionMiddleware, 
+  clearTokensFromSessionMiddleware,
   (req, res) => res.status(200).redirect(process.env.FRONTEND_URI));
 
 
