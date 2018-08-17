@@ -16,6 +16,15 @@ const getInboxRedirect = (package_id, signature_id=undefined) => {
 };
 
 
+/**
+ * Fetches a JSON object describing User's allowed actions and permissions.
+ * @param request {Object} - `request` - HTTP request object containing user information.
+ * @param [request.uiowa_access_token] {string} - OAuth token taken from request session.
+ * @param [request.user_ip_address] {string} - Originating IP Address of request.
+ * @param [request.params.package_id] {Integer} - Package ID taken from /events/:package_id endpoint.
+ * @param {Object} response - HTTP response object.
+ * @param {Object} next - Next function in middleware stack.
+ */
 async function fetchUserPermissionsMiddleware(request, response, next) {
   // Assumes checkSessionExists + retrieveSessionInfo has been run prior to 
   // executing this function. Call comes from our front end.
