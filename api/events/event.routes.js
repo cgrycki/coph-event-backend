@@ -32,7 +32,9 @@ router.use(session);
 
 // Get specific package
 // check user session, retrieve session info, get permissions, 
-//router.get('/:package_id', getDynamoEventMiddleware, (req, res) => res.status(200).json(req.evt));
+router.get('/:package_id', 
+  getDynamoEventMiddleware,
+  (req, res) => res.status(200).json(req.evt));
 
 
 // POST: Dispatch create event 
