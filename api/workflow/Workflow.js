@@ -110,6 +110,48 @@ Workflow.prototype.headers = async function(user_token, ip_address) {
  * @param {string} ip_address - Originating IP address taken from request.
  * @param {object} data - Package information.
  * @returns {object} result - RESTful Promise result.
+ * 
+ * @example
+ * 
+ * Example Success response:
+ * ```
+ * {
+ *   "id" : 2,
+ *   "state" : "ROUTING",
+ *   "subType" : null,
+ *   "emailContent" : {
+ *     "packageDetails" : "<h3>My Custom HTML for the Approver Notification Email</h3>"
+ *   },
+ *   "actions" : {
+ *     "canView" : true,
+ *     "canEdit" : true,
+ *     "canSign" : true,
+ *     "canVoid" : true,
+ *     "canInitiatorVoid" : false,
+ *     "canAddApprover" : true,
+ *     "canVoidAfter" : false,
+ *     "packageId" : 2,
+ *     "signatureId" : 2
+ *   },
+ *   "routingDate" : "2015-04-20T16:46:37",
+ *   "actionDate" : null,
+ *   "initiator" : {
+ *     "id" : 9,
+ *     "displayName" : "Briggs, Ransom",
+ *     "hrdeptdesc" : null,
+ *     "collegeName" : null,
+ *     "personType" : null,
+ *     "title" : null,
+ *     "univid" : "00028152",
+ *     "email" : "ransom-briggs@uiowa.edu",
+ *     "campusPostalAddress" : null,
+ *     "officePhone" : null
+ *   },
+ *   "voidReason" : null,
+ *   "commentCount" : 0,
+ *   "attachmentCount" : 0
+ * }
+ * ```
  */
 Workflow.prototype.postPackage = async function(user_token, ip_address, data) {
   // Create POST data for Workflow package entry
@@ -186,6 +228,35 @@ Workflow.prototype.removePackage = async function(user_token, ip_address, packag
  * @param {string} ip_address - IP Address taken from originating request.
  * @param {integer} package_id - ID of Workflow package to query.
  * @returns {object} result - Allowed user actions, information, and permissions for a given package.
+ * 
+ * @example
+ * 
+ * Endpoint and response:
+ * ```
+ * GET /workflow/{env}/api/developer/forms/{form_id}/packages/actions?id={package_id}&id={package_id}
+ *   =>
+ * [ {
+ *  "canView" : true,
+ *  "canEdit" : false,
+ *  "canSign" : false,
+ *  "canVoid" : false,
+ *  "canInitiatorVoid" : false,
+ *  "canAddApprover" : false,
+ *  "canVoidAfter" : false,
+ *  "packageId" : 17,
+ *  "signatureId" : null
+ * }, {
+ *  "canView" : true,
+ *  "canEdit" : true,
+ *  "canSign" : true,
+ *  "canVoid" : true,
+ *  "canInitiatorVoid" : false,
+ *  "canAddApprover" : true,
+ *  "canVoidAfter" : false,
+ *  "packageId" : 18,
+ *  "signatureId" : 40
+ * } ]
+ * ```
  */
 Workflow.prototype.getPermissions = async function(user_token, ip_address, package_id) {
   const options = {
