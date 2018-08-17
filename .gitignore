@@ -9,4 +9,5 @@ src/secrets.js
 
 # Ignore installed node libraries
 node_modules/
+node_modules/*.*
 .env
