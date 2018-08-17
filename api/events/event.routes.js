@@ -47,18 +47,7 @@ router.post('/',
     postWorkflowEventMiddleware,
     postDynamoEventMiddleware
   ],
-  (req, res) => res.status(201).json({
-    message       : "Success!",
-    form_id       : process.env.FORM_ID,
-    ip            : req.user_ip_address,
-    body          : req.body,
-    cookies       : req.cookies,
-    workflow_entry: req.workflow_entry,
-    workflow_res  : req.workflow_res,
-    package_id    : req.package_id,
-    dynamo_res    : req.dynamo_res
-  })
-);
+  (req, res) => res.status(201).json({ package_id: req.package_id, ...req.body }));
 
 
 // Get unapproved events

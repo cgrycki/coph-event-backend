@@ -78,9 +78,11 @@ EventModel.getEvents = function(field, value) {
 
   return new Promise(function(resolve, reject) {
     EventModel
-      .query(value)
-      .usingIndex(indexMap[field])
-      .descending()
+      //.query(value)
+      //.usingIndex(indexMap[field])
+      //.descending()
+      .scan()
+      .limit(20)
       .exec((err, data) => {
         if (err) return resolve({
           error  : true,
