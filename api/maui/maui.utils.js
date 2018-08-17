@@ -4,9 +4,8 @@
 
 
 /* Dependencies -------------------------------------------------------------*/
-const rp        = require('request-promise');
 const { check } = require('express-validator/check');
-const moment    = require('moment');
+const MAUI      = require('./MAUI');
 
 
 /* Paramater Validation -----------------------------------------------------*/
@@ -38,43 +37,28 @@ const validEndDate = check('endDate')
 
 
 /* Utilities ----------------------------------------------------------------*/
-const getNextDay = (date_string) => {
-  try {
-    // Coerce string into a date
-    const parsed_date = moment(date_string);
+async function getRoomScheduleMiddleware(request, response, next) {
+  // Gather MAUI parameters
+  const room_number = request.params.room_number,
+        start_date  = request.params.date,
+        end_date    = request.params.date;
 
-    // Add one day to get tomorrow
-    const next_day = parsed_date.add(1, 'days');
+  // Wait for the MAUI REST call
+  const result = await MAUI.getRoomSchedule(room_number, start_date, end_date);
 
-    // Return the YYYY-MM-DD formatted date
-    const next_day_format = next_day.format("YYYY-MM-DD");
-    return next_day_format;
-  } catch (error) {
-    return false;
+  // MAUI will return nothing if there are no events scheduled
+  if (result !== undefined && result.error) return response.status(400).json(result);
+  else {
+    request.events = (result !== undefined) ? result : [];
+    next();
   };
 }
 
-function getRoomSchedule(roomNumber, startDate, endDate) {
-  // Create URL and GET options for MAUI API call
-  const uri = 'https://api.maui.uiowa.edu/maui/api/pub/registrar/courses/AstraRoomSchedule/' +
-              `${startDate}/${endDate}/CPHB/${roomNumber}`;
-  const options = { 
-    method: 'GET',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }
-  };
 
-  // Return a promise to be resolved in our route handler.
-  return rp(uri, options);
-}
-
-
-
-exports.validRoomNum    = validRoomNum;
-exports.validDate       = validDate;
-exports.validStartDate  = validStartDate;
-exports.validEndDate    = validEndDate;
-exports.getNextDay      = getNextDay;
-exports.getRoomSchedule = getRoomSchedule;
+module.exports = {
+  validRoomNum,
+  validDate,
+  validStartDate,
+  validEndDate,
+  getRoomScheduleMiddleware
+};

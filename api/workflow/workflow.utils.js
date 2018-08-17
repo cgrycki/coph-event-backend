@@ -1,7 +1,5 @@
-const rp           = require('request-promise');
 const FRONTEND_URI = process.env.FRONTEND_URI;
-const WORKFLOW_ENV = process.env.EENV;
-const FORM_ID      = process.env.FORM_ID;
+const Workflow     = require('./Workflow');
 
 
 /**
@@ -18,45 +16,62 @@ const getInboxRedirect = (package_id, signature_id=undefined) => {
 };
 
 
-async function fetchUserPermissions(request, response, next) {
+/**
+ * Fetches a JSON object describing User's allowed actions and permissions.
+ * @param request {Object} - `request` - HTTP request object containing user information.
+ * @param [request.uiowa_access_token] {string} - OAuth token taken from request session.
+ * @param [request.user_ip_address] {string} - Originating IP Address of request.
+ * @param [request.params.package_id] {Integer} - Package ID taken from /events/:package_id endpoint.
+ * @param {Object} response - HTTP response object.
+ * @param {Object} next - Next function in middleware stack.
+ */
+async function fetchUserPermissionsMiddleware(request, response, next) {
   // Assumes checkSessionExists + retrieveSessionInfo has been run prior to 
   // executing this function. Call comes from our front end.
-  const user_ip_address = request.user_ip_address;
-  const uiowa_access_token = request.uiowa_access_token;
-  
-  // Package ID is taken from params
-  const { package_id } = request.query;
+  const auth_token = request.uiowa_access_token;
+  const ip_addr    = request.user_ip_address;
+  const pid        = request.params.package_id;
 
-  // Endpoint
-  //GET /workflow/{env}/api/developer/forms/{form_id}/packages/actions?id={package_id}&id={package_id}
-  const base_uri = 'https://apps.its.uiowa.edu/workflow';
-  const uri = `${base_uri}/workflow/${WORKFLOW_ENV}/api/developer/forms/${FORM_ID}/packages/actions=?id=${package_id}`;
+  // Call async function
+  const permissions = await Workflow.getPermissions(auth_token, ip_addr, pid);
   
-  // Workflow headers
-  const options = {
-    uri     : uri,
-    method  : 'GET',
-    headers : {
-      'Content-Type'        : 'application/json',
-      'Accept'              : 'application/vnd.workflow+json;version=1.1',
-      'Authorization'       : `Bearer ${uiowa_access_token}`,
-      'X-Client-Remote-Addr': user_ip_address
-    }
-  };
-
-  const { error, data } = await rp(options);
-  if (error) response.status(400).json({
-    error,
-    stack: error.stack,
-    message: error.message,
-    options
-  })
-  else {
-    request.data = data;
-    next();
-  };
+  // Check for errors
+  if (permissions.error) return response.status(400).json(permissions);
+  // Check for permissions
+  else if (!permissions[0].canView) return response.status(403).json({ 
+    error  : true,
+    message: "You don't have permissions to view this package."
+  });
+  else return next();
 };
 
 
-exports.getInboxRedirect     = getInboxRedirect;
-exports.fetchUserPermissions = fetchUserPermissions;
+async function postWorkflowEventMiddleware(request, response, next) {
+  // Assumes multer, checkSession, retrieveSession, validateEvent called
+
+  // Gather params and wait for REST Promise to resolve
+  const { uiowa_access_token, user_ip_address, workflow_entry } = request;
+  const result = await Workflow.postPackage(
+    uiowa_access_token, 
+    user_ip_address,
+    workflow_entry);
+
+  // Either return the error or attach data to the request and pass along
+  if (result.error) return response.status(400).json({
+    error: result.error,
+    workflow_entry: workflow_entry
+  });
+  else {
+    request.workflow_response = result;
+    request.package_id        = result.actions.packageId;
+    return next();
+  };
+}
+
+
+
+module.exports = {
+  getInboxRedirect,
+  fetchUserPermissionsMiddleware,
+  postWorkflowEventMiddleware
+};

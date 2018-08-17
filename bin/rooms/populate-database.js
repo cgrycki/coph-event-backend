@@ -6,7 +6,7 @@
  */
 
 // DEPENDENCIES
-const RoomModel = require('../../rooms/room.model');
+const RoomModel = require('../../api/maui/room.model');
 const Joi       = require('joi');
 
 

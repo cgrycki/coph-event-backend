@@ -3,6 +3,8 @@
  */
 
 const rp = require('request-promise');
+const { getAppAuthToken } = require('../auth/auth.app');
+
 
 class Workflow {
   /**
@@ -10,45 +12,32 @@ class Workflow {
    */
   constructor() {
     this.form_id       = process.env.FORM_ID;
-    this.env_type      = process.env.EENV;
+    this.env_type      = process.env.WF_ENV;
     this.client_id     = process.env.UIOWA_ACCESS_KEY_ID;
-    this.client_secret = process.env.UIOWA_SECRET_ACCESS_KEY;
+    this.client_secret = undefined;
     this.scope         = process.env.UIOWA_SCOPES;
     this.base_uri      = "https://apps.its.uiowa.edu/workflow";
   };
 };
 
+
 /**
- * Create the authentication URL for Workflow application tokens.
- * @returns {string} authURL - Authentication endpoint.
+ * Retrieves the authentication token for our Workflow app, either by 
+ * reading Application session information OR by calling Workflow and
+ * setting the token information to a session.
  * 
- * @example
- * 
- * ```
- * POST https://login.uiowa.edu/uip/token.page?
- *     grant_type=client_credentials&
- *     scope=YOUR_APPLICATION_SCOPE&
- *     client_id=YOUR_CLIENT_ID&
- *     client_secret=YOUR_CLIENT_SECRET
- * ```
+ * @async
+ * @returns {string} token - Authentication token.
  */
-Workflow.prototype.getAuthURL = function() {
-  const authURL = 'https://login.uiowa.edu/uip/token.page?' +
-    'grant_type=client_credentials&' +
-    `scope=${this.scope}&` +
-    `client_id=${this.client_id}&` +
-    `client_secret=${this.client_secret}`;
+Workflow.prototype.getAppToken = async function() {
+  let token;
 
-  const config = {
-    grant_type: 'client_credentials',
-    scope: this.scope,
-    client_id: this.client_id,
-    client_secret: this.client_secret
-  };
+  // Check if this object has already called the auth function
+  if (this.client_secret === undefined) token = await getAppAuthToken();
+  else token = this.client_secret;
 
-  return authURL;
+  return token;
 }
-
 
 
 /**
@@ -85,6 +74,7 @@ Workflow.prototype.request = async function(options) {
   return response;
 }
 
+
 /**
  * Creates the formatted authorization headers for a RESTful call to Workflow
  * @param {string} user_token User's OAuth token taken from request's session
@@ -101,13 +91,13 @@ Workflow.prototype.request = async function(options) {
  * X-Client-Remote-Addr: USER_IP_ADDRESS
  * ```
  */
-Workflow.prototype.headers = function(user_token, ip_address) {
+Workflow.prototype.headers = async function(user_token, ip_address) {
   const headers = {
     'Content-Type'        : 'application/json',
     'Accept'              : 'application/vnd.workflow+json;version=1.1',
     'Authorization'       : `Bearer ${user_token}`,
     'X-Client-Remote-Addr': ip_address,
-    'X-App-Authorization' : `${this.client_secret}`
+    'X-App-Authorization' : await this.getAppToken()
   };
 
   return headers;
@@ -120,19 +110,70 @@ Workflow.prototype.headers = function(user_token, ip_address) {
  * @param {string} ip_address - Originating IP address taken from request.
  * @param {object} data - Package information.
  * @returns {object} result - RESTful Promise result.
+ * 
+ * @example
+ * 
+ * Example Success response:
+ * ```
+ * {
+ *   "id" : 2,
+ *   "state" : "ROUTING",
+ *   "subType" : null,
+ *   "emailContent" : {
+ *     "packageDetails" : "<h3>My Custom HTML for the Approver Notification Email</h3>"
+ *   },
+ *   "actions" : {
+ *     "canView" : true,
+ *     "canEdit" : true,
+ *     "canSign" : true,
+ *     "canVoid" : true,
+ *     "canInitiatorVoid" : false,
+ *     "canAddApprover" : true,
+ *     "canVoidAfter" : false,
+ *     "packageId" : 2,
+ *     "signatureId" : 2
+ *   },
+ *   "routingDate" : "2015-04-20T16:46:37",
+ *   "actionDate" : null,
+ *   "initiator" : {
+ *     "id" : 9,
+ *     "displayName" : "Briggs, Ransom",
+ *     "hrdeptdesc" : null,
+ *     "collegeName" : null,
+ *     "personType" : null,
+ *     "title" : null,
+ *     "univid" : "00028152",
+ *     "email" : "ransom-briggs@uiowa.edu",
+ *     "campusPostalAddress" : null,
+ *     "officePhone" : null
+ *   },
+ *   "voidReason" : null,
+ *   "commentCount" : 0,
+ *   "attachmentCount" : 0
+ * }
+ * ```
  */
 Workflow.prototype.postPackage = async function(user_token, ip_address, data) {
+  // Create POST data for Workflow package entry
+  const workflow_data = {
+    state       : 'ROUTING',
+    subType     : null,
+    emailContent: null,
+    entry       : data
+  };
+  
   // Create request options
   const options = {
-    method: 'POST',
-    uri: this.constructURI(),
-    headers: this.headers(user_token, ip_address),
-    body: JSON.stringify(data)
+    method : 'POST',
+    uri    : this.constructURI(),
+    headers: await this.headers(user_token, ip_address),
+    json   : true,
+    body   : workflow_data
   };
 
   // Kick off request
   const result = await this.request(options);
-  return result; 
+  return result;
 }
 
 
@@ -146,9 +187,9 @@ Workflow.prototype.postPackage = async function(user_token, ip_address, data) {
  */
 Workflow.prototype.voidPackage = async function(user_token, ip_address, package_id, voidReason) {
   const options = {
-    method: 'PUT',
+    method : 'PUT',
     uri    : `${this.constructURI(tools=true)}/${package_id}`,
-    headers: this.headers(user_token, ip_address),
+    headers: await this.headers(user_token, ip_address),
     body   : JSON.stringify({
       id        : package_id,
       state     : 'VOID',
@@ -171,7 +212,7 @@ Workflow.prototype.removePackage = async function(user_token, ip_address, packag
   const options = {
     method         : 'PUT',
     uri            : `${this.constructURI(tools=true)}/${package_id}/remove`,
-    headers        : this.headers(user_token, ip_address),
+    headers        : await this.headers(user_token, ip_address),
     withCredentials: true,
     json           : true
   };
@@ -187,12 +228,42 @@ Workflow.prototype.removePackage = async function(user_token, ip_address, packag
  * @param {string} ip_address - IP Address taken from originating request.
  * @param {integer} package_id - ID of Workflow package to query.
  * @returns {object} result - Allowed user actions, information, and permissions for a given package.
+ * 
+ * @example
+ * 
+ * Endpoint and response:
+ * ```
+ * GET /workflow/{env}/api/developer/forms/{form_id}/packages/actions?id={package_id}&id={package_id}
+ *   =>
+ * [ {
+ *  "canView" : true,
+ *  "canEdit" : false,
+ *  "canSign" : false,
+ *  "canVoid" : false,
+ *  "canInitiatorVoid" : false,
+ *  "canAddApprover" : false,
+ *  "canVoidAfter" : false,
+ *  "packageId" : 17,
+ *  "signatureId" : null
+ * }, {
+ *  "canView" : true,
+ *  "canEdit" : true,
+ *  "canSign" : true,
+ *  "canVoid" : true,
+ *  "canInitiatorVoid" : false,
+ *  "canAddApprover" : true,
+ *  "canVoidAfter" : false,
+ *  "packageId" : 18,
+ *  "signatureId" : 40
+ * } ]
+ * ```
  */
 Workflow.prototype.getPermissions = async function(user_token, ip_address, package_id) {
   const options = {
-    method: 'GET',
-    uri: `${this.constructURI()}/actions/id=${package_id}`,
-    headers: this.headers(user_token, ip_address)
+    method : 'GET',
+    json   : true,
+    uri    : `${this.constructURI()}/actions?id=${package_id}`,
+    headers: await this.headers(user_token, ip_address)
   };
 
   let result = await this.request(options);
@@ -213,5 +284,4 @@ Workflow.prototype.validateCallback = async function(callback) {
 
 
 
-const wf = new Workflow();
-module.exports = wf;
+module.exports = new Workflow();

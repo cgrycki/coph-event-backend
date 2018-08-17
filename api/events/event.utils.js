@@ -1,168 +1,143 @@
 /**
  * Event Utilities
  */
-const rp                 = require('request-promise');
-const Joi                = require('joi');
-const {ModelSchema}      = require('./event.schema');
-const EventModel         = require('./event.model');
-const JoiSchema          = Joi.object().keys(ModelSchema);
 
+
+/* Dependencies -------------------------------------------------------------*/
+const EventModel      = require('./event.model');
+const { ModelSchema } = require('./event.schema');
+const Joi             = require('joi');
+const EventSchema     = Joi.object().keys(ModelSchema);
+
+
+/* GET Functions ------------------------------------------------------------*/
+/**
+ * Asynchronously calls DynamoDB `events` table. Handles extracting parameters from request and responding with respect to database result.
+ * @module getDynamoEventMiddleware
+ * @function
+ * @param {Object} request HTTP Request
+ * @param {Object} response HTTP Response
+ * @param {Object} next Next function in route
+ */
+async function getDynamoEventMiddleware(request, response, next) {
+  // Gather Package ID and try converting to number before making DynamoDB call.
+  const package_id = +request.params.package_id;
+  const evt = await EventModel.getEvent(package_id);
+
+  // If EventModel returned an error cut the response short.
+  if (evt.error !== undefined) return response.status(400).json(evt);
+  // If EventModel didn't find anything, return
+  if (evt.length === 0) return response.status(404).json({ message: 'couldnt find that'});
+  else {
+    request.evt = evt[0];
+    return next();
+  };
+}
+
+/* Might be better served with dedicated endpoints
+  /unapproved
+  /date
+  /user
+*/
+async function getDynamoEventsMiddleware(request, response, next) {
+  // Infer field from request path: we have different endpoints calling this 
+  // middleware function.
+  const path_to_field = {
+    '/my'        : 'user_email',
+    '/date'      : 'date',
+    '/unapproved': 'approved'
+  };
+  const path_to_value = {
+    '/my'        : `${request.hawkid}@uiowa.edu`,
+    '/date'      : request.params.date,
+    '/unapproved': false
+  };
+
+  // Fetch items from DynamoDB
+  const field  = path_to_field[request.path];
+  const value  = path_to_value[request.path];
+  const result = await EventModel.getEvents(field, value);
+
+  if (result.error) return response.status(400).json({
+    error : true,
+    result: result,
+    path  : request.path,
+    field : field,
+    value : value
+  });
+  else {
+    request.evts = result.Items;
+    return next();
+  };
+}
+
+
+/* POST Functions -----------------------------------------------------------*/
+/**
+ * Validates the potential Event information in a POST request.  
+ * @param {Object} request HTTP request containing form data.
+ * @param {Object} response HTTP response
+ * @param {Object} next Next function in middleware stack.
+ */
+function validateEvent(request, response, next) {
+  // Gather the form information parsed by Multer. Then validate with Joi.
+  let form_info = { ...request.body };
+  let { error, valid_info } = Joi.validate(form_info, EventSchema);
+
+  // If there's any invalid fields, return with information
+  if (error !== null) return response.status(400).json({ error, valid_info });
+  // Otherwise, create a Workflow entry (slimmed down information for inbox)
+  else {
+    request.workflow_entry = {
+      approved      : "false",
+      date          : form_info.date,
+      setup_required: form_info.setup_required.toString(),
+      user_email    : form_info.user_email,
+      contact_email : form_info.contact_email,
+      room_number   : form_info.room_number
+    };
+    return next();
+  };
+}
 
 
 /**
- * Returns an URL pointing to our Workflow endpoint
+ * Asynchronously creates an event object in DynamoDB `events` table.
+ * 
+ * @async
+ * @module postDynamoEventMiddleware
+ * @function
+ * @param {Object} request HTTP request; should contain form data
+ * @param {Object} response HTTP response.
+ * @param {Object} next Next function in middleware stack.
  */
-function getWorkflowURI() {
-  const env_type = process.env.EENV;
-  const form_id  = process.env.FORM_ID;
-  const base_uri = 'https://apps.its.uiowa.edu';
+async function postDynamoEventMiddleware(request, response, next) {
+  // Assumes postWorkflowEventMiddleware has been called before this
+  const evt = { package_id: request.package_id, ...request.body };
+  const result = await EventModel.postEvent(evt);
 
-  const workflowURI = `${base_uri}/workflow/${env_type}/api/developer/forms/${form_id}/packages`;
-  return workflowURI;
-}
-
-
-function prepareEvent(request, response, next) {
-  /* Prepares form data by setting any empty fields and validating existing fields. */
-
-  // The data parsed from Multer
-  let info = { ...request.body };
-  
-  // Create a Joi object and validate the submitted info
-  let { error, value } = Joi.validate(info, JoiSchema);
-
-  if (error !== null) response.status(400).json({ error, value, message: 'PIPELINE IS WORKING' });
+  // If there was an error return, otherwise pass on the information
+  if (result.error) return response.status(400).json(result);
   else {
-    // Add the extracted workflow inbox information to the request and send along
-    request.workflow_entry = {
-      approved      : "false",
-      date          : info.date,
-      setup_required: info.setup_required.toString(),
-      user_email    : info.user_email,
-      contact_email : info.contact_email,
-      room_number   : info.room_number
-    };
-    next();
+    request.dynamo_response = result;
+    return next();
   };
 }
 
 
-async function postWorkflowEvent(request, response, next) {
-  // Create a Workflow formatted JSON object
-  let workflow_response;
-  let workflow_data = {
-    state       : 'ROUTING',
-    subType     : null,
-    emailContent: null,
-    entry       : request.workflow_entry
-  };
-
-  // URI and POST call options
-  let options = {
-    method  : 'POST',
-    uri     : getWorkflowURI(),
-    headers : {
-      'Accept'              : 'application/vnd.workflow+json;version=1.1',
-      'Content-Type'        : 'application/json',
-      'Authorization'       : `Bearer ${request.uiowa_access_token}`,
-      'X-Client-Remote-Addr': request.user_ip_address
-    },
-    body                   : JSON.stringify(workflow_data),
-  };
-  
-  try {
-    // Post the event 
-    workflow_response = await rp(options);
-    let data = JSON.parse(workflow_response);
-
-    // add the event's package ID to the request before DynamoDB
-    request.workflow_response = data;
-    request.package_id = data.actions.packageId;
-    next();
-
-  } catch(requestError) {
-    response.status(400).json({
-      error  : requestError,
-      message: requestError.message,
-      stack  : requestError.stack,
-      options: options,
-      stage: 'error in request'
-    });
-  };
-}
+/* PATCH Functions ----------------------------------------------------------*/
+function patchDynamoEventMiddleware(request, response, next) {}
 
 
-function postDynamoEvent(request, response, next) {
-  /* Saves an event to our DynamoDB after receiving Workflow's response */
-
-  // Combine the form data and the package_id Workflow responded to our POST with
-  let package_id = request.package_id;
-  let new_event = { package_id, ...request.body };
-
-  // Create the entry in DynamoDB using our model
-  EventModel.create(new_event, (error, data) => {
-    if (error) return response.status(400).json({ 
-      error: error, 
-      new_event: new_event,
-      stack: error.stack,
-      message: error.message
-    });
-    else {
-      request.dynamo_response = data;
-      next();
-    };
-  });
-}
+/* DELETE Functions ---------------------------------------------------------*/
+function deleteDynamoEventMiddleware(request, response, next) {}
 
 
-function getWorkflowEvent(request, response, next) {
-  /* TO BE DONE */
+module.exports = {
+  getDynamoEventMiddleware,
+  getDynamoEventsMiddleware,
+  validateEvent,
+  postDynamoEventMiddleware,
+  patchDynamoEventMiddleware,
+  deleteDynamoEventMiddleware
 };
-
-
-function getDynamoEvent(request, response, next) {
-  /* Gets a single event from DynamoDB */
-  let package_id = request.query.package_id;
-
-  EventModel
-    .query(package_id)
-    .limit(1)
-    .exec((error, data) => {
-      // Return errors if encountered
-      if (error) response.status(422).json({ error });
-
-      // Otherwise check if this is a POST request, and return an error if it exists
-      else if ((request.method === 'POST') && (data.Items.length !== 0)) response.status(400).json({ error: "Event already exists"});
-
-      // No event found: Return error
-      else if (data.Items.length === 0) return response.status(404).json({ error: "Not found"});
-
-      // Exists and we're not trying to create, next middleware!
-      else {
-        request.item = data.Items[0];
-        next();
-      };
-    });
-}
-
-function getDynamoEvents(request, response, next) {
-  /* Gets a list of events from DynamoDB for populating dashboards. */
-  EventModel.scan()
-    .exec((error, data) => {
-      if (error) response.status(404).json({ error, stack: error.stack });
-      else {
-        request.items = data.Items;
-        next();
-      };
-    });
-}
-
-
-/* EXPORTS ------------------------------------------------------------------*/
-// POST functions
-exports.prepareEvent      = prepareEvent;
-exports.postWorkflowEvent = postWorkflowEvent;
-exports.postDynamoEvent   = postDynamoEvent;
-// GET functions
-exports.getDynamoEvent    = getDynamoEvent;
-exports.getDynamoEvents   = getDynamoEvents;

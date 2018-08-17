@@ -21,9 +21,18 @@ describe('Workflow REST class', function() {
         'X-App-Authorization': process.env.UIOWA_SECRET_ACCESS_KEY
       };
 
-    it("Should create correct headers given a user's token + IP", function() {
-      let faux_header = Workflow.headers(faux_user_token, faux_ip_address);
-      assert.deepEqual(faux_header, correct_header);
+    it("Should create correct headers given a user's token + IP", async function() {
+      let faux_header = await Workflow.headers(faux_user_token, faux_ip_address);
+
+      // Create copies of headers
+      let faux_header_sans_auth = { ...faux_header };
+      let correct_header_sans_auth = { ...correct_header };
+      
+      // Remove application auth from both headers
+      delete correct_header_sans_auth['X-App-Authorization'];
+      delete faux_header_sans_auth['X-App-Authorization'];
+
+      assert.deepEqual(faux_header_sans_auth, correct_header_sans_auth);
     });
   });
 
@@ -42,15 +51,9 @@ describe('Workflow REST class', function() {
       assert.equal(faux_tool_uri, correct_tool_uri);
     });
 
-    it('Creates the correct authorization endpoint for appliction token', function() {
-      let faux_auth_url = 'https://login.uiowa.edu/uip/token.page?' +
-        'grant_type=client_credentials&' +
-        `scope=${process.env.UIOWA_SCOPES}&` +
-        `client_id=${process.env.UIOWA_ACCESS_KEY_ID}&` +
-        `client_secret=${process.env.UIOWA_SECRET_ACCESS_KEY}`;
-      
-      let authURL = Workflow.getAuthURL();
-      assert.equal(faux_auth_url, authURL);
+    it('Gets authentication token for appliction.', async function() {
+      let app_token = await Workflow.getAppToken();
+      assert.equal(typeof(app_token), "string");
     });
   });
 

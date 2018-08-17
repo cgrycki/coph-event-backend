@@ -11,6 +11,7 @@ ROLE=$2
 # Make sure both arguments are present before executing.
 if [ -n "$JSON" ] && [[ -n "$ROLE" ]]; then
     TMPDIR=/tmp claudia create\
+     --use-local-dependencies\
      --handler lambda.handler \
      --deploy-proxy-api \
      --region us-east-1 \
