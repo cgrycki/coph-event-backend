@@ -78,18 +78,13 @@ EventModel.getEvents = function(field, value) {
     };
 
     EventModel
-      //.query(value)
-      //.usingIndex(indexMap[field])
-      //.descending()
       .scan()
+      .loadAll()
       .exec((err, data) => {
         if (err) return resolve({
           error  : true,
           message: err.message,
-          stack  : err.stack,
-          field: field,
-          value: value,
-          full_err: err
+          stack  : err.stack
         });
         else resolve(data.Items);
       });

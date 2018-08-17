@@ -8,17 +8,17 @@ const { session } = require('../auth/auth.session');
 const { 
   checkSessionExistsMiddleware, 
   retrieveSessionInfoMiddleware 
-} = require('../auth/auth.utils');
+}                               = require('../auth/auth.utils');
 const { 
   getDynamoEventMiddleware,
   getDynamoEventsMiddleware,
   validateEvent,
   postDynamoEventMiddleware
-} = require('./event.utils');
+}                               = require('./event.utils');
 const {
   fetchUserPermissionsMiddleware,
   postWorkflowEventMiddleware
-} = require('../workflow/workflow.utils');
+}                               = require('../workflow/workflow.utils');
 
 
 /* Parameters + Sessions ----------------------------------------------------*/

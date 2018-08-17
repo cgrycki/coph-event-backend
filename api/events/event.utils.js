@@ -34,6 +34,7 @@ async function getDynamoEventMiddleware(request, response, next) {
   };
 }
 
+
 /* Might be better served with dedicated endpoints
   /unapproved
   /date
@@ -56,18 +57,29 @@ async function getDynamoEventsMiddleware(request, response, next) {
   // Fetch items from DynamoDB
   const field  = path_to_field[request.path];
   const value  = path_to_value[request.path];
-  const result = await EventModel.getEvents(field, value);
 
-  if (result.error) return response.status(400).json({
-    error : true,
-    result: result,
-    path  : request.path,
-    field : field,
-    value : value
-  });
-  else {
-    request.evts = result.Items;
-    return next();
+  try {
+    const result = await EventModel.getEvents(field, value);
+
+    if (result.error) return response.status(400).json({
+      error : true,
+      result: result,
+      path  : request.path,
+      field : field,
+      value : value
+    });
+    else {
+      request.evts = result.Items;
+      return next();
+    };
+  } catch (error) {
+    return response.status(500).json({
+      error : true,
+      result: result,
+      path  : request.path,
+      field : field,
+      value : value
+    });
   };
 }
 
