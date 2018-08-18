@@ -16,7 +16,7 @@ const {
   postDynamoEventMiddleware
 }                               = require('./event.utils');
 const {
-  fetchUserPermissionsMiddleware,
+  getWorkflowPermissionsMiddleware,
   postWorkflowEventMiddleware
 }                               = require('../workflow/workflow.utils');
 
@@ -35,8 +35,10 @@ router.get('/my', getDynamoEventsMiddleware,
 
 // GET package_id -- Get specific package 
 router.get('/:package_id',
-  [fetchUserPermissionsMiddleware, getDynamoEventMiddleware],
+  [getWorkflowPermissionsMiddleware, getDynamoEventMiddleware],
   (req, res) => res.status(200).json({ evt: req.evt, permissions: req.permissions }));
+
+//router.delete('/:package_id', )
 
 
 // POST -- Create event in workflow, dynamoDB, and (TODO) Office365

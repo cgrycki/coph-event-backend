@@ -25,9 +25,8 @@ const getInboxRedirect = (package_id, signature_id=undefined) => {
  * @param {Object} response - HTTP response object.
  * @param {Object} next - Next function in middleware stack.
  */
-async function fetchUserPermissionsMiddleware(request, response, next) {
-  // Assumes checkSessionExists + retrieveSessionInfo has been run prior to 
-  // executing this function. Call comes from our front end.
+async function getWorkflowPermissionsMiddleware(request, response, next) {
+  // From prior middleware
   const auth_token = request.uiowa_access_token;
   const ip_addr    = request.user_ip_address;
   const pid        = request.params.package_id;
@@ -37,16 +36,19 @@ async function fetchUserPermissionsMiddleware(request, response, next) {
   
   // Check for errors in REST call
   if (permissions.error) return response.status(400).json(permissions);
+
   // Check permissions from REST response
   else if (!permissions.canView) return response.status(403).json({ 
     error  : true,
     message: "You don't have permissions to view this package."
   });
+
   // User can view, attach any more permissions to the request
   else {
-    request.permissions = { 
+    request.permissions = {
       canEdit         : permissions.canEdit,
       canInitiatorVoid: permissions.canInitiatorVoid,
+      canVoid         : permissions.canVoid,
       canVoidAfter    : permissions.canVoidAfter,
       canSign         : permissions.canSign,
       signatureId     : permissions.signatureId
@@ -77,7 +79,7 @@ async function postWorkflowEventMiddleware(request, response, next) {
 
   // Either return the error or attach data to the request and pass along
   if (result.error) return response.status(400).json({
-    error: result.error,
+    error: result,
     workflow_entry: workflow_entry
   });
   else {
@@ -88,9 +90,25 @@ async function postWorkflowEventMiddleware(request, response, next) {
 }
 
 
+async function deleteWorkflowEventMiddleware(request, response, next) {
+  // Gather params from prior middleware for calling RESTful Workflow endpoint.
+  const {
+    uiowa_access_token: auth_token,
+    user_ip_address   : ip,
+    params            : { package_id }
+  } = request;
+
+  // Call and wait for workflow response
+  const result = await Workflow.removePackage(auth_token, ip, package_id);
+
+  // Return response if we error out
+  if (result.error !== undefined) return response.status(400).json(result);
+  else return next();
+}
+
 
 module.exports = {
   getInboxRedirect,
-  fetchUserPermissionsMiddleware,
+  getWorkflowPermissionsMiddleware,
   postWorkflowEventMiddleware
 };
