@@ -36,7 +36,7 @@ router.post('/',
     postWorkflowEventMiddleware,
     postDynamoEventMiddleware
   ],
-  (req, res) => res.status(201).json({ package_id: req.package_id, ...req.body }));
+  (req, res) => res.status(201).json(req.dynamo_response));
 
 
 // GET /my -- Get events filtered by hawkid
