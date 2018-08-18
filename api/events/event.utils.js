@@ -61,7 +61,7 @@ async function getDynamoEventsMiddleware(request, response, next) {
   try {
     const result = await EventModel.getEvents(field, value);
 
-    if (result.error) return response.status(400).json({
+    if (result.error !== undefined) return response.status(400).json({
       error : true,
       result: result,
       path  : request.path,

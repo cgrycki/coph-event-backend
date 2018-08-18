@@ -81,7 +81,7 @@ EventModel.getEvents = function(field, value) {
       .scan()
       .loadAll()
       .exec((err, data) => {
-        if (err) return resolve({
+        if (err) return reject({
           error  : true,
           message: err.message,
           stack  : err.stack
