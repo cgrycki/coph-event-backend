@@ -69,7 +69,7 @@ async function getDynamoEventsMiddleware(request, response, next) {
       value : value
     });
     else {
-      request.evts = result.Items;
+      request.evts = result;
       return next();
     };
   } catch (error) {
