@@ -95,6 +95,7 @@ function getDynamoEventsTest(request, response, next) {
       });
       else {
         response.evts = data.Items;
+        response.dynamo = data;
         return next();
       };
     });
