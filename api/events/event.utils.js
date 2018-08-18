@@ -84,6 +84,31 @@ async function getDynamoEventsMiddleware(request, response, next) {
 }
 
 
+async function getDynamoEventsTest(request, response, next) {
+  EventModel
+    .scan()
+    .limit(20)
+    .exec((err, data) => {
+      if (err) return response.status(400).json({
+        error: true,
+        full: err
+      });
+      else {
+        response.evts = data.Items;
+        return next();
+      };
+    });
+}
+
+
+
+
+
+
+
+
+
+
 /* POST Functions -----------------------------------------------------------*/
 /**
  * Validates the potential Event information in a POST request.  
@@ -148,6 +173,7 @@ function deleteDynamoEventMiddleware(request, response, next) {}
 module.exports = {
   getDynamoEventMiddleware,
   getDynamoEventsMiddleware,
+  getDynamoEventsTest,
   validateEvent,
   postDynamoEventMiddleware,
   patchDynamoEventMiddleware,

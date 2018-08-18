@@ -12,6 +12,7 @@ const {
 const { 
   getDynamoEventMiddleware,
   getDynamoEventsMiddleware,
+  getDynamoEventsTest,
   validateEvent,
   postDynamoEventMiddleware
 }                               = require('./event.utils');
@@ -28,15 +29,21 @@ router.use(retrieveSessionInfoMiddleware);
 
 
 /* Routes -------------------------------------------------------------------*/
+// GET /my -- Get events filtered by hawkid
+router.get('/my', getDynamoEventsMiddleware,
+  (req, res) => res.status(200).json(req.evts));
+
+
+// TEST
+router.get('/', getDynamoEventsTest,
+  (req, res) => res.status(200).json(req.evts));
+
+
+
 // GET package_id -- Get specific package 
 router.get('/:package_id',
   [fetchUserPermissionsMiddleware, getDynamoEventMiddleware],
   (req, res) => res.status(200).json({ evt: req.evt, permissions: req.permissions }));
-
-
-// GET /my -- Get events filtered by hawkid
-router.get('/my', getDynamoEventsMiddleware,
-  (req, res) => res.status(200).json(req.evts));
 
 
 // POST -- Create event in workflow, dynamoDB, and (TODO) Office365
@@ -50,15 +57,8 @@ router.post('/',
   (req, res) => res.status(201).json({ package_id: req.package_id, ...req.body }));
 
 
-// Get unapproved events
-/*
-router.get('/unapproved', (req, res) => {
-  let { results, error } = EventModel.getEvents("approved", false);
-  
-  if (error) res.status(400).json({ error: true, message: error.message });
-  else res.status(200).json(results);
-});
-*/
+
+
 
 // GET/:date date(s) events
 // loggedIn, tokenValid, getEvents, return
