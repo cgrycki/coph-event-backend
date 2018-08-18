@@ -203,10 +203,55 @@ Workflow.prototype.voidPackage = async function(user_token, ip_address, package_
 
 /**
  * Remove a package so that it is no longer routing.
+ * 
+ * @async
  * @param {string} user_token - User OAuth2 token taken from session.
  * @param {string} ip_address - Originating IP Address taken from request.
  * @param {integer} package_id - Package ID
  * @returns {object} result - Response object from Workflow if successful or error.
+ * 
+ * @example
+ * 
+ * ```
+ * PUT https://apps.its.uiowa.edu/workflow/prod/api/developer/tools/forms/1/packages/8/remove
+ * ==>
+ * {
+ *   "id" : 8,
+ *   "state" : "PRE_ROUTING",
+ *   "voidReason" : null,
+ *   "actions" : {
+ *     "canView" : true,
+ *     "canEdit" : true,
+ *     "canSign" : false,
+ *     "canVoid" : false,
+ *     "canInitiatorVoid" : false,
+ *     "canAddApprover" : false,
+ *     "canVoidAfter" : false,
+ *     "packageId" : 8,
+ *     "signatureId" : null
+ *   },
+ *   "subType" : null,
+ *   "emailContent" : {
+ *     "packageDetails" : null
+ *   },
+ *   "routingDate" : "2015-04-20T16:46:42",
+ *   "actionDate" : null,
+ *   "initiator" : {
+ *     "id" : 9,
+ *     "displayName" : "Briggs, Ransom",
+ *     "hrdeptdesc" : null,
+ *     "collegeName" : null,
+ *     "personType" : null,
+ *     "title" : null,
+ *     "univid" : "00028152",
+ *     "email" : "ransom-briggs@uiowa.edu",
+ *     "campusPostalAddress" : null,
+ *     "officePhone" : null
+ *   },
+ *   "commentCount" : 0,
+ *   "attachmentCount" : 0
+ * }
+ * ```
  */
 Workflow.prototype.removePackage = async function(user_token, ip_address, package_id) {
   const options = {
@@ -224,6 +269,8 @@ Workflow.prototype.removePackage = async function(user_token, ip_address, packag
 
 /**
  * Get user's permissions for a package. Useful for authenticating editing and approval.
+ * 
+ * @async
  * @param {string} user_token - User OAuth2 token taken from session.
  * @param {string} ip_address - IP Address taken from originating request.
  * @param {integer} package_id - ID of Workflow package to query.
