@@ -10,7 +10,10 @@ const options_time  = require('../utils/time.constants');
 const jString = Joi.string();
 const jBool   = Joi.boolean().required();
 const email   = jString.allow("").email();
-const date    = Joi.date().iso().required();
+const date    = Joi.date().iso().raw().required();
+const dateReg = Joi.string()
+  .regex(/^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/)
+  .required();
 const time    = jString.allow(options_time).required();
 
 
