@@ -66,7 +66,7 @@ async function authUserCodeMiddleware(request, response, next) {
 async function checkSessionExistsMiddleware(request, response, next) {
   let sess = request.session;
 
-  // Check if they've been here before
+  // Check user has session and is authenticated
   if (sess && sess.uiowa_access_token) {
     // We have a token, but is it expired?
     // Expire 5 minutes early to account for clock differences
@@ -87,12 +87,15 @@ async function checkSessionExistsMiddleware(request, response, next) {
     setUserAuthToken(new_token, request);
     return next();
   }
+
+  // Check if user is developer
+  else if (request.get('origin') === 'http://localhost:3000') return next();
   
   // Check if this request is being sent to /auth with a valid token
-  if (request.path.endsWith('/auth') && request.query.code) return next();
+  else if (request.path.endsWith('/auth') && request.query.code) return next();
 
   // No authenticated session? Expired?
-  response.status(403).json({
+  else response.status(403).json({
     error   : true,
     loggedIn: false,
     message : "You are not logged in"
