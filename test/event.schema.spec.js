@@ -148,6 +148,35 @@ describe('Event Schema (Individual)', function() {
       {setup_required: true, setup_mfk: "1234567890"},
       scheme, Error);
   });
+
+  /** Approved:
+   * To use an index, we chose 'Binary' for the attribute. Thus, we need to 
+   * convert our 'approved' attribute to binary. The schema defaults to 'false'
+   * for the value, as it's optional (when we create the event the attribute is
+   * created for us).
+   */
+  describe('#Approved', function() {
+    let scheme = Schema.approved;
+
+    runJoiTest('Should not allow actual postive boolean value',   {approved: true}, scheme, Error);
+    runJoiTest('Should not allow actual negative boolean value',  {approved: false}, scheme, null);
+    runJoiTest('Should not allow truthy values (1)',              {approved: 1}, scheme, null);
+    runJoiTest('Should not allow falsy values (0)',               {approved: 0}, scheme, null);
+    runJoiTest('Should not allow empty string',                   {approved: ''}, scheme, null);
+    runJoiTest('Should allow undefined and return "false" in binary.',      {approved: undefined}, scheme, Error);
+    runJoiTest('Should not allow "true"',      {approved: 'true'}, scheme, null);
+    runJoiTest('Should not allow "false"',      {approved: 'false'}, scheme, null);
+
+    it('Converts string representations of Base64 to booleans', function() {
+      let { error:base_64_err, value:base_64_val } = scheme.validate("dHJ1ZQ==");
+      assert.equal(base_64_val, "dHJ1ZQ==");
+    });
+
+    it('Converts string representations of booleans to Base64', function() {
+      let { error:base_64_err, value:base_64_val } = scheme.validate("ZmFsc2U=");
+      assert.equal(base_64_val, "ZmFsc2U=");
+    });
+  });
 });
 
 describe('Event Schema (Total)', function() {
@@ -181,7 +210,7 @@ describe('Event Schema (Total)', function() {
 
     it('Should NOT transform info fields after validating AND add approved', function() {
       let res = Joi.object().keys(schema).validate(info);
-      let dynamo_obj = { ...info, approved: false };
+      let dynamo_obj = { ...info, approved: "ZmFsc2U=" };
       
       assert.deepEqual(res.value, dynamo_obj);
     });

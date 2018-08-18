@@ -19,7 +19,14 @@ const time    = jString.allow(options_time).required();
 
 /* SCHEMA + CASES ------------------------------------------------------------*/
 const package_id    = Joi.number().integer().required();
-const approved      = Joi.boolean().optional().default(false);
+// OLD APPROVED: boolean value, changed to binary to implement EventApprovedIndex
+//const approved    = Joi.boolean().optional().default(false);
+const approved      = Joi.binary()
+  .encoding('base64')
+  .optional()
+  .allow(["dHJ1ZQ==", "ZmFsc2U="]) // true, false
+  .default("ZmFsc2U=");
+
 const user_email    = email.regex(/uiowa\.edu$/).required();
 const contact_email = email;
 const coph_email    = email.regex(/uiowa\.edu$/).default("");
@@ -56,7 +63,7 @@ const setup = Joi.object().keys({
 
 const ModelSchema = {
   // Workflow attributes
-  //package_id Added in the DynamoDB definition, so that we can
+  // hashKey 'package_id' Added in the DynamoDB definition, so that we can
   // validate objects before they're POSTed to Workflow
   approved    : approved,
 
@@ -97,4 +104,5 @@ exports.comments      = comments;
 exports.num_people    = num_people;
 exports.course        = course;
 exports.setup         = setup;
+exports.approved      = approved;
 exports.ModelSchema   = ModelSchema;

@@ -26,9 +26,18 @@ async function getDynamoEventMiddleware(request, response, next) {
 
   // If EventModel returned an error cut the response short.
   if (evt.error !== undefined) return response.status(400).json(evt);
+  
   // If EventModel didn't find anything, return
   if (evt.length === 0) return response.status(404).json({ message: 'couldnt find that'});
+  
+  // Otherwise we found the event object, convert 'approval' from base64 > bool
+  // "dHJ1ZQ==" ('true')        "ZmFsc2U=" (false)
   else {
+    // Some of our objects are still using booleans (woof)
+    if (typeof(evt[0].approval) !== "boolean") {
+      evt[0].approval = (evt[0].approval === "dHJ1ZQ==") ? true : false;
+    };
+
     request.evt = evt[0];
     return next();
   };
