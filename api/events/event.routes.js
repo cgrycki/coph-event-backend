@@ -28,19 +28,6 @@ router.use(retrieveSessionInfoMiddleware);
 
 
 /* Routes -------------------------------------------------------------------*/
-// GET /my -- Get events filtered by hawkid
-router.get('/my', getDynamoEventsMiddleware,
-  (req, res) => res.status(200).json(req.evts));
-
-
-// GET package_id -- Get specific package 
-router.get('/:package_id',
-  [getWorkflowPermissionsMiddleware, getDynamoEventMiddleware],
-  (req, res) => res.status(200).json({ evt: req.evt, permissions: req.permissions }));
-
-//router.delete('/:package_id', )
-
-
 // POST -- Create event in workflow, dynamoDB, and (TODO) Office365
 router.post('/',
   [
@@ -52,7 +39,18 @@ router.post('/',
   (req, res) => res.status(201).json({ package_id: req.package_id, ...req.body }));
 
 
+// GET /my -- Get events filtered by hawkid
+router.get('/my', getDynamoEventsMiddleware,
+  (req, res) => res.status(200).json(req.evts));
 
+
+// GET package_id -- Get specific package 
+router.get('/:package_id',
+  [getWorkflowPermissionsMiddleware, getDynamoEventMiddleware],
+  (req, res) => res.status(200).json({ evt: req.evt, permissions: req.permissions }));
+
+
+//router.delete('/:package_id', )
 
 
 // GET/:date date(s) events
