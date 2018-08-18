@@ -35,11 +35,15 @@ async function getDynamoEventMiddleware(request, response, next) {
 }
 
 
-/* Might be better served with dedicated endpoints
-  /unapproved
-  /date
-  /user
-*/
+/**
+ * Attaches a filtered list of event objects to request. Infers DynamoDB index and value to use for filter from request. 
+ * @param {Object} request HTTP request from frontend.
+ * @param [request.path] {string} - Route endpoint request is hitting
+ * @param [request.hawkid] {string} - HawkID from user session.
+ * @param [request.params] {(string|undefined)} - Params *can* have value depending on the endpoint called.
+ * @param {Object} response HTTP response
+ * @param {Object} next Next Function in server route (final response).
+ */
 async function getDynamoEventsMiddleware(request, response, next) {
   // Infer field from request path: we have different endpoints calling this 
   // middleware function.
@@ -80,6 +84,7 @@ async function getDynamoEventsMiddleware(request, response, next) {
 /**
  * Validates the potential Event information in a POST request.  
  * @param {Object} request HTTP request containing form data.
+ * @param [request.body] {Object} - Form Data as an object, parsed by Multer.
  * @param {Object} response HTTP response
  * @param {Object} next Next function in middleware stack.
  */
@@ -111,7 +116,8 @@ function validateEvent(request, response, next) {
  * @async
  * @module postDynamoEventMiddleware
  * @function
- * @param {Object} request HTTP request; should contain form data
+ * @param {Object} request HTTP request from frontend.
+ * @param [request.body] {Object} - Form Data as an object, parsed by Multer.
  * @param {Object} response HTTP response.
  * @param {Object} next Next function in middleware stack.
  */
@@ -134,7 +140,17 @@ function patchDynamoEventMiddleware(request, response, next) {}
 
 
 /* DELETE Functions ---------------------------------------------------------*/
-function deleteDynamoEventMiddleware(request, response, next) {}
+async function deleteDynamoEventMiddleware(request, response, next) {
+  // Get hashKey of dynamo object
+  let { package_id } = request.params;
+  
+  // Wait for dynamoDB to destroy object
+  let result = await EventModel.deleteEvent(package_id);
+
+  // Respond appropriately
+  if (result.error) return response.status(400).json(result);
+  else return next();
+}
 
 
 module.exports = {

@@ -121,12 +121,12 @@ EventModel.postEvent = function(evt) {
 EventModel.deleteEvent = function(package_id) {
   return new Promise(function(resolve, reject) {
     EventModel.destroy(package_id, (err) => {
-      if (err) resolve({
+      if (err) return resolve({
         error  : true,
         message: err.message,
         stack  : err.stack
       });
-      else resolve({});
+      else resolve({ error: false });
     });
   });
 }
