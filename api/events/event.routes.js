@@ -13,11 +13,13 @@ const {
   getDynamoEventMiddleware,
   getDynamoEventsMiddleware,
   validateEvent,
-  postDynamoEventMiddleware
+  postDynamoEventMiddleware,
+  deleteDynamoEventMiddleware
 }                               = require('./event.utils');
 const {
   getWorkflowPermissionsMiddleware,
-  postWorkflowEventMiddleware
+  postWorkflowEventMiddleware,
+  deleteWorkflowEventMiddleware
 }                               = require('../workflow/workflow.utils');
 
 
@@ -50,7 +52,9 @@ router.get('/:package_id',
   (req, res) => res.status(200).json({ evt: req.evt, permissions: req.permissions }));
 
 
-//router.delete('/:package_id', )
+router.delete('/:package_id', 
+  [deleteWorkflowEventMiddleware, deleteDynamoEventMiddleware],
+  (req, res) => res.status(200).json({ package_id: req.params.package_id }));
 
 
 // GET/:date date(s) events

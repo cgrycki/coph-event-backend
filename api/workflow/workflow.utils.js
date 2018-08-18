@@ -1,3 +1,8 @@
+/** Express Middleware functions to interact with the University of Iowa Workflow servers.
+ * @module workflow.utils
+ */
+
+
 const FRONTEND_URI = process.env.FRONTEND_URI;
 const Workflow     = require('./Workflow');
 
@@ -90,7 +95,17 @@ async function postWorkflowEventMiddleware(request, response, next) {
 }
 
 
-async function deleteWorkflowEventMiddleware(request, response, next) {
+/**
+ * Deletes an event from workflow, and passes along the package_id to delete in Dynamo.
+ * @module deleteWorkflowEventMiddleware
+ * @function
+ * @async
+ * @param {Object} request Incoming HTTP request from frontend.
+ * @param {Object} response Outgoing HTTP response object.
+ * @param {Object} next Next function in middleware stack (deleteDynamoEvent).
+ */
+// async
+function deleteWorkflowEventMiddleware(request, response, next) {
   // Gather params from prior middleware for calling RESTful Workflow endpoint.
   const {
     uiowa_access_token: auth_token,
@@ -98,17 +113,22 @@ async function deleteWorkflowEventMiddleware(request, response, next) {
     params            : { package_id }
   } = request;
 
+
+  // Ensure we've gathered correct vars
+  return response.status(200).json({ auth_token, ip, package_id });
+
   // Call and wait for workflow response
-  const result = await Workflow.removePackage(auth_token, ip, package_id);
+  //const result = await Workflow.removePackage(auth_token, ip, package_id);
 
   // Return response if we error out
-  if (result.error !== undefined) return response.status(400).json(result);
-  else return next();
+  //if (result.error !== undefined) return response.status(400).json(result);
+  //else next();
 }
 
 
 module.exports = {
   getInboxRedirect,
   getWorkflowPermissionsMiddleware,
-  postWorkflowEventMiddleware
+  postWorkflowEventMiddleware,
+  deleteWorkflowEventMiddleware
 };
