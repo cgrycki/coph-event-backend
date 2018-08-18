@@ -84,7 +84,7 @@ async function getDynamoEventsMiddleware(request, response, next) {
 }
 
 
-async function getDynamoEventsTest(request, response, next) {
+function getDynamoEventsTest(request, response, next) {
   EventModel
     .scan()
     .limit(20)
