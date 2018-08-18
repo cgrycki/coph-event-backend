@@ -12,7 +12,6 @@ const {
 const { 
   getDynamoEventMiddleware,
   getDynamoEventsMiddleware,
-  getDynamoEventsTest,
   validateEvent,
   postDynamoEventMiddleware
 }                               = require('./event.utils');
@@ -29,11 +28,6 @@ router.use(retrieveSessionInfoMiddleware);
 
 
 /* Routes -------------------------------------------------------------------*/
-// TEST
-router.get('/', getDynamoEventsTest,
-  (req, res) => res.status(200).json({ evts: req.evts, dynamo: req.dynamo }));
-
-
 // GET /my -- Get events filtered by hawkid
 router.get('/my', getDynamoEventsMiddleware,
   (req, res) => res.status(200).json(req.evts));

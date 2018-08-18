@@ -46,67 +46,33 @@ async function getDynamoEventsMiddleware(request, response, next) {
   const path_to_field = {
     '/my'        : 'user_email',
     '/date'      : 'date',
-    '/unapproved': 'approved'
+    '/unapproved': 'approved',
+    '/room'      : 'room_number'
   };
   const path_to_value = {
     '/my'        : `${request.hawkid}@uiowa.edu`,
     '/date'      : request.params.date,
-    '/unapproved': false
+    '/unapproved': false,
+    '/room'      : request.params.room_number
   };
 
   // Fetch items from DynamoDB
   const field  = path_to_field[request.path];
   const value  = path_to_value[request.path];
+  const result = await EventModel.getEvents(field, value);
 
-  try {
-    const result = await EventModel.getEvents(field, value);
-
-    if (result.error !== undefined) return response.status(400).json({
-      error : true,
-      result: result,
-      path  : request.path,
-      field : field,
-      value : value
-    });
-    else {
-      request.evts = result;
-      return next();
-    };
-  } catch (error) {
-    return response.status(500).json({
-      error : true,
-      result: result,
-      path  : request.path,
-      field : field,
-      value : value
-    });
+  if (result.error !== undefined) return response.status(400).json({
+    error : true,
+    result: result,
+    path  : request.path,
+    field : field,
+    value : value
+  });
+  else {
+    request.evts = result;
+    return next();
   };
 }
-
-
-function getDynamoEventsTest(request, response, next) {
-  EventModel
-    .scan()
-    .limit(20)
-    .exec((err, data) => {
-      if (err) return response.status(400).json({
-        error: true,
-        full: err
-      });
-      else {
-        response.evts = data.Items;
-        response.dynamo = data;
-        return next();
-      };
-    });
-}
-
-
-
-
-
-
-
 
 
 
@@ -174,7 +140,6 @@ function deleteDynamoEventMiddleware(request, response, next) {}
 module.exports = {
   getDynamoEventMiddleware,
   getDynamoEventsMiddleware,
-  getDynamoEventsTest,
   validateEvent,
   postDynamoEventMiddleware,
   patchDynamoEventMiddleware,
