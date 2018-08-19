@@ -111,10 +111,10 @@ async function checkSessionExistsMiddleware(request, response, next) {
  */
 function retrieveSessionInfoMiddleware(request, response, next) {
   // Localhost gets forwarded
-  if (request.get('origin') === 'http://localhost:3000') {
+  /*if (request.get('origin') === 'http://localhost:3000') {
     request.hawkid = 'LOCALHOST';
     return next();
-  };
+  };*/
 
   try {
     // Define and load the session
