@@ -192,6 +192,25 @@ Workflow.prototype.postPackage = async function(user_token, ip_address, data) {
  * @param {string} user_token OAuth token taken from session store.
  * @param {string} ip_address IP address of originating request.
  * @param {Object} data Extracted information from user Event update.
+ * 
+ * @example
+ * 
+ * ```
+ * URI: PUT https://apps.its.uiowa.edu/workflow/prod/api/developer/tools/forms/1/packages/2/entry
+ * 
+ * BODY: {
+ *   "entry" : {
+ *     "age" : 70.0,
+ *     "name" : "Al Pacino"
+ *   },
+ *   "sendDeltaEmail" : null,
+ *   "emailContent" : {
+ *     "deltaSummary" : "<h3>My custom HTML for the edit email</h3>",
+ *     "packageDetails" : "<h3>My Custom HTML for the approver notification email</h3>"
+ *   }  
+ * }
+ * 
+ * RESPONSE: Reflects body if successful
  */
 Workflow.prototype.updatePackage = async function(user_token, ip_address, data) {
   // Create a body for the update

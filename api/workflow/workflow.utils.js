@@ -161,12 +161,9 @@ async function patchWorkflowEventMiddleware(request, response, next) {
       response.workflow_response = result;
       return next();
     };
-  } 
+  }
   else return next();
 }
-
-
-
 
 
 
