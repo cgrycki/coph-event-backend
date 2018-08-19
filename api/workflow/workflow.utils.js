@@ -141,6 +141,7 @@ async function patchWorkflowEventMiddleware(request, response, next) {
 
   // Get old + new data from Dynamo and request body, respectively.
   const {
+    params            : { package_id },
     uiowa_access_token: auth_token,
     user_ip_address   : ip,
     evt               : dynamo_data,
@@ -153,7 +154,7 @@ async function patchWorkflowEventMiddleware(request, response, next) {
   
   // Should we update workflow or just Dynamo?
   if (shouldUpdateWorkflow) {
-    const result = await Workflow.updatePackage(auth_token, ip, slim_workflow_data);
+    const result = await Workflow.updatePackage(auth_token, ip, package_id, slim_workflow_data);
 
     // Should we continue with the request or was there an error while updating?
     if (result.error) return response.status(400).json(result);

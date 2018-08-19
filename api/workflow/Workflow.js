@@ -212,7 +212,7 @@ Workflow.prototype.postPackage = async function(user_token, ip_address, data) {
  * 
  * RESPONSE: Reflects body if successful
  */
-Workflow.prototype.updatePackage = async function(user_token, ip_address, data) {
+Workflow.prototype.updatePackage = async function(user_token, ip_address, package_id, data) {
   // Create a body for the update
   const workflow_data = {
     entry          : data,
@@ -226,7 +226,7 @@ Workflow.prototype.updatePackage = async function(user_token, ip_address, data) 
   // Create options for the REST call
   const options = {
     method : 'PUT',
-    uri    : this.constructURI(tools=true),
+    uri    : `${this.constructURI(tools=true)}/${package_id}/entry`,
     headers: await this.headers(user_token, ip_address),
     json   : true,
     body   : workflow_data

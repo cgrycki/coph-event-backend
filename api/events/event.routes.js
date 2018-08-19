@@ -19,7 +19,8 @@ const {
 const {
   getWorkflowPermissionsMiddleware,
   postWorkflowEventMiddleware,
-  deleteWorkflowEventMiddleware
+  deleteWorkflowEventMiddleware,
+  patchWorkflowEventMiddleware
 }                               = require('../workflow/workflow.utils');
 
 
@@ -38,7 +39,7 @@ router.post('/',
     postWorkflowEventMiddleware,
     postDynamoEventMiddleware
   ],
-  (req, res) => res.status(201).json(req.dynamo_response));
+  (req, res) => res.status(201).json(req.dynamo_data));
 
 
 // GET /my -- Get events filtered by hawkid
@@ -57,8 +58,17 @@ router.delete('/:package_id',
   (req, res) => res.status(200).json({ package_id: req.params.package_id }));
 
 
-// GET/:date date(s) events
-// loggedIn, tokenValid, getEvents, return
+// PATCH/:package_id -- Update a given event
+router.patch('/:package_id', 
+  [
+    validateEvent,
+    getDynamoEventMiddleware,
+    patchWorkflowEventMiddleware,
+    postDynamoEventMiddleware
+  ], (req, res) => res.status(200).json(req.dynamo_data));
+
+
+
 
 // PATCH/:id: Update a given event
 // loggedIn, tokenValid, eventExists, isAdmin/hasOwnership, updateDynamoDB, patchOffice365, return

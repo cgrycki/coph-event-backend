@@ -4,10 +4,11 @@
 
 
 /* Dependencies -------------------------------------------------------------*/
-const EventModel      = require('./event.model');
-const { ModelSchema } = require('./event.schema');
-const Joi             = require('joi');
-const EventSchema     = Joi.object().keys(ModelSchema);
+const { extractWorkflowInfo } = require('../utils/');
+const EventModel              = require('./event.model');
+const { ModelSchema }         = require('./event.schema');
+const Joi                     = require('joi');
+const EventSchema             = Joi.object().keys(ModelSchema);
 
 
 /* GET Functions ------------------------------------------------------------*/
@@ -22,7 +23,7 @@ const EventSchema     = Joi.object().keys(ModelSchema);
 async function getDynamoEventMiddleware(request, response, next) {
   // Gather Package ID and try converting to number before making DynamoDB call.
   const package_id = +request.params.package_id;
-  const evt = await EventModel.getEvent(package_id);
+  const evt        = await EventModel.getEvent(package_id);
 
   // If EventModel returned an error cut the response short.
   if (evt.error !== undefined) return response.status(400).json(evt);
@@ -89,7 +90,7 @@ async function getDynamoEventsMiddleware(request, response, next) {
 
 
 
-/* POST Functions -----------------------------------------------------------*/
+/* POST + PATCH Functions ---------------------------------------------------*/
 /**
  * Validates the potential Event information in a POST request.  
  * @param {Object} request HTTP request containing form data.
@@ -106,7 +107,8 @@ function validateEvent(request, response, next) {
   if (error !== null) return response.status(400).json({ error, valid_info });
   // Otherwise, create a Workflow entry (slimmed down information for inbox)
   else {
-    request.workflow_entry = {
+    // request.workflow_data = extractWorkflowInfo(valid_info);
+    request.workflow_data = {
       approved      : "false",
       date          : form_info.date,
       setup_required: form_info.setup_required.toString(),
@@ -120,32 +122,30 @@ function validateEvent(request, response, next) {
 
 
 /**
- * Asynchronously creates an event object in DynamoDB `events` table.
+ * Asynchronously creates/overwrites an event object in DynamoDB `events` table. If the event exists, we overwrite it.
  * 
  * @async
- * @module postDynamoEventMiddleware
  * @function
+ * @module postDynamoEventMiddleware
  * @param {Object} request HTTP request from frontend.
- * @param [request.body] {Object} - Form Data as an object, parsed by Multer.
+ * @param [request.body] {Object} - Form Data as an object, parsed by Multer if POST and BodyParser if PATCH (JSON).
+ * param [request.package_id] {Integer} - Package ID for Workflow and Dynamo, taken from either Workflow response (POST) or params (PATCH).
  * @param {Object} response HTTP response.
  * @param {Object} next Next function in middleware stack.
  */
 async function postDynamoEventMiddleware(request, response, next) {
   // Assumes postWorkflowEventMiddleware has been called before this
-  const evt = { package_id: request.package_id, ...request.body };
+  const pid = request.package_id || request.params.package_id;
+  const evt = { package_id: pid, ...request.body };
   const result = await EventModel.postEvent(evt);
 
   // If there was an error return, otherwise pass on the information
   if (result.error) return response.status(400).json(result);
   else {
-    request.dynamo_response = result;
+    request.dynamo_data = result;
     return next();
   };
 }
-
-
-/* PATCH Functions ----------------------------------------------------------*/
-function patchDynamoEventMiddleware(request, response, next) {}
 
 
 /* DELETE Functions ---------------------------------------------------------*/
@@ -167,6 +167,5 @@ module.exports = {
   getDynamoEventsMiddleware,
   validateEvent,
   postDynamoEventMiddleware,
-  patchDynamoEventMiddleware,
   deleteDynamoEventMiddleware
 };
