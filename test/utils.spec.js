@@ -3,8 +3,6 @@
  */
 
 const assert            = require('assert');
-const Joi               = require('joi');
-const Schema            = require('../api/events/event.schema');
 const {
   extractWorkflowInfo,
   shouldUpdateEvent

@@ -134,9 +134,9 @@ function validateEvent(request, response, next) {
  * @param {Object} next Next function in middleware stack.
  */
 async function postDynamoEventMiddleware(request, response, next) {
-  // Assumes postWorkflowEventMiddleware has been called before this
-  const pid = request.package_id || request.params.package_id;
-  const evt = { package_id: pid, ...request.body };
+  // Assumes post/patchWorkflowEventMiddleware has been called before this
+  const pid    = request.package_id || request.params.package_id;
+  const evt    = { package_id: pid, ...request.body };
   const result = await EventModel.postEvent(evt);
 
   // If there was an error return, otherwise pass on the information
