@@ -72,13 +72,22 @@ const extractWorkflowInfo = (form_info) => ({
 
 
 /**
- * 
+ * Deep compares two objects' properties and returns a boolean if they are inequal.
  * @param {Object} old_data Old event info data from DynamoDB and slimmed down.
  * @param {Object} new_data New event info data from user update.
- * @returns {boolean} Indicates equality of JSON.stringify on both objects.
+ * @returns {boolean} Indicates equality of objects.
  */
 const shouldUpdateEvent = (old_data, new_data) => {
-  return JSON.stringify(old_data) === JSON.stringify(new_data);
+  for (var key in old_data) {
+    // If dynamo object has key and new object doesn't, they are inequal
+    if (!(key in new_data)) return true;
+
+    // If any of the objects properties are different, return true
+    if (old_data[key] !== new_data[key]) return true;
+  };
+
+  // Otherwise we made it through all object keys, objects are functionally same
+  return false;
 };
 
 
