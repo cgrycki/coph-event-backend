@@ -1,13 +1,11 @@
 /**
  * Utilty functions shared by our API routes.
  */
-
-
 /* Dependencies -------------------------------------------------------------*/
 const { validationResult } = require('express-validator/check');
 
-/* Utilities ----------------------------------------------------------------*/
 
+/* Utilities ----------------------------------------------------------------*/
 /**
  * Formates express-validator errors gracefully.
  * @param {validationResult} error Return value from express-validator's 
@@ -58,6 +56,37 @@ const createTableName = (table) => {
 };
 
 
-exports.errorFormatter  = errorFormatter;
-exports.validateParams  = validateParams;
-exports.createTableName = createTableName;
+/**
+ * Extracts submitted data from an User's event for their Workflow entry.
+ * @param {Object} form_info Form Data submitted via a user's POST request.
+ * @returns {Object} Workflow information: a subset of total information *required* for Workflow's inbox.
+ */
+const extractWorkflowInfo = (form_info) => ({
+  approved      : form_info.approved.toString(),
+  date          : form_info.date,
+  setup_required: form_info.setup_required.toString(),
+  user_email    : form_info.user_email,
+  contact_email : form_info.contact_email,
+  room_number   : form_info.room_number
+});
+
+
+/**
+ * 
+ * @param {Object} old_data Old event info data from DynamoDB and slimmed down.
+ * @param {Object} new_data New event info data from user update.
+ * @returns {boolean} Indicates equality of JSON.stringify on both objects.
+ */
+const shouldUpdateEvent = (old_data, new_data) => {
+  return JSON.stringify(old_data) === JSON.stringify(new_data);
+};
+
+
+
+module.exports = {
+  errorFormatter,
+  validateParams,
+  createTableName,
+  extractWorkflowInfo,
+  shouldUpdateEvent
+};
