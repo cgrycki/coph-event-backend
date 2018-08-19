@@ -44,6 +44,16 @@ Workflow.prototype.getAppToken = async function() {
  * Constructs an URL for Workflow's RESTful API.
  * @param {boolean} tools - Flag indicating if the route should have tools.
  * @returns {string} uri - URI endpoint.
+ * 
+ * @example
+ * 
+ * ```
+ * Workflow.constructURI() => 
+ * 'https://apps.its.uiowa.edu/workflow/test/api/developer/forms/6025/packages'
+ * 
+ * Workflow.constructURI(tools=true) => 
+ * 'https://apps.its.uiowa.edu/workflow/test/api/developer/tools/forms/6025/packages/1111111/entry'
+ * ```
  */
 Workflow.prototype.constructURI = function(tools=false) {
   const base_uri = `${this.base_uri}/${this.env_type}/api/developer/`;
@@ -171,7 +181,39 @@ Workflow.prototype.postPackage = async function(user_token, ip_address, data) {
     body   : workflow_data
   };
 
-  // Kick off request
+  // Make the request to Workflow
+  const result = await this.request(options);
+  return result;
+}
+
+
+/**
+ * Updates an Event package entry in Workflow. 
+ * @param {string} user_token OAuth token taken from session store.
+ * @param {string} ip_address IP address of originating request.
+ * @param {Object} data Extracted information from user Event update.
+ */
+Workflow.prototype.updatePackage = async function(user_token, ip_address, data) {
+  // Create a body for the update
+  const workflow_data = {
+    entry          : data,
+    sendDeltaEmails: false,
+    emailContant   : {
+      deltaSummary  : null,
+      packageDetails: null
+    }
+  };
+
+  // Create options for the REST call
+  const options = {
+    method : 'PUT',
+    uri    : this.constructURI(tools=true),
+    headers: await this.headers(user_token, ip_address),
+    json   : true,
+    body   : workflow_data
+  };
+
+  // Make the request to Workflow
   const result = await this.request(options);
   return result;
 }
