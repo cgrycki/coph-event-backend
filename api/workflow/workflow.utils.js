@@ -104,8 +104,7 @@ async function postWorkflowEventMiddleware(request, response, next) {
  * @param {Object} response Outgoing HTTP response object.
  * @param {Object} next Next function in middleware stack (deleteDynamoEvent).
  */
-// async
-function deleteWorkflowEventMiddleware(request, response, next) {
+async function deleteWorkflowEventMiddleware(request, response, next) {
   // Gather params from prior middleware for calling RESTful Workflow endpoint.
   const {
     uiowa_access_token: auth_token,
@@ -115,14 +114,14 @@ function deleteWorkflowEventMiddleware(request, response, next) {
 
 
   // Ensure we've gathered correct vars
-  return response.status(200).json({ auth_token, ip, package_id });
+  //return response.status(200).json({ auth_token, ip, package_id });
 
   // Call and wait for workflow response
-  //const result = await Workflow.removePackage(auth_token, ip, package_id);
+  const result = await Workflow.removePackage(auth_token, ip, package_id);
 
   // Return response if we error out
-  //if (result.error !== undefined) return response.status(400).json(result);
-  //else next();
+  if (result.error !== undefined) return response.status(400).json(result);
+  else next();
 }
 
 
