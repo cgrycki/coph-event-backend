@@ -98,7 +98,7 @@ async function getDynamoEventsMiddleware(request, response, next) {
 function validateEvent(request, response, next) {
   // Gather the form information parsed by Multer. Then validate with Joi.
   let form_info = { ...request.body };
-  let { error, valid_info } = Joi.validate(form_info, EventSchema);
+  let { error, value:valid_info } = Joi.validate(form_info, EventSchema, { abortEarly: false });
 
   // If there's any invalid fields, return with information
   if (error !== null) return response.status(400).json({ error, valid_info });
