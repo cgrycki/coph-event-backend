@@ -31,13 +31,10 @@ async function getDynamoEventMiddleware(request, response, next) {
   // If EventModel didn't find anything, return
   if (evt.length === 0) return response.status(404).json({ message: 'couldnt find that'});
   
-  // Otherwise we found the event object, convert 'approval' from base64 > bool
-  // "dHJ1ZQ==" ('true')        "ZmFsc2U=" (false)
+  // Otherwise we found the event object, convert 'approval' from string => bool
   else {
     // Some of our objects are still using booleans (woof)
-    if (typeof(evt[0].approval) !== "boolean") {
-      evt[0].approval = (evt[0].approval === "dHJ1ZQ==") ? true : false;
-    };
+    evt[0].approval = evt[0].approval === "true"
 
     request.evt = evt[0];
     return next();
@@ -107,15 +104,7 @@ function validateEvent(request, response, next) {
   if (error !== null) return response.status(400).json({ error, valid_info });
   // Otherwise, create a Workflow entry (slimmed down information for inbox)
   else {
-    // request.workflow_data = extractWorkflowInfo(valid_info);
-    request.workflow_data = {
-      approved      : "false",
-      date          : form_info.date,
-      setup_required: form_info.setup_required.toString(),
-      user_email    : form_info.user_email,
-      contact_email : form_info.contact_email,
-      room_number   : form_info.room_number
-    };
+    request.workflow_data = extractWorkflowInfo(valid_info);
     return next();
   };
 }
