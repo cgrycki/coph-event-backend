@@ -154,7 +154,7 @@ async function deleteDynamoEventMiddleware(request, response, next) {
   let { package_id } = request.params;
   
   // Wait for dynamoDB to destroy object
-  let result = await EventModel.deleteEvent(package_id);
+  let result = await EventModel.deleteEvent(+package_id);
 
   // Respond appropriately
   if (result.error) return response.status(400).json(result);
