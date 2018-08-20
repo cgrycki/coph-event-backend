@@ -19,14 +19,9 @@ const time    = jString.allow(options_time).required();
 
 /* SCHEMA + CASES ------------------------------------------------------------*/
 const package_id    = Joi.number().integer().required();
-// OLD APPROVED: boolean value, changed to binary to implement EventApprovedIndex
-//const approved    = Joi.boolean().optional().default(false);
-const approved      = Joi.binary()
-  .encoding('base64')
-  .optional()
-  .allow(["dHJ1ZQ==", "ZmFsc2U="]) // true, false
-  .default("ZmFsc2U=");
-
+// Approved is actually a boolean, but we cast it to string because DynamoDB 
+// has weird attribute types for it's indices
+const approved    = Joi.string().optional().allow(["true", "false"]).default("false");
 const user_email    = email.regex(/uiowa\.edu$/).required();
 const contact_email = email;
 const coph_email    = email.regex(/uiowa\.edu$/).default("");

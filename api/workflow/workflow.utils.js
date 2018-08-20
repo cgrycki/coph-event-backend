@@ -2,9 +2,12 @@
  * @module workflow.utils
  */
 
-
-const FRONTEND_URI = process.env.FRONTEND_URI;
-const Workflow     = require('./Workflow');
+const FRONTEND_URI          = process.env.FRONTEND_URI;
+const Workflow              = require('./Workflow');
+const {
+  extractWorkflowInfo,
+  shouldUpdateEvent
+}                           = require('../utils/');
 
 
 /**
@@ -76,16 +79,16 @@ async function postWorkflowEventMiddleware(request, response, next) {
   // Assumes multer, checkSession, retrieveSession, validateEvent called
 
   // Gather params and wait for REST Promise to resolve
-  const { uiowa_access_token, user_ip_address, workflow_entry } = request;
+  const { uiowa_access_token, user_ip_address, workflow_data } = request;
   const result = await Workflow.postPackage(
     uiowa_access_token, 
     user_ip_address,
-    workflow_entry);
+    workflow_data);
 
   // Either return the error or attach data to the request and pass along
   if (result.error) return response.status(400).json({
     error: result,
-    workflow_entry: workflow_entry
+    workflow_data: workflow_data
   });
   else {
     request.workflow_response = result;
@@ -125,9 +128,49 @@ async function deleteWorkflowEventMiddleware(request, response, next) {
 }
 
 
+/**
+ * Middleware conditionally updating Workflow event if data has changed since last POST/update. Otherwise it passes along to the next Middleware
+ * @param {Object} request Incoming HTTP Request from frontend.
+ * @param {Object} response Outgoing HTTP response.
+ * @param {Object} next Next function in Middleware stack. In this case it's usually patchDynamoMiddleware.
+ */
+async function patchWorkflowEventMiddleware(request, response, next) {
+  // Middleware assumes checkSession, retrieveSession, and event validation 
+  // and extraction has been succesfully called.
+
+  // Get old + new data from Dynamo and request body, respectively.
+  const {
+    params            : { package_id },
+    uiowa_access_token: auth_token,
+    user_ip_address   : ip,
+    evt               : dynamo_data,
+    workflow_data
+  } = request;
+
+  // Get only the portion of data Workflow cares about and test inequality.
+  const slim_dynamo_data     = extractWorkflowInfo(dynamo_data);
+  const shouldUpdateWorkflow = shouldUpdateEvent(slim_dynamo_data, workflow_data);
+  
+  // Should we update workflow or just Dynamo?
+  if (shouldUpdateWorkflow) {
+    const result = await Workflow.updatePackage(auth_token, ip, package_id, slim_workflow_data);
+
+    // Should we continue with the request or was there an error while updating?
+    if (result.error) return response.status(400).json(result);
+    else {
+      response.workflow_response = result;
+      return next();
+    };
+  }
+  else return next();
+}
+
+
+
 module.exports = {
   getInboxRedirect,
   getWorkflowPermissionsMiddleware,
   postWorkflowEventMiddleware,
-  deleteWorkflowEventMiddleware
+  deleteWorkflowEventMiddleware,
+  patchWorkflowEventMiddleware
 };

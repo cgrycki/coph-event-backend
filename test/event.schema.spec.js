@@ -163,19 +163,11 @@ describe('Event Schema (Individual)', function() {
     runJoiTest('Should not allow truthy values (1)',              {approved: 1}, scheme, null);
     runJoiTest('Should not allow falsy values (0)',               {approved: 0}, scheme, null);
     runJoiTest('Should not allow empty string',                   {approved: ''}, scheme, null);
-    runJoiTest('Should allow undefined and return "false" in binary.',      {approved: undefined}, scheme, Error);
-    runJoiTest('Should not allow "true"',      {approved: 'true'}, scheme, null);
-    runJoiTest('Should not allow "false"',      {approved: 'false'}, scheme, null);
 
-    it('Converts string representations of Base64 to booleans', function() {
-      let { error:base_64_err, value:base_64_val } = scheme.validate("dHJ1ZQ==");
-      assert.equal(base_64_val, "dHJ1ZQ==");
-    });
 
-    it('Converts string representations of booleans to Base64', function() {
-      let { error:base_64_err, value:base_64_val } = scheme.validate("ZmFsc2U=");
-      assert.equal(base_64_val, "ZmFsc2U=");
-    });
+    runJoiTest('Should allow "true"',      {approved: 'true'}, scheme, null);
+    runJoiTest('Should allow "false"',      {approved: 'false'}, scheme, null);
+    runJoiTest('Should allow undefined and return "false".',      {approved: undefined}, scheme, Error);
   });
 });
 
@@ -210,7 +202,7 @@ describe('Event Schema (Total)', function() {
 
     it('Should NOT transform info fields after validating AND add approved', function() {
       let res = Joi.object().keys(schema).validate(info);
-      let dynamo_obj = { ...info, approved: "ZmFsc2U=" };
+      let dynamo_obj = { ...info, approved: "false" };
       
       assert.deepEqual(res.value, dynamo_obj);
     });
