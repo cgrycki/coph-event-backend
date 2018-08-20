@@ -115,14 +115,14 @@ function deleteWorkflowEventMiddleware(request, response, next) {
 
 
   // Ensure we've gathered correct vars
-  return response.status(200).json({ auth_token, ip, package_id });
+  //return response.status(200).json({ auth_token, ip, package_id });
 
   // Call and wait for workflow response
-  //const result = await Workflow.removePackage(auth_token, ip, package_id);
+  const result = await Workflow.removePackage(auth_token, ip, package_id);
 
   // Return response if we error out
-  //if (result.error !== undefined) return response.status(400).json(result);
-  //else next();
+  if (result.error !== undefined) return response.status(400).json(result);
+  else next();
 }
 
 
