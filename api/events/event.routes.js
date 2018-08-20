@@ -61,6 +61,7 @@ router.delete('/:package_id',
 // PATCH/:package_id -- Update a given event
 router.patch('/:package_id', 
   [
+    multer.fields([]),
     validateEvent,
     getDynamoEventMiddleware,
     patchWorkflowEventMiddleware,
