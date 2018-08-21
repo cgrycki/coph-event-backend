@@ -102,12 +102,14 @@ Workflow.prototype.request = async function(options) {
  * ```
  */
 Workflow.prototype.headers = async function(user_token, ip_address) {
+  const app_token = await this.getAppToken();
+
   const headers = {
     'Content-Type'        : 'application/json',
     'Accept'              : 'application/vnd.workflow+json;version=1.1',
     'Authorization'       : `Bearer ${user_token}`,
     'X-Client-Remote-Addr': ip_address,
-    'X-App-Authorization' : await this.getAppToken()
+    'X-App-Authorization' : `Bearer ${app_token}`
   };
 
   return headers;
@@ -232,11 +234,9 @@ Workflow.prototype.updatePackage = async function(user_token, ip_address, packag
     body   : workflow_data
   };
 
-  // Make the request to Workflow
-  if (true === false) {
-    const result = await this.request(options);
-    return result;
-  } else return options;
+
+  const result = await this.request(options);
+  return result;
 }
 
 
