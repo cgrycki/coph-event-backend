@@ -149,12 +149,12 @@ async function patchWorkflowEventMiddleware(request, response, next) {
 
   // Get only the portion of data Workflow cares about and test inequality.
   const slim_dynamo_data     = extractWorkflowInfo(dynamo_data);
-  const shouldUpdateWorkflow = shouldUpdateEvent(slim_dynamo_data, workflow_data);
+  //const shouldUpdateWorkflow = shouldUpdateEvent(slim_dynamo_data, workflow_data);
 
   return response.status(200).json({
     slim_dynamo_data: slim_dynamo_data,
     workflow_data: workflow_data,
-    shouldUpdateWorkflow: shouldUpdateWorkflow,
+    //shouldUpdateWorkflow: shouldUpdateWorkflow,
     body: request.body,
     dynamo_data: dynamo_data,
     package_id: package_id

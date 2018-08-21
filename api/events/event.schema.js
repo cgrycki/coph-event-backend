@@ -70,7 +70,7 @@ const ModelSchema = {
   // Event information
   event_name : event_name,
   comments   : comments,
-  date       : date,
+  date       : dateReg,
   start_time : time,
   end_time   : time,
   room_number: room_number,
@@ -93,7 +93,7 @@ exports.package_id    = package_id;
 exports.user_email    = user_email;
 exports.contact_email = contact_email;
 exports.coph_email    = coph_email;
-exports.date          = date;
+exports.date          = dateReg;
 exports.time          = time;
 exports.comments      = comments;
 exports.num_people    = num_people;
