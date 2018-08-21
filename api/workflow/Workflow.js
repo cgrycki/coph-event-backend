@@ -219,11 +219,14 @@ Workflow.prototype.updatePackage = async function(user_token, ip_address, packag
   const workflow_data = {
     entry         : data,
     sendDeltaEmail: false,
-    emailContent  : {
+    emailContent  : false
+  };
+
+  /*{
       deltaSummary  : null,
       packageDetails: null
     }
-  };
+  */
 
   // Create options for the REST call
   const options = {
