@@ -150,9 +150,18 @@ async function patchWorkflowEventMiddleware(request, response, next) {
   // Get only the portion of data Workflow cares about and test inequality.
   const slim_dynamo_data     = extractWorkflowInfo(dynamo_data);
   const shouldUpdateWorkflow = shouldUpdateEvent(slim_dynamo_data, workflow_data);
+
+  return response.status(200).json({
+    slim_dynamo_data: slim_dynamo_data,
+    workflow_data: workflow_data,
+    shouldUpdateWorkflow: shouldUpdateWorkflow,
+    body: request.body,
+    dynamo_data: dynamo_data,
+    package_id: package_id
+  });
   
   // Should we update workflow or just Dynamo?
-  if (shouldUpdateWorkflow) {
+  /*if (shouldUpdateWorkflow) {
     const result = await Workflow.updatePackage(auth_token, ip, package_id, slim_workflow_data);
 
     // Should we continue with the request or was there an error while updating?
@@ -162,7 +171,7 @@ async function patchWorkflowEventMiddleware(request, response, next) {
       return next();
     };
   }
-  else return next();
+  else return next();*/
 }
 
 
