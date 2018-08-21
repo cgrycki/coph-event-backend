@@ -215,9 +215,9 @@ Workflow.prototype.postPackage = async function(user_token, ip_address, data) {
 Workflow.prototype.updatePackage = async function(user_token, ip_address, package_id, data) {
   // Create a body for the update
   const workflow_data = {
-    entry          : data,
-    sendDeltaEmails: false,
-    emailContant   : {
+    entry         : data,
+    sendDeltaEmail: false,
+    emailContent  : {
       deltaSummary  : null,
       packageDetails: null
     }
