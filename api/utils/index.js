@@ -66,7 +66,7 @@ const extractWorkflowInfo = (form_info) => ({
   date          : form_info.date,
   setup_required: form_info.setup_required.toString(),
   user_email    : form_info.user_email,
-  contact_email : form_info.contact_email,
+  contact_email : form_info.contact_email || "",
   room_number   : form_info.room_number
 });
 
