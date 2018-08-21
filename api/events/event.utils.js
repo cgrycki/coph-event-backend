@@ -102,7 +102,7 @@ async function getDynamoEventsMiddleware(request, response, next) {
  * @param {Object} next Next function in middleware stack.
  */
 function validateEvent(request, response, next) {
-  // Gather the form information parsed by Multer. Then validate with Joi.
+  // Gather the form information. Then validate with Joi.
   let form_info = { ...request.body };
   let { error, value:valid_info } = Joi.validate(form_info, EventSchema, { abortEarly: false });
 

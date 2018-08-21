@@ -62,10 +62,14 @@ const createTableName = (table) => {
  * @returns {Object} Workflow information: a subset of total information *required* for Workflow's inbox.
  */
 const extractWorkflowInfo = (form_info) => ({
+  // We're keeping approved as a string because of the DynamoDB index
   approved      : form_info.approved,
   date          : form_info.date,
+  // ... but converting this boolean to string because Workflow doesn't accept booleans
   setup_required: form_info.setup_required.toString(),
   user_email    : form_info.user_email,
+  // ... And conditionally assigning a string because not every event will have a
+  // contact email, but it's important to have in the Workflow inbox (and required).
   contact_email : form_info.contact_email || "",
   room_number   : form_info.room_number
 });

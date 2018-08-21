@@ -147,18 +147,30 @@ async function patchWorkflowEventMiddleware(request, response, next) {
     workflow_data
   } = request;
 
-  // Get only the portion of data Workflow cares about and test inequality.
-  const slim_dynamo_data     = extractWorkflowInfo(dynamo_data);
-  //const shouldUpdateWorkflow = shouldUpdateEvent(slim_dynamo_data, workflow_data);
+  try {
+    // Get only the portion of data Workflow cares about and test inequality.
+    // NOTE: Our DynamoDB model holds it data internally in a 'attrs' object. 
+    const slim_dynamo_data     = extractWorkflowInfo(dynamo_data.attrs);
+    const shouldUpdateWorkflow = shouldUpdateEvent(slim_dynamo_data, workflow_data);
 
-  return response.status(200).json({
-    slim_dynamo_data: slim_dynamo_data,
-    workflow_data: workflow_data,
-    //shouldUpdateWorkflow: shouldUpdateWorkflow,
-    body: request.body,
-    dynamo_data: dynamo_data,
-    package_id: package_id
-  });
+    return response.status(200).json({
+      slim_dynamo_data: slim_dynamo_data,
+      workflow_data: workflow_data,
+      shouldUpdateWorkflow: shouldUpdateWorkflow,
+      body: request.body,
+      dynamo_data: dynamo_data,
+      package_id: package_id
+    });
+  } catch(err) {
+    response.status(200).json({
+      slim_dynamo_data: slim_dynamo_data,
+      workflow_data: workflow_data,
+      //shouldUpdateWorkflow: shouldUpdateWorkflow,
+      body: request.body,
+      dynamo_data: dynamo_data,
+      package_id: package_id
+    });
+  }
   
   // Should we update workflow or just Dynamo?
   /*if (shouldUpdateWorkflow) {
