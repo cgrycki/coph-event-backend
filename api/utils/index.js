@@ -62,7 +62,7 @@ const createTableName = (table) => {
  * @returns {Object} Workflow information: a subset of total information *required* for Workflow's inbox.
  */
 const extractWorkflowInfo = (form_info) => ({
-  approved      : form_info.approved.toString(),
+  approved      : form_info.approved,
   date          : form_info.date,
   setup_required: form_info.setup_required.toString(),
   user_email    : form_info.user_email,
