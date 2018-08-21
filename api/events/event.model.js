@@ -23,7 +23,7 @@ const EventModel = dynamo.define('Event', {
   timestamps: true,
 
   // Schema defined in current directory
-  schema: { package_id, ...ModelSchema },
+  schema: { package_id: package_id.required(), ...ModelSchema },
 
   // Dynamic table names depending on our Node environment
   tableName: createTableName(table_name),

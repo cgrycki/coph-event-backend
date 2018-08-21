@@ -6,9 +6,15 @@
 /* Dependencies -------------------------------------------------------------*/
 const { extractWorkflowInfo } = require('../utils/');
 const EventModel              = require('./event.model');
-const { ModelSchema }         = require('./event.schema');
+const { 
+  ModelSchema,
+  package_id
+}                             = require('./event.schema');
 const Joi                     = require('joi');
-const EventSchema             = Joi.object().keys(ModelSchema);
+const EventSchema = Joi.object().keys({ 
+  package_id: package_id.optional(),
+  ...ModelSchema
+});
 
 
 /* GET Functions ------------------------------------------------------------*/
