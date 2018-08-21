@@ -233,8 +233,10 @@ Workflow.prototype.updatePackage = async function(user_token, ip_address, packag
   };
 
   // Make the request to Workflow
-  const result = await this.request(options);
-  return result;
+  if (true === false) {
+    const result = await this.request(options);
+    return result;
+  } else return options;
 }
 
 
