@@ -185,10 +185,12 @@ function getUserAdminStatus(request, response, next) {
   }
 };
 
+
 module.exports = {
   validParamCode,
   authUserCodeMiddleware,
   checkSessionExistsMiddleware,
   retrieveSessionInfoMiddleware,
-  clearTokensFromSessionMiddleware
+  clearTokensFromSessionMiddleware,
+  getUserAdminStatus
 };
