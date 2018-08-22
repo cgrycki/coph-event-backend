@@ -10,7 +10,8 @@ const {
   authUserCodeMiddleware,
   checkSessionExistsMiddleware,
   retrieveSessionInfoMiddleware,
-  clearTokensFromSessionMiddleware
+  clearTokensFromSessionMiddleware,
+  getUserAdminStatus
 }                = require('./auth.utils');
 
 
@@ -34,8 +35,12 @@ router.get('/logout',
 
 // GET /auth/validate -- Returns a boolean indicating if the user is logged in
 router.get('/validate', 
-  checkSessionExistsMiddleware, retrieveSessionInfoMiddleware, 
-  (req, res) => res.status(200).json({ loggedIn: true, hawkid: req.hawkid }));
+  checkSessionExistsMiddleware, retrieveSessionInfoMiddleware, getUserAdminStatus,
+  (req, res) => res.status(200).json({ 
+    loggedIn: true,
+    hawkid  : req.hawkid,
+    isAdmin : req.isAdmin
+  }));
 
 
 /* Exports ------------------------------------------------------------------*/
