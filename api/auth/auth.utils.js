@@ -175,7 +175,7 @@ function clearTokensFromSessionMiddleware(request, response, next) {
 function getUserAdminStatus(request, response, next) {
   try {
     const userIsAdmin = isAdmin(request.hawkid);
-    request.isAdmin = userIsAdmin;
+    request.isAdmin   = userIsAdmin;
     return next();
   } catch (err) {
     return response.status(400).json({
