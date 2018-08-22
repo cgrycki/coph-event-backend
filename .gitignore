@@ -11,3 +11,6 @@ src/secrets.js
 node_modules/
 node_modules/*.*
 .env
+
+# Ignore admin HawkIDs
+config/hawkids.js

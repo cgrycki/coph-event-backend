@@ -4,6 +4,7 @@
 
 /* Dependencies -------------------------------------------------------------*/
 const { check } = require('express-validator/check');
+const hawkids   = require('../../config/hawkids');
 const {
   oauth_uiowa,
   getUserAuthURL,
@@ -15,6 +16,13 @@ const {
 
 /* Parameters ---------------------------------------------------------------*/
 const validParamCode = check('code').exists().isAlphanumeric();
+
+/**
+ * Quick helper function to test if a HawkID is in admin list
+ * @param {string} hawkid HawkID of a user making a HTTP request.
+ * @returns {boolean} isAdmin Weither or not the user is an admin.
+ */
+const isAdmin = hawkid => hawkids.has(hawkid);
 
 
 /* Middlewares --------------------------------------------------------------*/
@@ -157,6 +165,25 @@ function clearTokensFromSessionMiddleware(request, response, next) {
   return next();
 }
 
+
+/**
+ * Looks up if a user's hawkID is in a set of Administrator hawkIDs. This function is the last middleware function called in our /auth/validate endpoint. As such, it expects the request to be authenticated and values present.
+ * @param {Object} request Incoming HTTP request.
+ * @params [request.hawkid] {string} HawkID taken from the user's DynamoDB backed session.
+ * @param {Object} response Outgoing HTTP response to client.
+ */
+function getUserAdminStatus(request, response, next) {
+  try {
+    const userIsAdmin = isAdmin(request.hawkid);
+    request.isAdmin = userIsAdmin;
+    return next();
+  } catch (err) {
+    return response.status(400).json({
+      error: true,
+      message: "There was an error while processing user admin status."
+    })
+  }
+};
 
 module.exports = {
   validParamCode,
