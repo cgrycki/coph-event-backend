@@ -3,7 +3,7 @@
  */
 
 const rp                  = require('request-promise');
-const { URLSearchParams } = require('url');
+const querystring         = require('querystring');
 const { getAppAuthToken } = require('../auth/auth.app');
 
 
@@ -81,8 +81,10 @@ Workflow.prototype.constructPermissionsURI = function(pidOrPids) {
   let queryString;
   
   if (typeof(pidOrPids) === 'number' || typeof(pidOrPids) === 'string') {
-    queryString = new URLSearchParams({id: pidOrPids});
-  } else queryString = new URLSearchParams(pidOrPids.map(pid => ['id', pid]));
+    queryString = querystring.stringify({ id: [pidOrPids] });
+  } else {
+    queryString = querystring.stringify({ id: pidOrPids });
+  };
   
   return queryString;
 }
