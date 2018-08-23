@@ -47,7 +47,7 @@ router.get('/my', getDynamoEventsMiddleware,
   (req, res) => res.status(200).json(req.evts));
 
 // TESTING
-router.get('/my/test', getDynamoEventMiddleware, (req, res) => {
+router.get('/my/test', getDynamoEventsMiddleware, (req, res) => {
 
   const { evts } = req;
   // Map each event to it's packageID
