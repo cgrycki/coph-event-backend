@@ -55,10 +55,30 @@ async function getRoomScheduleMiddleware(request, response, next) {
 }
 
 
+async function getCoursesMiddleware(request, response, next) {
+  // Gather inputs
+  const courseText = request.params.courseText;
+  
+  // Wait for the rest call
+  const courses = await MAUI.getCourses(courseText);
+
+  if (courses.error) return response.status(400).json({
+    error  : true,
+    message: courses.message,
+    stack  : courses.stack
+  });
+  else {
+    request.courses = courses;
+    return next();
+  };
+}
+
+
 module.exports = {
   validRoomNum,
   validDate,
   validStartDate,
   validEndDate,
-  getRoomScheduleMiddleware
+  getRoomScheduleMiddleware,
+  getCoursesMiddleware
 };
