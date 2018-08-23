@@ -54,24 +54,6 @@ router.delete('/:package_id',
     else res.status(200).json(result);
   });
 
-// TESTING
-router.get('/token', async (req, res) => {
-  try {
-    let token = await Workflow.getAppToken();
-    res.status(200).json(token);
-  } catch (err) {
-    res.status(400).json({
-      message: err.message,
-      stack: err.stack
-    });
-  }
-});
-
-
-
-
-// CALLBACK ROUTE
-
 
 
 module.exports = router;
