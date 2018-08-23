@@ -43,27 +43,8 @@ router.post('/',
 
 
 // GET /my -- Get events filtered by hawkid
-router.get('/my', getDynamoEventsMiddleware, getWorkflowPermissionsMiddleware,
+router.get('/my', getDynamoEventsMiddleware, //getWorkflowPermissionsMiddleware,
   (req, res) => res.status(200).json(req.evts));
-  /* TESTING
-  (req, res) => {
-
-  const { evts } = req;
-  // Map each event to it's packageID
-  try {
-    const pids = evts.map(evt => evt.attrs.package_id);
-    return res.status(200).json(pids);
-  } catch (err) {
-    return res.status(400).json({
-      error  : true,
-      message: err.message,
-      stack  : err.stack,
-      evts   : evts
-    })
-  }
-});*/
-
-
 
 
 // GET package_id -- Get specific package 
