@@ -66,7 +66,7 @@ Workflow.prototype.constructURI = function(tools=false) {
 
 /**
  * Returns a URI query for package ID(s).
- * @param {(number|array[number])}
+ * @param {array[number]}
  * @returns {string} queryString String to tack onto the Workflow permissions URI.
  * 
  * @example
@@ -78,14 +78,7 @@ Workflow.prototype.constructURI = function(tools=false) {
  * ```
  */
 Workflow.prototype.constructPermissionsURI = function(pidOrPids) {
-  let queryString;
-  
-  if (typeof(pidOrPids) === 'number' || typeof(pidOrPids) === 'string') {
-    queryString = querystring.stringify({ id: [pidOrPids] });
-  } else {
-    queryString = querystring.stringify({ id: pidOrPids });
-  };
-  
+  const queryString = querystring.stringify({ id: [pidOrPids] });
   return queryString;
 }
 
