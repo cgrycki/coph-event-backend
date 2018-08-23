@@ -27,12 +27,12 @@ router.use(retrieveSessionInfoMiddleware);
 /* RESTful functions --------------------------------------------------------*/
 // DELETE Workflow package
 router.delete('/workflow/:package_id', deleteWorkflowEventMiddleware,
-  (req, res) => res.status(200).json({ package_id: res.params.pacakge_id }));
+  (req, res) => res.status(200).json({ package_id: req.params.pacakge_id }));
 
 
 // DELETE Dynamo entry
 router.delete("/dynamo/:package_id", deleteDynamoEventMiddleware,
-  (req, res) => res.status(200).json({ package_id: res.params.package_id }));
+  (req, res) => res.status(200).json({ package_id: req.params.package_id }));
 
 
 
