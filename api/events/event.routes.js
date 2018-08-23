@@ -44,10 +44,9 @@ router.post('/',
 
 // GET /my -- Get events filtered by hawkid
 router.get('/my', getDynamoEventsMiddleware,
-  (req, res) => res.status(200).json(req.evts));
-
-// TESTING
-router.get('/test/my', getDynamoEventsMiddleware, (req, res) => {
+  //(req, res) => res.status(200).json(req.evts));
+  // TESTING
+  (req, res) => {
 
   const { evts } = req;
   // Map each event to it's packageID
