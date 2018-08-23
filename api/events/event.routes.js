@@ -43,7 +43,7 @@ router.post('/',
 
 
 // GET /my -- Get events filtered by hawkid
-router.get('/my', getDynamoEventsMiddleware, //getWorkflowPermissionsMiddleware,
+router.get('/my', getDynamoEventsMiddleware, getWorkflowPermissionsMiddleware,
   (req, res) => res.status(200).json(req.evts));
 
 
