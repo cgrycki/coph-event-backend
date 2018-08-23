@@ -78,7 +78,7 @@ Workflow.prototype.constructURI = function(tools=false) {
  * ```
  */
 Workflow.prototype.constructPermissionsURI = function(pidOrPids) {
-  const queryString = querystring.stringify({ id: [pidOrPids] });
+  const queryString = querystring.stringify({ id: pidOrPids });
   return queryString;
 }
 
