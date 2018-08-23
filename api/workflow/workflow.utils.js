@@ -37,7 +37,7 @@ async function getWorkflowPermissionsMiddleware(request, response, next) {
   // From prior middleware
   const auth_token = request.uiowa_access_token;
   const ip_addr    = request.user_ip_address;
-  const pid        = [request.params.package_id] || request.package_ids;
+  const pid        = ("package_ids" in request) ? request.package_ids : [request.params.package_id];
 
   const query = Workflow.constructPermissionsURI(pid);
 
