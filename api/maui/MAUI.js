@@ -1,4 +1,6 @@
-const rp = require('request-promise');
+const rp                    = require('request-promise');     // For REST calls
+const { getFormattedDate }  = require('../utils/date.utils'); // For dates
+const querystring = require('querystring');                   // For creating queries
 
 
 /**
@@ -67,6 +69,11 @@ MAUI.prototype.getRoomSchedule = async function(roomNumber, start, end) {
 }
 
 
+/**
+ * Returns the MAUI SessionID of a YYYY-MM-DD date.
+ * @param {(string|Date)} date - Input to format
+ * @returns {string} session_id - MAUI SessionID identifying an academic session (Spring 2018, Summer 2012, etc...)
+ */
 MAUI.prototype.getSessionID = async function(date) {
   const uri = `${this.base_uri}/pub/registrar/sessions/by-date?date=${date}`;
 
@@ -84,10 +91,138 @@ MAUI.prototype.getSessionID = async function(date) {
 
 
 /**
+ * Creates a query string from an object
+ * @param {Object} params - Object containing query parameters: {field: value} OR {field: [value1, value2]}
+ * @returns {string} query - String formatted as 'field=value' OR 'field=value1&field=value2'
+ */
+MAUI.prototype.constructQuery = function(params) {
+  const query = querystring.stringify(params);
+  return query;
+}
+
+
+
+/**
  * @todo
  * @param {string} courseText - Text to search course title and text.
  */
-//MAUI.prototype.getCourses = async function(courseText, session_id) {}
+MAUI.prototype.getCourses = async function(courseText) {
+  // We need a sessionID to make a search. Default to current date+session
+  const todaysDate = getFormattedDate();
+  const sessionID  = await this.getSessionID(todaysDate);
 
+  // Create the query and then the URI
+  const query = this.constructQuery({
+    sessionCode      : sessionID,
+    titleAndTextQuery: courseText,
+    sort             : 'HIGHEST_SCORE'
+  });
+  const uri = `${this.base_uri}pub/registrar/course/search?${query}`;
+
+  // REST options + call
+  const options = {
+    method : 'GET',
+    uri    : uri,
+    headers: this.headers(),
+    json   : true
+  };
+  const courses = await this.request(options);
+
+  // Parse courses to slim down 
+  const parsedCourses = this.parseCourses(courses, sessionID);
+  return parsedCourses
+}
+
+
+/**
+ * Filters and parses a course search result
+ */
+MAUI.prototype.parseCourses = function(courses, session) {
+  // Sanity check for REST result
+  if ((courses.error) || (!courses.hasPayload) ||(courses.payload.length === 0)) return [];
+
+  // Filter courses that aren't currently being offered
+  const currentCourses = courses.payload.filter(c => {
+    const lastSessionId = (c.lastTaughtSession !== null) ?
+      c.lastTaughtSession.sessionCode :
+      c.sessionInfo.sessionCode;
+    return lastSessionId === session;
+  });
+
+  // Map only the attributes we need
+  const parsedCourses = currentCourses.map(c => {
+    // Find titles from old and new courses
+    const title = (c.titles.hasOwnProperty('CATALOG')) ? c.titles.CATALOG : c.titles.FULL;
+
+    // Get course descriptions
+    const text = (c.texts.hasOwnProperty('GENERAL_CATALOG')) ? c.texts.GENERAL_CATALOG : '';
+
+    // Mercifully all courses have a course ID
+    const courseId = c.courseId;
+
+    const attrs = { title, text, courseId };
+    return attrs;
+  });
+
+  return parsedCourses;
+}
+
+
+/* Course response object has the following shape: {
+      error: false,
+      hasPayload: {true | false},
+      message: null,
+
+      page: 1, (number indicating cursor index)
+      pageCount: 1, (length of cursors)
+      pageSize: 0, (???)
+      cursors: [0], (or [0, 10, 20] from size param)
+      
+      recordCount: n (# returned),
+      payload: [
+        {
+          adminHomeAcademicUnit: {
+            generalCatalogUrl: 'https://catalog.registrar.uiowa.edu/...',
+            id: 541,
+            name: 'Computer Science'
+          },
+          adminHomeCourseSubject: {
+            additionalProperties: {},
+            description: 'Computer Science',
+            id: 351,
+            naturalKey: 'CS',
+            shortDescription: 'Computer Science',
+            sortOrder: 1540,
+            webDescription: null
+          },
+          adminHomeIdentity: {
+            courseIdentityId: 158661
+            courseNumber: "3330"
+            courseSubject: "CS"
+            departmentCode: "22C"
+            legacyCourseNumber: "031"
+          },
+          attributes: {
+            courseLevel: {...},
+            id: 281929,
+            ...
+          },
+          courseID: 74161,
+          identities: [{...}],
+          texts: {
+            COURSE_INFORMATION: '...',
+            COURSE_PREREQ: '...',
+            GENERAL_CATALOG: '...'
+          },
+          titles: {
+            CATALOG: '',
+            COURSE_PREREQ: '',
+            SHORT: ''
+          }
+        },
+        {...}, {...}
+      ]
+    }
+  */
 
 module.exports = new MAUI();
