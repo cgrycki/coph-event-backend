@@ -136,10 +136,6 @@ async function deleteWorkflowEventMiddleware(request, response, next) {
     params            : { package_id }
   } = request;
 
-
-  // Ensure we've gathered correct vars
-  //return response.status(200).json({ auth_token, ip, package_id });
-
   // Call and wait for workflow response
   const result = await Workflow.removePackage(auth_token, ip, package_id);
 
