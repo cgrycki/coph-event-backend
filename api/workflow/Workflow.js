@@ -2,7 +2,8 @@
  * Workflow Helper class.
  */
 
-const rp = require('request-promise');
+const rp                  = require('request-promise');
+const { URLSearchParams } = require('url');
 const { getAppAuthToken } = require('../auth/auth.app');
 
 
@@ -62,6 +63,26 @@ Workflow.prototype.constructURI = function(tools=false) {
 
   return uri;
 };
+
+/**
+ * Returns a URI query for package ID(s).
+ * @param {(number|array[number])}
+ * @returns {string} queryString String to tack onto the Workflow permissions URI.
+ * 
+ * @example
+ * 
+ * ```
+ * constructPermissionsURI(1) => 'id=1';
+ * 
+ * constructPermissionsURI([1, 2, 3]) => 'id=1&id=2&id=3;
+ * ```
+ */
+Workflow.prototype.constructPermissionsURI = function(pidOrPids) {
+  let queryString;
+  if (typeof(pidOrPids) === 'number') queryString = new URLSearchParams({id: pidOrPids});
+  else queryString = new URLSearchParams(pidOrPids.map(pid => ['id', pid]));
+  return queryString;
+}
 
 
 /**
@@ -219,14 +240,11 @@ Workflow.prototype.updatePackage = async function(user_token, ip_address, packag
   const workflow_data = {
     entry         : data,
     sendDeltaEmail: false,
-    emailContent  : false
-  };
-
-  /*{
+    emailContent  : {
       deltaSummary  : null,
       packageDetails: null
     }
-  */
+  };
 
   // Create options for the REST call
   const options = {
@@ -371,18 +389,18 @@ Workflow.prototype.removePackage = async function(user_token, ip_address, packag
  * } ]
  * ```
  */
-Workflow.prototype.getPermissions = async function(user_token, ip_address, package_id) {
+Workflow.prototype.getPermissions = async function(user_token, ip_address, package_id_or_ids) {
+  // Create a query using a helper function
+  const queryString = this.constructPermissionsURI(package_id_or_ids);
+
   const options = {
     method : 'GET',
     json   : true,
-    uri    : `${this.constructURI()}/actions?id=${package_id}`,
+    uri    : `${this.constructURI()}/actions?${queryString}`,
     headers: await this.headers(user_token, ip_address)
   };
 
   let result = await this.request(options);
-  // We only request permissions for one package at a time, so return first
-  // object from response array if there was no error.
-  if (!result.error && result.length) result = result[0];
   return result;
 }
 
