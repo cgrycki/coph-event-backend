@@ -57,7 +57,7 @@ describe('Workflow REST class', function() {
     });
     */
 
-    it('Should create correct URI for a single package\'s permissions', function() {
+    it('Should create correct URI for a single package\'s permissions (number)', function() {
       let pid = 1;
       let queryString = Workflow.constructPermissionsURI(pid);
       let correctQueryString = 'id=1';
@@ -65,8 +65,24 @@ describe('Workflow REST class', function() {
       assert.equal(queryString, correctQueryString);
     });
 
-    it('Should create correct URI for a multiple package\'s permissions', function() {
+    it('Should create correct URI for a single package\'s permissions (string)', function() {
+      let pid = '1';
+      let queryString = Workflow.constructPermissionsURI(pid);
+      let correctQueryString = 'id=1';
+
+      assert.equal(queryString, correctQueryString);
+    });
+
+    it('Should create correct URI for a multiple package\'s permissions (numbers)', function() {
       let pids = [1, 2, 3];
+      let queryString = Workflow.constructPermissionsURI(pids);
+      let correctQueryString = 'id=1&id=2&id=3';
+
+      assert.equal(queryString, correctQueryString);
+    });
+
+    it('Should create correct URI for a multiple package\'s permissions (strings)', function() {
+      let pids = ['1', '2', '3'];
       let queryString = Workflow.constructPermissionsURI(pids);
       let correctQueryString = 'id=1&id=2&id=3';
 

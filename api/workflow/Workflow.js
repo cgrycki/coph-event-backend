@@ -79,8 +79,11 @@ Workflow.prototype.constructURI = function(tools=false) {
  */
 Workflow.prototype.constructPermissionsURI = function(pidOrPids) {
   let queryString;
-  if (typeof(pidOrPids) === 'number') queryString = new URLSearchParams({id: pidOrPids});
-  else queryString = new URLSearchParams(pidOrPids.map(pid => ['id', pid]));
+  
+  if (typeof(pidOrPids) === 'number' || typeof(pidOrPids) === 'string') {
+    queryString = new URLSearchParams({id: pidOrPids});
+  } else queryString = new URLSearchParams(pidOrPids.map(pid => ['id', pid]));
+  
   return queryString;
 }
 
