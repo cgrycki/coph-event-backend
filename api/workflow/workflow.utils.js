@@ -39,51 +39,43 @@ async function getWorkflowPermissionsMiddleware(request, response, next) {
   const ip_addr    = request.user_ip_address;
   const pid        = ("package_ids" in request) ? request.package_ids : [request.params.package_id];
 
-  try {
-    // Call async function
-    const permissions = await Workflow.getPermissions(auth_token, ip_addr, pid);
-    
-    // Check for errors in REST call
-    if (permissions.error) return response.status(400).json(permissions);
-    
-    // Permissions should be a list regardless of how many packageIDs we passed
-    // So if we only passed one (from getDynamoEvent) we'll only have one permission object
-    if (permissions.length === 1) request.permissions = {
-        canEdit         : permissions[0].canEdit,
-        canInitiatorVoid: permissions[0].canInitiatorVoid,
-        canVoid         : permissions[0].canVoid,
-        canVoidAfter    : permissions[0].canVoidAfter,
-        canSign         : permissions[0].canSign,
-        signatureId     : permissions[0].signatureId
-      };
-    // Otherwise this was called by getDynamoEvent*S*, and we have a list of permissions
-    // So map the permissions back onto the events and modify the request
-    else if (permissions.length > 1) {
-      const evts = request.evts;
-      const evts_with_permissions = evts.map((evt, i) => ({
-        evt: evt, 
-        permissions: {
-          canEdit         : permissions[i].canEdit,
-          canInitiatorVoid: permissions[i].canInitiatorVoid,
-          canVoid         : permissions[i].canVoid,
-          canVoidAfter    : permissions[i].canVoidAfter,
-          canSign         : permissions[i].canSign,
-          signatureId     : permissions[i].signatureId
-        }
-      }));
-
-      request.evts = evts_with_permissions;
-    };
+  // Check if user has no events before calling workflow
+  if (pid.length === 0) return next();
+  const permissions = await Workflow.getPermissions(auth_token, ip_addr, pid);
   
-    return next();
-  } catch(err) {
-    return response.status(400).json({
-      error: true,
-      message: err.message,
-      stack: err.stack,
-      pid: pid
-    });
-  }
+  // Check for errors in REST call
+  if (permissions.error) return response.status(400).json(permissions);
+  
+  // Permissions should be a list regardless of how many packageIDs we passed
+  // So if we only passed one (from getDynamoEvent) we'll only have one permission object
+  if (permissions.length === 1) request.permissions = {
+      canEdit         : permissions[0].canEdit,
+      canInitiatorVoid: permissions[0].canInitiatorVoid,
+      canVoid         : permissions[0].canVoid,
+      canVoidAfter    : permissions[0].canVoidAfter,
+      canSign         : permissions[0].canSign,
+      signatureId     : permissions[0].signatureId
+    };
+  // Otherwise this was called by getDynamoEvent*S*, and we have a list of permissions
+  // So map the permissions back onto the events and modify the request
+  else if (permissions.length > 1) {
+    const evts = request.evts;
+    const evts_with_permissions = evts.map((evt, i) => ({
+      evt: evt, 
+      permissions: {
+        canEdit         : permissions[i].canEdit,
+        canInitiatorVoid: permissions[i].canInitiatorVoid,
+        canVoid         : permissions[i].canVoid,
+        canVoidAfter    : permissions[i].canVoidAfter,
+        canSign         : permissions[i].canSign,
+        signatureId     : permissions[i].signatureId
+      }
+    }));
+
+    request.evts = evts_with_permissions;
+  };
+
+  return next();
 };
 
 
