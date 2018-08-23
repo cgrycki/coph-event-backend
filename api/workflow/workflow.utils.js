@@ -39,9 +39,13 @@ async function getWorkflowPermissionsMiddleware(request, response, next) {
   const ip_addr    = request.user_ip_address;
   const pid        = [request.params.package_id] || request.package_ids;
 
+  const query = Workflow.constructPermissionsURI(pid);
+
   return response.status(200).json({
     evts: request.evts,
-    ids: pid
+    ids: pid,
+    query: query,
+    stringified: request.string_test
   });
 
   /*try {

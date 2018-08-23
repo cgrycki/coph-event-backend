@@ -90,6 +90,7 @@ async function getDynamoEventsMiddleware(request, response, next) {
     request.evts = result;
     // Map the package_ids of events to call for Workflow permissions
     request.package_ids = result.map(evt => evt.package_id);
+    request.string_test = JSON.stringify(result);
     
     return next();
   };
