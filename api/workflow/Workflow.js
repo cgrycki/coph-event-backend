@@ -408,12 +408,6 @@ Workflow.prototype.validateCallback = async function(callback) {
   return null;
 }
 
-// GET packages
-
-// GET:package_id pacakge entry
-
-// PATCH package entry
-
 
 
 module.exports = new Workflow();

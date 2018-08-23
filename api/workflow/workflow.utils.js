@@ -179,14 +179,14 @@ async function patchWorkflowEventMiddleware(request, response, next) {
     const result = await Workflow.updatePackage(auth_token, ip, package_id, workflow_data);
 
 
-    return response.status(400).json({ result, workflow_data, dynamo_data });
+    //return response.status(400).json({ result, workflow_data, dynamo_data });
 
     // Should we continue with the request or was there an error while updating?
-    /*if (result.error) return response.status(400).json(result);
+    if (result.error) return response.status(400).json(result);
     else {
       response.workflow_response = result;
       return next();
-    };*/
+    };
   }
   else return next();
 }
