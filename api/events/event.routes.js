@@ -46,6 +46,26 @@ router.post('/',
 router.get('/my', getDynamoEventsMiddleware,
   (req, res) => res.status(200).json(req.evts));
 
+// TESTING
+router.get('/my/test', getDynamoEventMiddleware, (req, res) => {
+
+  const { evts } = req;
+  // Map each event to it's packageID
+  try {
+    const pids = evts.map(evt => evt.attrs.package_id);
+    return res.status(200).json(pids);
+  } catch (err) {
+    return res.status(400).json({
+      error  : true,
+      message: err.message,
+      stack  : err.stack,
+      evts   : evts
+    })
+  }
+});
+
+
+
 
 // GET package_id -- Get specific package 
 router.get('/:package_id',
@@ -53,7 +73,9 @@ router.get('/:package_id',
   (req, res) => res.status(200).json({ evt: req.evt, permissions: req.permissions }));
 
 
-router.delete('/:package_id', 
+// DELETE package_id -- Delete a event in Workflow and DynamoDB
+// loggedIn, tokenValid, eventExists, isAdmin, hasOwnership, deleteDynamoDB, deleteOffice365, return
+router.delete('/:package_id',
   [deleteWorkflowEventMiddleware, deleteDynamoEventMiddleware],
   (req, res) => res.status(200).json({ package_id: req.params.package_id }));
 
@@ -66,15 +88,6 @@ router.patch('/:package_id',
     patchWorkflowEventMiddleware,
     postDynamoEventMiddleware
   ], (req, res) => res.status(200).json(req.dynamo_data));
-
-
-
-
-// PATCH/:id: Update a given event
-// loggedIn, tokenValid, eventExists, isAdmin/hasOwnership, updateDynamoDB, patchOffice365, return
-
-// DELETE/:id: Delete a given event
-// loggedIn, tokenValid, eventExists, isAdmin, hasOwnership, deleteDynamoDB, deleteOffice365, return
 
 
 module.exports = router;
