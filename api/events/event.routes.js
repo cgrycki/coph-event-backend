@@ -43,7 +43,7 @@ router.post('/',
 
 
 // GET /my -- Get events filtered by hawkid
-router.get('/my', getDynamoEventsMiddleware,
+router.get('/my', getDynamoEventsMiddleware, //getWorkflowPermissionsMiddleware,
   (req, res) => res.status(200).json(req.evts));
 
 
@@ -53,7 +53,9 @@ router.get('/:package_id',
   (req, res) => res.status(200).json({ evt: req.evt, permissions: req.permissions }));
 
 
-router.delete('/:package_id', 
+// DELETE package_id -- Delete a event in Workflow and DynamoDB
+// loggedIn, tokenValid, eventExists, isAdmin, hasOwnership, deleteDynamoDB, deleteOffice365, return
+router.delete('/:package_id',
   [deleteWorkflowEventMiddleware, deleteDynamoEventMiddleware],
   (req, res) => res.status(200).json({ package_id: req.params.package_id }));
 
@@ -66,15 +68,6 @@ router.patch('/:package_id',
     patchWorkflowEventMiddleware,
     postDynamoEventMiddleware
   ], (req, res) => res.status(200).json(req.dynamo_data));
-
-
-
-
-// PATCH/:id: Update a given event
-// loggedIn, tokenValid, eventExists, isAdmin/hasOwnership, updateDynamoDB, patchOffice365, return
-
-// DELETE/:id: Delete a given event
-// loggedIn, tokenValid, eventExists, isAdmin, hasOwnership, deleteDynamoDB, deleteOffice365, return
 
 
 module.exports = router;

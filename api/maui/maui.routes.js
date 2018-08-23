@@ -13,7 +13,8 @@ const {
   validDate,
   validStartDate,
   validEndDate,
-  getRoomScheduleMiddleware
+  getRoomScheduleMiddleware,
+  getCoursesMiddleware
 }                         = require('./maui.utils');
 
 
@@ -41,6 +42,10 @@ router.get('/rooms/:room_number/:date',
       message: `${req.events.length} events found`,
       events: req.events
     }));
+
+
+router.get('/courses/:courseText', getCoursesMiddleware,
+  (req, res) => res.status(200).json(req.courses));
 
 
 module.exports = router;

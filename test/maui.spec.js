@@ -4,9 +4,10 @@
 
 const assert = require('assert');
 const MAUI   = require('../api/maui/MAUI');
+const { getFormattedDate } = require('../api/utils/date.utils');
+
 
 describe('MAUI REST class', function() {
-
   // Headers
   describe('#headers', function() {
     it('Should create a header', function() {
@@ -17,6 +18,21 @@ describe('MAUI REST class', function() {
       const test_header = MAUI.headers();
       
       assert.deepEqual(test_header, correct_header);
+    });
+  });
+
+  describe('#queries', function() {
+    it('Creates an accurate query for searching courses', function() {
+      let params = {
+        sessionCode: 72,
+        titleAndTextQuery: 'algorithms',
+        sort: 'HIGHEST_SCORE'
+      };
+
+      let query = MAUI.constructQuery(params);
+      let correctQuery = 'sessionCode=72&titleAndTextQuery=algorithms&sort=HIGHEST_SCORE';
+
+      assert.equal(query, correctQuery);
     });
   });
 
@@ -38,6 +54,24 @@ describe('MAUI REST class', function() {
       let restful_sess_id   = await MAUI.getSessionID(faux_session_date);
 
       assert.equal(restful_sess_id, correct_sess_id);
+    });
+
+    it('Should return the session ID created by a helper function', async function() {
+      let todaysDate = getFormattedDate();
+      let sid = await MAUI.getSessionID(todaysDate);
+
+      assert.ok(sid);
+    });
+  });
+
+  describe('#courses', function() {
+    const courseText = 'algorithms';
+
+    it('Should return a list of courses given just a query string', async function() { 
+      const course = 'algorithms';
+      const courses = await MAUI.getCourses(course);
+      
+      assert.ok(courses);
     });
   });
 });
