@@ -44,8 +44,7 @@ async function getWorkflowPermissionsMiddleware(request, response, next) {
   return response.status(200).json({
     evts: request.evts,
     ids: pid,
-    query: query,
-    stringified: request.string_test
+    query: query
   });
 
   /*try {
