@@ -78,18 +78,12 @@ async function getDynamoEventsMiddleware(request, response, next) {
   const value  = path_to_value[request.path];
   const result = await EventModel.getEvents(field, value);
 
-  if (result.error !== undefined) return response.status(400).json({
-    error : true,
-    result: result,
-    path  : request.path,
-    field : field,
-    value : value
-  });
+  if (result.error !== undefined) return response.status(400).json(result);
   else {
     // Attach events to the request
     request.evts = result;
     // Map the package_ids of events to call for Workflow permissions
-    request.package_ids = result.map(evt => evt.package_id);
+    request.package_ids = result.map(evt => evt.attrs.package_id);
     request.string_test = JSON.stringify(result);
     
     return next();
