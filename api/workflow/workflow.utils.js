@@ -39,15 +39,7 @@ async function getWorkflowPermissionsMiddleware(request, response, next) {
   const ip_addr    = request.user_ip_address;
   const pid        = ("package_ids" in request) ? request.package_ids : [request.params.package_id];
 
-  const query = Workflow.constructPermissionsURI(pid);
-
-  return response.status(200).json({
-    evts: request.evts,
-    ids: pid,
-    query: query
-  });
-
-  /*try {
+  try {
     // Call async function
     const permissions = await Workflow.getPermissions(auth_token, ip_addr, pid);
     
@@ -91,7 +83,7 @@ async function getWorkflowPermissionsMiddleware(request, response, next) {
       stack: err.stack,
       pid: pid
     });
-  }*/
+  }
 };
 
 
