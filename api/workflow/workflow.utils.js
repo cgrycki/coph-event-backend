@@ -37,7 +37,7 @@ async function getWorkflowPermissionsMiddleware(request, response, next) {
   // From prior middleware
   const auth_token = request.uiowa_access_token;
   const ip_addr    = request.user_ip_address;
-  const pid        = request.params.package_id;
+  const pid        = request.params.package_id || request.package_ids;
 
   // Call async function
   const permissions = await Workflow.getPermissions(auth_token, ip_addr, pid);
@@ -45,15 +45,15 @@ async function getWorkflowPermissionsMiddleware(request, response, next) {
   // Check for errors in REST call
   if (permissions.error) return response.status(400).json(permissions);
 
-  // Check permissions from REST response
+  /* Check permissions from REST response
   else if (!permissions.canView) return response.status(403).json({ 
     error  : true,
     message: "You don't have permissions to view this package."
-  });
-
+  });*/
   // User can view, attach any more permissions to the request
-  else {
-    request.permissions = {
+  
+  // Permissions should be a list, if we passed only one package ID 
+  if (permissions.length === 1) request.permissions = {
       canEdit         : permissions.canEdit,
       canInitiatorVoid: permissions.canInitiatorVoid,
       canVoid         : permissions.canVoid,
@@ -61,8 +61,26 @@ async function getWorkflowPermissionsMiddleware(request, response, next) {
       canSign         : permissions.canSign,
       signatureId     : permissions.signatureId
     };
-    return next();
+  //
+  else if (permissions.length > 1) {
+    const evts = request.evts;
+    const evts_with_permissions = evts.map((evt, i) => ({
+      evt: evt, 
+      permissions: {
+        canEdit         : permissions[i].canEdit,
+        canInitiatorVoid: permissions[i].canInitiatorVoid,
+        canVoid         : permissions[i].canVoid,
+        canVoidAfter    : permissions[i].canVoidAfter,
+        canSign         : permissions[i].canSign,
+        signatureId     : permissions[i].signatureId
+      }
+      }
+    ));
+
+    request.evts = evts_with_permissions;
   };
+ 
+  return next();  
 };
 
 

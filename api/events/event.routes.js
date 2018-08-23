@@ -43,9 +43,9 @@ router.post('/',
 
 
 // GET /my -- Get events filtered by hawkid
-router.get('/my', getDynamoEventsMiddleware,
-  //(req, res) => res.status(200).json(req.evts));
-  // TESTING
+router.get('/my', getDynamoEventsMiddleware, getWorkflowPermissionsMiddleware,
+  (req, res) => res.status(200).json(req.evts));
+  /* TESTING
   (req, res) => {
 
   const { evts } = req;
@@ -61,7 +61,7 @@ router.get('/my', getDynamoEventsMiddleware,
       evts   : evts
     })
   }
-});
+});*/
 
 
 
