@@ -103,7 +103,7 @@ MAUI.prototype.constructQuery = function(params) {
 
 
 /**
- * @todo
+ * Returns a list of courses matching param `courseText`.
  * @param {string} courseText - Text to search course title and text.
  */
 MAUI.prototype.getCourses = async function(courseText) {
@@ -142,11 +142,14 @@ MAUI.prototype.parseCourses = function(courses, session) {
   if ((courses.error) || (!courses.hasPayload) ||(courses.payload.length === 0)) return [];
 
   // Filter courses that aren't currently being offered
-  const currentCourses = courses.payload.filter(c => {
+  /*const currentCourses = courses.payload.filter(c => {
     const lastSessionId = (c.lastTaughtSession !== null) ?
       c.lastTaughtSession.sessionCode :
       c.sessionInfo.sessionCode;
     return lastSessionId === session;
+  });*/
+  const currentCourses = courses.payload.filter(c => {
+    return c.titles.hasOwnProperty('CATATLOG') || c.titles.hasOwnProperty('FULL');
   });
 
   // Map only the attributes we need
