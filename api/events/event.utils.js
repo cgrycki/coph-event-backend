@@ -76,21 +76,17 @@ async function getDynamoEventsMiddleware(request, response, next) {
   // Fetch items from DynamoDB
   const field  = path_to_field[request.path];
   const value  = path_to_value[request.path];
-  const result = await EventModel.getEvents(field, value);
+  const {
+    error,
+    evts,
+    package_ids
+  }            = await EventModel.getEvents(field, value);
 
-  if (result.error !== undefined) return response.status(400).json({
-    error : true,
-    result: result,
-    path  : request.path,
-    field : field,
-    value : value
-  });
+  // Either response with error or pass on the DynamoDB info
+  if (error !== undefined) return response.status(400).json(result);
   else {
-    // Attach events to the request
-    request.evts = result;
-    // Map the package_ids of events to call for Workflow permissions
-    request.package_ids = result.map(evt => evt.package_id);
-    
+    request.evts        = evts;
+    request.package_ids = package_ids;
     return next();
   };
 }
@@ -150,10 +146,10 @@ async function postDynamoEventMiddleware(request, response, next) {
 /* DELETE Functions ---------------------------------------------------------*/
 async function deleteDynamoEventMiddleware(request, response, next) {
   // Get hashKey of dynamo object
-  let { package_id } = request.params;
+  const { package_id } = request.params;
   
   // Wait for dynamoDB to destroy object
-  let result = await EventModel.deleteEvent(+package_id);
+  const result = await EventModel.deleteEvent(+package_id);
 
   // Respond appropriately
   if (result.error) return response.status(400).json(result);

@@ -78,7 +78,7 @@ Workflow.prototype.constructURI = function(tools=false) {
  * ```
  */
 Workflow.prototype.constructPermissionsURI = function(pidOrPids) {
-  const queryString = querystring.stringify({ id: [pidOrPids] });
+  const queryString = querystring.stringify({ id: pidOrPids });
   return queryString;
 }
 
@@ -407,12 +407,6 @@ Workflow.prototype.getPermissions = async function(user_token, ip_address, packa
 Workflow.prototype.validateCallback = async function(callback) {
   return null;
 }
-
-// GET packages
-
-// GET:package_id pacakge entry
-
-// PATCH package entry
 
 
 

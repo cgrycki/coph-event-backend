@@ -43,20 +43,18 @@ router.post('/',
 
 
 // GET /my -- Get events filtered by hawkid
-router.get('/my', getDynamoEventsMiddleware, //getWorkflowPermissionsMiddleware,
+router.get('/my', getDynamoEventsMiddleware, getWorkflowPermissionsMiddleware,
   (req, res) => res.status(200).json(req.evts));
 
 
 // GET package_id -- Get specific package 
-router.get('/:package_id',
-  [getWorkflowPermissionsMiddleware, getDynamoEventMiddleware],
+router.get('/:package_id', getWorkflowPermissionsMiddleware, getDynamoEventMiddleware,
   (req, res) => res.status(200).json({ evt: req.evt, permissions: req.permissions }));
 
 
 // DELETE package_id -- Delete a event in Workflow and DynamoDB
-// loggedIn, tokenValid, eventExists, isAdmin, hasOwnership, deleteDynamoDB, deleteOffice365, return
-router.delete('/:package_id',
-  [deleteWorkflowEventMiddleware, deleteDynamoEventMiddleware],
+// loggedIn, tokenValid, eventExists, hasOwnership, deleteDynamoDB, deleteOffice365, return
+router.delete('/:package_id', deleteWorkflowEventMiddleware, deleteDynamoEventMiddleware,
   (req, res) => res.status(200).json({ package_id: req.params.package_id }));
 
 

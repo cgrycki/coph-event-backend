@@ -88,7 +88,12 @@ EventModel.getEvents = function(field, value) {
           field: field,
           value: value
         });
-        else resolve(data.Items);
+        else {
+          // Extract the info we need for future middlewares
+          const evts        = data.Items;
+          const package_ids = evts.map(evt => evt.get('package_id'));
+          resolve({ evts, package_ids });
+        }
       });
   });
 }

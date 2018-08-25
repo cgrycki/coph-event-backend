@@ -37,10 +37,10 @@ async function getWorkflowPermissionsMiddleware(request, response, next) {
   // From prior middleware
   const auth_token = request.uiowa_access_token;
   const ip_addr    = request.user_ip_address;
-  const pid        = [request.params.package_id] || request.package_ids;
+  const pid        = ("package_ids" in request) ? request.package_ids : [request.params.package_id];
 
-  try {
-  // Call async function
+  // Check if user has no events before calling workflow
+  if (pid.length === 0) return next();
   const permissions = await Workflow.getPermissions(auth_token, ip_addr, pid);
   
   // Check for errors in REST call
@@ -74,16 +74,8 @@ async function getWorkflowPermissionsMiddleware(request, response, next) {
 
     request.evts = evts_with_permissions;
   };
- 
+
   return next();
-  } catch(err) {
-    return response.status(400).json({
-      error: true,
-      message: err.message,
-      stack: err.stack,
-      pid: pid
-    });
-  }
 };
 
 
@@ -136,10 +128,6 @@ async function deleteWorkflowEventMiddleware(request, response, next) {
     params            : { package_id }
   } = request;
 
-
-  // Ensure we've gathered correct vars
-  //return response.status(200).json({ auth_token, ip, package_id });
-
   // Call and wait for workflow response
   const result = await Workflow.removePackage(auth_token, ip, package_id);
 
@@ -179,14 +167,14 @@ async function patchWorkflowEventMiddleware(request, response, next) {
     const result = await Workflow.updatePackage(auth_token, ip, package_id, workflow_data);
 
 
-    return response.status(400).json({ result, workflow_data, dynamo_data });
+    //return response.status(400).json({ result, workflow_data, dynamo_data });
 
     // Should we continue with the request or was there an error while updating?
-    /*if (result.error) return response.status(400).json(result);
+    if (result.error) return response.status(400).json(result);
     else {
       response.workflow_response = result;
       return next();
-    };*/
+    };
   }
   else return next();
 }
