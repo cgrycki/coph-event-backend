@@ -112,7 +112,7 @@ MAUI.prototype.getRoomPromise = async function(roomNumber, start, end) {
  */
 MAUI.prototype.parseEvent = function(evt) {
   const parsedEvt = {
-    evt_number : evt.evtNumber,
+    evt_number : evt.eventNumber,
     room_number: evt.roomNumber,
     date       : getFormattedDate(evt.date),
     start_time : evt.startTime.trim(),
