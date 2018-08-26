@@ -29,6 +29,17 @@ MAUI.prototype.headers = function() {
 
 
 /**
+ * Creates a query string from an object
+ * @param {Object} params - Object containing query parameters: {field: value} OR {field: [value1, value2]}
+ * @returns {string} query - String formatted as 'field=value' OR 'field=value1&field=value2'
+ */
+MAUI.prototype.constructQuery = function(params) {
+  const query = querystring.stringify(params);
+  return query;
+}
+
+
+/**
  * Makes an asynchronous request to MAUI.
  * @param {object} options - Request Promise options for REST call.
  * @returns {object} response - Request response object.
@@ -70,6 +81,77 @@ MAUI.prototype.getRoomSchedule = async function(roomNumber, start, end) {
 
 
 /**
+ * Returns a REST call to MAUI's AstraRoomSchedule endpoint as a Promise.
+ * @param {string} roomNumber Room ID from ASTRA
+ * @param {string} start Starting date of query. Formatted as 'YYYY-MM-DD'.
+ * @param {string} end Ending date of query. Same format as start.
+ */
+MAUI.prototype.getRoomPromise = async function(roomNumber, start, end) {
+  const options = {
+    method : 'GET',
+    headers: this.headers(),
+    json   : true,
+    uri    : `${this.base_uri}/pub/registrar/courses/AstraRoomSchedule/${start}/${end}/CPHB/${roomNumber}`
+  };
+
+  return rp(options);
+}
+
+
+/**
+ * Formats an event return by MAUI.
+ * @param {Object} evt MAUI event object
+ * @param [evt.buildingCode] {string} Building ID from MAUI.
+ * @param [evt.roomNumber] {string} Room ID for room in building
+ * @param [evt.date] {string} Date formatted as 'July 12, 2018'
+ * @param [evt.startTime] {string} Startimg time of event formatted as '3:00PM    ' 
+ * @param [evt.endTime] {string} Ending time of event. 
+ * @param [evt.title] {string} Title of event
+ * @param [evt.counter] {string} String formatted number. 
+ * @returns {Object} parsedEvt - Event object formatted for our frontend application.
+ */
+MAUI.prototype.parseEvent = function(evt) {
+  const parsedEvt = {
+    evt_number : evt.evtNumber,
+    room_number: evt.roomNumber,
+    date       : getFormattedDate(evt.date),
+    start_time : evt.startTime.trim(),
+    end_time   : evt.endTime.trim(),
+    event_name : evt.title,
+    id         : evt.activityId
+  };
+  return parsedEvt;
+}
+
+
+/**
+ * Maps a list of rooms and returns all of their schedules from [start-end]
+ * @param {array[string]} rooms List of Room IDs to look up events for.
+ * @param {string} start Starting date of query. Formatted as 'YYYY-MM-DD'.
+ * @param {string} end Ending date of query (inclusive), same format as start.
+ */
+MAUI.prototype.getSchedules = async function(rooms, start, end) {
+  // Map the list of roomNumbers as string to a RESTful Promise
+  const eachSchedule = await Promise.all(rooms.map(r => {
+    const schedule = this.getRoomPromise(r, start, end)
+      .then(res => res)
+      .catch(err => console.log(err));
+    return schedule;
+  }));
+
+  // Merge the lists of schedules (list of events) together
+  // and filter out responses with no events (undefined).
+  // Then parse all of the valid events. 
+  const allSchedules = [].concat.apply([], eachSchedule.filter(e => e !== undefined));
+
+  const ourSchedules = allSchedules.map(evt => this.parseEvent(evt));
+
+  return ourSchedules;
+}
+
+
+
+/**
  * Returns the MAUI SessionID of a YYYY-MM-DD date.
  * @param {(string|Date)} date - Input to format
  * @returns {string} session_id - MAUI SessionID identifying an academic session (Spring 2018, Summer 2012, etc...)
@@ -88,18 +170,6 @@ MAUI.prototype.getSessionID = async function(date) {
   const session_id   = session_info.legacyCode;
   return session_id;
 }
-
-
-/**
- * Creates a query string from an object
- * @param {Object} params - Object containing query parameters: {field: value} OR {field: [value1, value2]}
- * @returns {string} query - String formatted as 'field=value' OR 'field=value1&field=value2'
- */
-MAUI.prototype.constructQuery = function(params) {
-  const query = querystring.stringify(params);
-  return query;
-}
-
 
 
 /**
@@ -169,6 +239,36 @@ MAUI.prototype.parseCourses = function(courses, session) {
 
   return parsedCourses;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /* Course response object has the following shape: {
