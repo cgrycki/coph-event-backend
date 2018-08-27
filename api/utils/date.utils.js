@@ -10,10 +10,10 @@ const getFormattedDate = (date=new Date()) => moment(date).local().format('YYYY-
 const getFormattedDateTime = (date=new Date(), time="4:50PM") => {
   // Combine the date and time
   const dateTime = `${date} ${time}`;
-  const format = 'YYYY-MM-DD hh:mmA';
+  const format = 'MMMM DD, YYYY hh:mmA';
 
   // Format it and output to local datetime
-  const formattedDateTime = moment(dateTime, format).local().format(format);
+  const formattedDateTime = moment(dateTime, format).local().toLocaleString();
   return formattedDateTime;
 }
 
