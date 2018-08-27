@@ -13,7 +13,7 @@ const getFormattedDateTime = (date=new Date(), time="4:50PM") => {
   const format = 'MMMM DD, YYYY hh:mmA';
 
   // Format it and output to local datetime
-  const formattedDateTime = moment(dateTime, format).local().toLocaleString();
+  const formattedDateTime = moment(dateTime, format).local().toISOString();
   return formattedDateTime;
 }
 
