@@ -54,13 +54,11 @@ describe('#MAUI REST class', function() {
 
     it('Returns one rooms schedule.', async function() {
       const evts = await MAUI.getSchedules([oneRoom], startDate, endDate);
-      console.log(evts);
       assert.ok(evts);
     });
 
     it('Returns multiple rooms\' schedules', async function() {
       const evts = await MAUI.getSchedules([moreRooms], startDate, endDate);
-      console.log(evts);
       assert.ok(evts);
     });
   });

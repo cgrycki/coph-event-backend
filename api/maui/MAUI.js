@@ -1,6 +1,7 @@
 const rp                    = require('request-promise');     // For REST calls
-const { getFormattedDate }  = require('../utils/date.utils'); // For dates
-const querystring = require('querystring');                   // For creating queries
+const { getFormattedDate,
+  getFormattedDateTime }    = require('../utils/date.utils'); // For dates
+const querystring           = require('querystring');         // For creating queries
 
 
 /**
@@ -111,15 +112,22 @@ MAUI.prototype.getRoomPromise = async function(roomNumber, start, end) {
  * @returns {Object} parsedEvt - Event object formatted for our frontend application.
  */
 MAUI.prototype.parseEvent = function(evt) {
+  // Parse dates so that the times can be used natively by frontend
+  const evtDate = getFormattedDate(evt.date);
+  const evtStart= getFormattedDateTime(evtDate, evt.startTime.trim());
+  const evtEnd  = getFormattedDateTime(evtDate, evt.endTime.trim());
+
+  // Create the new frontend object
   const parsedEvt = {
-    evt_number : evt.eventNumber,
+    evt_number : +evt.counter,
     room_number: evt.roomNumber,
-    date       : getFormattedDate(evt.date),
-    start_time : evt.startTime.trim(),
-    end_time   : evt.endTime.trim(),
+    date       : evtDate,
+    start_time : evtStart,
+    end_time   : evtEnd,
     event_name : evt.title,
     id         : evt.activityId
   };
+
   return parsedEvt;
 }
 
