@@ -27,18 +27,11 @@ router.param('end_date',     validEndDate);
 
 
 /* REST ---------------------------------------------------------------------*/
-// TESTING
-router.get("/", (req, res) => {
-  console.log(req.query);
-  res.json(req.query);
-});
-
-
-/* GET /rooms -- List CoPH rooms as JS objects. */
+/** GET /rooms -- List CoPH rooms as JS objects. */
 router.get('/rooms', (req, res) => Room.getRooms(req, res));
 
 
-/* GET /rooms/:room_number -- Get one room's info. */
+/** GET /rooms/:room_number -- Get one room's info. */
 router.get('/rooms/:room_number', validateParams, (req, res) => Room.getRoom(req, res));
 
 
@@ -50,12 +43,13 @@ router.get('/rooms/:room_number/:date', validateParams, getRoomScheduleMiddlewar
   }));
 
 
-/* GET /schedules/:YYYY-MM-DD/:2018-08-01/?room_number='N110'&... */
+/** GET /schedules/:YYYY-MM-DD/:2018-08-01/?room_number='N110'&... */
 router.get('/schedules/:start_date/:end_date/', 
   validRoomNum, validateParams, newGetRoomSchedulesMiddleware,
   (req, res) => res.status(200).json({ schedule: req.schedule }));
 
 
+/** GET /courses/algorithms */
 router.get('/courses/:courseText', getCoursesMiddleware,
   (req, res) => res.status(200).json(req.courses));
 
