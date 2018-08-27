@@ -50,7 +50,7 @@ describe('#MAUI REST class', function() {
     let startDate = '2018-07-01';
     let endDate   = '2018-08-10';
     let oneRoom   = 'N110';
-    let moreRooms = ['N110', 'C217A', 'S030', 'C410'];
+    let moreRooms = ['N110', 'S030', 'C410'];
 
     it('Returns one rooms schedule.', async function() {
       const evts = await MAUI.getSchedules([oneRoom], startDate, endDate);

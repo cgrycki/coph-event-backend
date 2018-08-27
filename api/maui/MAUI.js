@@ -114,8 +114,8 @@ MAUI.prototype.getRoomPromise = async function(roomNumber, start, end) {
 MAUI.prototype.parseEvent = function(evt) {
   // Parse dates so that the times can be used natively by frontend
   const evtDate = getFormattedDate(evt.date);
-  const evtStart= getFormattedDateTime(evtDate, evt.startTime.trim());
-  const evtEnd  = getFormattedDateTime(evtDate, evt.endTime.trim());
+  const evtStart= getFormattedDateTime(evt.date, evt.startTime.trim());
+  const evtEnd  = getFormattedDateTime(evt.date, evt.endTime.trim());
 
   // Create the new frontend object
   const parsedEvt = {
