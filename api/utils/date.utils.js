@@ -17,7 +17,7 @@ const getFormattedDateTime = (date=new Date(), time="4:50PM") => {
 
 
   // Format it and output to local datetime
-  const formattedDateTime = moment(dateTime, format);
+  const formattedDateTime = moment(dateTime, format).local();
   return formattedDateTime.toLocaleString();
 }
 
