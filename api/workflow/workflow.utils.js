@@ -104,7 +104,16 @@ async function postWorkflowEventMiddleware(request, response, next) {
     workflow_data: workflow_data
   });
   else {
-    request.workflow_response = result;
+    const permissions = {
+      canEdit         : result.actions.canEdit,
+      canInitiatorVoid: result.actions.canInitiatorVoid,
+      canVoid         : result.actions.canVoid,
+      canVoidAfter    : result.actions.canVoidAfter,
+      canSign         : result.actions.canSign,
+      signatureId     : result.actions.signatureId
+    };
+
+    request.permissions       = permissions;
     request.package_id        = result.actions.packageId;
     return next();
   };
