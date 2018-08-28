@@ -10,13 +10,18 @@ const options_time  = require('../utils/time.constants');
 const jString = Joi.string();
 const jBool   = Joi.boolean().required();
 const email   = jString.allow("").email();
-const date    = Joi.date().iso().required();
+const date    = Joi.date().iso().raw().required();
+const dateReg = Joi.string()
+  .regex(/^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/)
+  .required();
 const time    = jString.allow(options_time).required();
 
 
 /* SCHEMA + CASES ------------------------------------------------------------*/
-const package_id    = Joi.number().integer().required();
-const approved      = Joi.boolean().optional().default(false);
+const package_id    = Joi.number().integer();
+// Approved is actually a boolean, but we cast it to string because DynamoDB 
+// has weird attribute types for it's indices
+const approved      = Joi.string().optional().allow(["true", "false"]).default("false");
 const user_email    = email.regex(/uiowa\.edu$/).required();
 const contact_email = email;
 const coph_email    = email.regex(/uiowa\.edu$/).default("");
@@ -53,7 +58,7 @@ const setup = Joi.object().keys({
 
 const ModelSchema = {
   // Workflow attributes
-  //package_id Added in the DynamoDB definition, so that we can
+  // hashKey 'package_id' Added in the DynamoDB definition, so that we can
   // validate objects before they're POSTed to Workflow
   approved    : approved,
 
@@ -65,7 +70,7 @@ const ModelSchema = {
   // Event information
   event_name : event_name,
   comments   : comments,
-  date       : date,
+  date       : dateReg,
   start_time : time,
   end_time   : time,
   room_number: room_number,
@@ -88,10 +93,11 @@ exports.package_id    = package_id;
 exports.user_email    = user_email;
 exports.contact_email = contact_email;
 exports.coph_email    = coph_email;
-exports.date          = date;
+exports.date          = dateReg;
 exports.time          = time;
 exports.comments      = comments;
 exports.num_people    = num_people;
 exports.course        = course;
 exports.setup         = setup;
+exports.approved      = approved;
 exports.ModelSchema   = ModelSchema;

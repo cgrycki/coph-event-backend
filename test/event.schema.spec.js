@@ -63,6 +63,16 @@ describe('Event Schema (Individual)', function() {
     runJoiTest('Should not allow an empty string.', {date: ""}, scheme, null);
     runJoiTest('Should not allow malformed values', {date: "Aug 1st, 2018"}, scheme, null);
     runJoiTest('Should allow YYYY-MM-DD values.',   {date: "2018-08-01"}, scheme, Error);
+    runJoiTest('Should allow YYYY-MM-DD values. (2018-08-01)',   {date: "2018-08-01"}, scheme, Error);
+    runJoiTest('Should NOT allow YYYY-M-DD values. (2018-8-01)',   {date: "2018-8-01"}, scheme, null);
+    runJoiTest('Should NOT allow YYYY-MM-D values. (2018-11-1)',   {date: "2018-11-1"}, scheme, null);
+    runJoiTest('Should allow YY-MM-DD values. (18-08-01)',   {date: "18-08-01"}, scheme, null);
+
+    it('Shouldnt convert the date string to a new date format', function() {
+      let raw_date = "2018-01-01";
+      let res = Schema.date.validate(raw_date);
+      assert.equal(res.value, raw_date);
+    });
   });
 
   // Time: Required, in H:MM A format
@@ -138,6 +148,27 @@ describe('Event Schema (Individual)', function() {
       {setup_required: true, setup_mfk: "1234567890"},
       scheme, Error);
   });
+
+  /** Approved:
+   * To use an index, we chose 'Binary' for the attribute. Thus, we need to 
+   * convert our 'approved' attribute to binary. The schema defaults to 'false'
+   * for the value, as it's optional (when we create the event the attribute is
+   * created for us).
+   */
+  describe('#Approved', function() {
+    let scheme = Schema.approved;
+
+    runJoiTest('Should not allow actual postive boolean value',   {approved: true}, scheme, Error);
+    runJoiTest('Should not allow actual negative boolean value',  {approved: false}, scheme, null);
+    runJoiTest('Should not allow truthy values (1)',              {approved: 1}, scheme, null);
+    runJoiTest('Should not allow falsy values (0)',               {approved: 0}, scheme, null);
+    runJoiTest('Should not allow empty string',                   {approved: ''}, scheme, null);
+
+
+    runJoiTest('Should allow "true"',      {approved: 'true'}, scheme, null);
+    runJoiTest('Should allow "false"',      {approved: 'false'}, scheme, null);
+    runJoiTest('Should allow undefined and return "false".',      {approved: undefined}, scheme, Error);
+  });
 });
 
 describe('Event Schema (Total)', function() {
@@ -168,5 +199,12 @@ describe('Event Schema (Total)', function() {
       'Should validate a minimum viable object',
       info,
       schema, Error);
+
+    it('Should NOT transform info fields after validating AND add approved', function() {
+      let res = Joi.object().keys(schema).validate(info);
+      let dynamo_obj = { ...info, approved: "false" };
+      
+      assert.deepEqual(res.value, dynamo_obj);
+    });
   });
 });

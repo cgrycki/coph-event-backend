@@ -4,6 +4,7 @@
 
 /* Dependencies -------------------------------------------------------------*/
 const { check } = require('express-validator/check');
+const hawkids   = require('../../config/hawkids');
 const {
   oauth_uiowa,
   getUserAuthURL,
@@ -15,6 +16,13 @@ const {
 
 /* Parameters ---------------------------------------------------------------*/
 const validParamCode = check('code').exists().isAlphanumeric();
+
+/**
+ * Quick helper function to test if a HawkID is in admin list
+ * @param {string} hawkid HawkID of a user making a HTTP request.
+ * @returns {boolean} isAdmin Weither or not the user is an admin.
+ */
+const isAdmin = hawkid => hawkids.has(hawkid);
 
 
 /* Middlewares --------------------------------------------------------------*/
@@ -66,7 +74,7 @@ async function authUserCodeMiddleware(request, response, next) {
 async function checkSessionExistsMiddleware(request, response, next) {
   let sess = request.session;
 
-  // Check if they've been here before
+  // Check user has session and is authenticated
   if (sess && sess.uiowa_access_token) {
     // We have a token, but is it expired?
     // Expire 5 minutes early to account for clock differences
@@ -87,12 +95,15 @@ async function checkSessionExistsMiddleware(request, response, next) {
     setUserAuthToken(new_token, request);
     return next();
   }
+
+  // Check if user is developer
+  else if (request.get('origin') === 'http://localhost:3000') return next();
   
   // Check if this request is being sent to /auth with a valid token
-  if (request.path.endsWith('/auth') && request.query.code) return next();
+  else if (request.path.endsWith('/auth') && request.query.code) return next();
 
   // No authenticated session? Expired?
-  response.status(403).json({
+  else response.status(403).json({
     error   : true,
     loggedIn: false,
     message : "You are not logged in"
@@ -108,10 +119,10 @@ async function checkSessionExistsMiddleware(request, response, next) {
  */
 function retrieveSessionInfoMiddleware(request, response, next) {
   // Localhost gets forwarded
-  if (request.get('origin') === 'http://localhost:3000') {
+  /*if (request.get('origin') === 'http://localhost:3000') {
     request.hawkid = 'LOCALHOST';
     return next();
-  };
+  };*/
 
   try {
     // Define and load the session
@@ -155,10 +166,31 @@ function clearTokensFromSessionMiddleware(request, response, next) {
 }
 
 
+/**
+ * Looks up if a user's hawkID is in a set of Administrator hawkIDs. This function is the last middleware function called in our /auth/validate endpoint. As such, it expects the request to be authenticated and values present.
+ * @param {Object} request Incoming HTTP request.
+ * @params [request.hawkid] {string} HawkID taken from the user's DynamoDB backed session.
+ * @param {Object} response Outgoing HTTP response to client.
+ */
+function getUserAdminStatus(request, response, next) {
+  try {
+    const userIsAdmin = isAdmin(request.hawkid);
+    request.isAdmin   = userIsAdmin;
+    return next();
+  } catch (err) {
+    return response.status(400).json({
+      error: true,
+      message: "There was an error while processing user admin status."
+    })
+  }
+};
+
+
 module.exports = {
   validParamCode,
   authUserCodeMiddleware,
   checkSessionExistsMiddleware,
   retrieveSessionInfoMiddleware,
-  clearTokensFromSessionMiddleware
+  clearTokensFromSessionMiddleware,
+  getUserAdminStatus
 };

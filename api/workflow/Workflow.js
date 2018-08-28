@@ -2,7 +2,8 @@
  * Workflow Helper class.
  */
 
-const rp = require('request-promise');
+const rp                  = require('request-promise');
+const querystring         = require('querystring');
 const { getAppAuthToken } = require('../auth/auth.app');
 
 
@@ -44,6 +45,16 @@ Workflow.prototype.getAppToken = async function() {
  * Constructs an URL for Workflow's RESTful API.
  * @param {boolean} tools - Flag indicating if the route should have tools.
  * @returns {string} uri - URI endpoint.
+ * 
+ * @example
+ * 
+ * ```
+ * Workflow.constructURI() => 
+ * 'https://apps.its.uiowa.edu/workflow/test/api/developer/forms/6025/packages'
+ * 
+ * Workflow.constructURI(tools=true) => 
+ * 'https://apps.its.uiowa.edu/workflow/test/api/developer/tools/forms/6025/packages/1111111/entry'
+ * ```
  */
 Workflow.prototype.constructURI = function(tools=false) {
   const base_uri = `${this.base_uri}/${this.env_type}/api/developer/`;
@@ -52,6 +63,24 @@ Workflow.prototype.constructURI = function(tools=false) {
 
   return uri;
 };
+
+/**
+ * Returns a URI query for package ID(s).
+ * @param {array[number]}
+ * @returns {string} queryString String to tack onto the Workflow permissions URI.
+ * 
+ * @example
+ * 
+ * ```
+ * constructPermissionsURI(1) => 'id=1';
+ * 
+ * constructPermissionsURI([1, 2, 3]) => 'id=1&id=2&id=3;
+ * ```
+ */
+Workflow.prototype.constructPermissionsURI = function(pidOrPids) {
+  const queryString = querystring.stringify({ id: pidOrPids });
+  return queryString;
+}
 
 
 /**
@@ -92,12 +121,14 @@ Workflow.prototype.request = async function(options) {
  * ```
  */
 Workflow.prototype.headers = async function(user_token, ip_address) {
+  const app_token = await this.getAppToken();
+
   const headers = {
     'Content-Type'        : 'application/json',
     'Accept'              : 'application/vnd.workflow+json;version=1.1',
     'Authorization'       : `Bearer ${user_token}`,
     'X-Client-Remote-Addr': ip_address,
-    'X-App-Authorization' : await this.getAppToken()
+    'X-App-Authorization' : `Bearer ${app_token}`
   };
 
   return headers;
@@ -171,7 +202,58 @@ Workflow.prototype.postPackage = async function(user_token, ip_address, data) {
     body   : workflow_data
   };
 
-  // Kick off request
+  // Make the request to Workflow
+  const result = await this.request(options);
+  return result;
+}
+
+
+/**
+ * Updates an Event package entry in Workflow. 
+ * @param {string} user_token OAuth token taken from session store.
+ * @param {string} ip_address IP address of originating request.
+ * @param {Object} data Extracted information from user Event update.
+ * 
+ * @example
+ * 
+ * ```
+ * URI: PUT https://apps.its.uiowa.edu/workflow/prod/api/developer/tools/forms/1/packages/2/entry
+ * 
+ * BODY: {
+ *   "entry" : {
+ *     "age" : 70.0,
+ *     "name" : "Al Pacino"
+ *   },
+ *   "sendDeltaEmail" : null,
+ *   "emailContent" : {
+ *     "deltaSummary" : "<h3>My custom HTML for the edit email</h3>",
+ *     "packageDetails" : "<h3>My Custom HTML for the approver notification email</h3>"
+ *   }  
+ * }
+ * 
+ * RESPONSE: Reflects body if successful
+ */
+Workflow.prototype.updatePackage = async function(user_token, ip_address, package_id, data) {
+  // Create a body for the update
+  const workflow_data = {
+    entry         : data,
+    sendDeltaEmail: false,
+    emailContent  : {
+      deltaSummary  : null,
+      packageDetails: null
+    }
+  };
+
+  // Create options for the REST call
+  const options = {
+    method : 'PUT',
+    uri    : `${this.constructURI(tools=true)}/${package_id}/entry`,
+    headers: await this.headers(user_token, ip_address),
+    json   : true,
+    body   : workflow_data
+  };
+
+
   const result = await this.request(options);
   return result;
 }
@@ -203,10 +285,55 @@ Workflow.prototype.voidPackage = async function(user_token, ip_address, package_
 
 /**
  * Remove a package so that it is no longer routing.
+ * 
+ * @async
  * @param {string} user_token - User OAuth2 token taken from session.
  * @param {string} ip_address - Originating IP Address taken from request.
  * @param {integer} package_id - Package ID
  * @returns {object} result - Response object from Workflow if successful or error.
+ * 
+ * @example
+ * 
+ * ```
+ * PUT https://apps.its.uiowa.edu/workflow/prod/api/developer/tools/forms/1/packages/8/remove
+ * ==>
+ * {
+ *   "id" : 8,
+ *   "state" : "PRE_ROUTING",
+ *   "voidReason" : null,
+ *   "actions" : {
+ *     "canView" : true,
+ *     "canEdit" : true,
+ *     "canSign" : false,
+ *     "canVoid" : false,
+ *     "canInitiatorVoid" : false,
+ *     "canAddApprover" : false,
+ *     "canVoidAfter" : false,
+ *     "packageId" : 8,
+ *     "signatureId" : null
+ *   },
+ *   "subType" : null,
+ *   "emailContent" : {
+ *     "packageDetails" : null
+ *   },
+ *   "routingDate" : "2015-04-20T16:46:42",
+ *   "actionDate" : null,
+ *   "initiator" : {
+ *     "id" : 9,
+ *     "displayName" : "Briggs, Ransom",
+ *     "hrdeptdesc" : null,
+ *     "collegeName" : null,
+ *     "personType" : null,
+ *     "title" : null,
+ *     "univid" : "00028152",
+ *     "email" : "ransom-briggs@uiowa.edu",
+ *     "campusPostalAddress" : null,
+ *     "officePhone" : null
+ *   },
+ *   "commentCount" : 0,
+ *   "attachmentCount" : 0
+ * }
+ * ```
  */
 Workflow.prototype.removePackage = async function(user_token, ip_address, package_id) {
   const options = {
@@ -224,6 +351,8 @@ Workflow.prototype.removePackage = async function(user_token, ip_address, packag
 
 /**
  * Get user's permissions for a package. Useful for authenticating editing and approval.
+ * 
+ * @async
  * @param {string} user_token - User OAuth2 token taken from session.
  * @param {string} ip_address - IP Address taken from originating request.
  * @param {integer} package_id - ID of Workflow package to query.
@@ -258,11 +387,14 @@ Workflow.prototype.removePackage = async function(user_token, ip_address, packag
  * } ]
  * ```
  */
-Workflow.prototype.getPermissions = async function(user_token, ip_address, package_id) {
+Workflow.prototype.getPermissions = async function(user_token, ip_address, package_id_or_ids) {
+  // Create a query using a helper function
+  const queryString = this.constructPermissionsURI(package_id_or_ids);
+
   const options = {
     method : 'GET',
     json   : true,
-    uri    : `${this.constructURI()}/actions?id=${package_id}`,
+    uri    : `${this.constructURI()}/actions?${queryString}`,
     headers: await this.headers(user_token, ip_address)
   };
 
@@ -275,12 +407,6 @@ Workflow.prototype.getPermissions = async function(user_token, ip_address, packa
 Workflow.prototype.validateCallback = async function(callback) {
   return null;
 }
-
-// GET packages
-
-// GET:package_id pacakge entry
-
-// PATCH package entry
 
 
 

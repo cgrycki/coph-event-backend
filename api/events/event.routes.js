@@ -8,17 +8,20 @@ const { session } = require('../auth/auth.session');
 const { 
   checkSessionExistsMiddleware, 
   retrieveSessionInfoMiddleware 
-} = require('../auth/auth.utils');
+}                               = require('../auth/auth.utils');
 const { 
   getDynamoEventMiddleware,
   getDynamoEventsMiddleware,
   validateEvent,
-  postDynamoEventMiddleware
-} = require('./event.utils');
+  postDynamoEventMiddleware,
+  deleteDynamoEventMiddleware
+}                               = require('./event.utils');
 const {
-  fetchUserPermissionsMiddleware,
-  postWorkflowEventMiddleware
-} = require('../workflow/workflow.utils');
+  getWorkflowPermissionsMiddleware,
+  postWorkflowEventMiddleware,
+  deleteWorkflowEventMiddleware,
+  patchWorkflowEventMiddleware
+}                               = require('../workflow/workflow.utils');
 
 
 /* Parameters + Sessions ----------------------------------------------------*/
@@ -28,17 +31,6 @@ router.use(retrieveSessionInfoMiddleware);
 
 
 /* Routes -------------------------------------------------------------------*/
-// GET package_id -- Get specific package 
-router.get('/:package_id',
-  [fetchUserPermissionsMiddleware, getDynamoEventMiddleware],
-  (req, res) => res.status(200).json(req.evt));
-
-
-// GET /my -- Get events filtered by hawkid
-router.get('/my', getDynamoEventsMiddleware,
-  (req, res) => res.status(200).json(req.evts));
-
-
 // POST -- Create event in workflow, dynamoDB, and (TODO) Office365
 router.post('/',
   [
@@ -47,38 +39,36 @@ router.post('/',
     postWorkflowEventMiddleware,
     postDynamoEventMiddleware
   ],
-  (req, res) => res.status(201).json({
-    message       : "Success!",
-    form_id       : process.env.FORM_ID,
-    ip            : req.user_ip_address,
-    body          : req.body,
-    cookies       : req.cookies,
-    workflow_entry: req.workflow_entry,
-    workflow_res  : req.workflow_res,
-    package_id    : req.package_id,
-    dynamo_res    : req.dynamo_res
-  })
-);
+  (req, res) => res.status(201).json(req.dynamo_data));
 
 
-// Get unapproved events
-/*
-router.get('/unapproved', (req, res) => {
-  let { results, error } = EventModel.getEvents("approved", false);
-  
-  if (error) res.status(400).json({ error: true, message: error.message });
-  else res.status(200).json(results);
-});
-*/
+// GET /my -- Get events filtered by hawkid
+router.get('/my', getDynamoEventsMiddleware, getWorkflowPermissionsMiddleware,
+  (req, res) => res.status(200).json(req.evts));
 
-// GET/:date date(s) events
-// loggedIn, tokenValid, getEvents, return
 
-// PATCH/:id: Update a given event
-// loggedIn, tokenValid, eventExists, isAdmin/hasOwnership, updateDynamoDB, patchOffice365, return
+// GET package_id -- Get specific package 
+router.get('/:package_id', getWorkflowPermissionsMiddleware, getDynamoEventMiddleware,
+  (req, res) => res.status(200).json({ evt: req.evt, permissions: req.permissions }));
 
-// DELETE/:id: Delete a given event
-// loggedIn, tokenValid, eventExists, isAdmin, hasOwnership, deleteDynamoDB, deleteOffice365, return
+// GET /my -- Get events filtered by hawkid
+router.get('/my', getDynamoEventsMiddleware,
+  (req, res) => res.status(200).json(req.evts));
+
+// DELETE package_id -- Delete a event in Workflow and DynamoDB
+// loggedIn, tokenValid, eventExists, hasOwnership, deleteDynamoDB, deleteOffice365, return
+router.delete('/:package_id', deleteWorkflowEventMiddleware, deleteDynamoEventMiddleware,
+  (req, res) => res.status(200).json({ package_id: req.params.package_id }));
+
+
+// PATCH/:package_id -- Update a given event
+router.patch('/:package_id', 
+  [
+    validateEvent,
+    getDynamoEventMiddleware,
+    patchWorkflowEventMiddleware,
+    postDynamoEventMiddleware
+  ], (req, res) => res.status(200).json(req.dynamo_data));
 
 
 module.exports = router;

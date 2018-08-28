@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon ./bin/www",
     "populate-rooms": "node -r dotenv/config bin/rooms/populate-database.js",
-    "test": "mocha",
+    "test": "clear && mocha",
     "predeploy": "claudia generate-serverless-express-proxy --express-module server",
     "deploy": "npm run predeploy && exec bin/claudia-deploy.sh",
     "update": "npm run predeploy && TMPDIR=/tmp claudia update --use-local-dependencies --set-env-from-json",
@@ -45,5 +45,13 @@
     "request": "^2.87.0",
     "request-promise": "^4.2.2",
     "simple-oauth2": "^2.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.4.0",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-prettier": "^3.0.1",
+    "eslint-plugin-import": "^2.14.0",
+    "eslint-plugin-prettier": "^2.6.2",
+    "prettier": "^1.14.2"
   }
 }

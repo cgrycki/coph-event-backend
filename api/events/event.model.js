@@ -23,7 +23,7 @@ const EventModel = dynamo.define('Event', {
   timestamps: true,
 
   // Schema defined in current directory
-  schema: { package_id, ...ModelSchema },
+  schema: { package_id: package_id.required(), ...ModelSchema },
 
   // Dynamic table names depending on our Node environment
   tableName: createTableName(table_name),
@@ -68,26 +68,32 @@ EventModel.getEvent = function(package_id) {
  * @returns {Promise} Promise DynamoDB result.
  */
 EventModel.getEvents = function(field, value) {
-  // Create a lookup for our non-hashKey indices
-  const indexMap = {
-    'user_email' : 'EventUserIndex',
-    'room_number': 'EventRoomIndex',
-    'approved'   : 'EventApprovedIndex',
-    'date'       : 'EventDateIndex'
-  };
+  return new Promise((resolve, reject) => {
+    // Create a lookup for our non-hashKey indices
+    const indexMap = {
+      'user_email' : 'EventUserIndex',
+      'room_number': 'EventRoomIndex',
+      'approved'   : 'EventApprovedIndex',
+      'date'       : 'EventDateIndex'
+    };
 
-  return new Promise(function(resolve, reject) {
     EventModel
       .query(value)
       .usingIndex(indexMap[field])
-      .descending()
       .exec((err, data) => {
         if (err) return resolve({
           error  : true,
           message: err.message,
-          stack  : err.stack
+          stack  : err.stack,
+          field: field,
+          value: value
         });
-        else resolve(data.Items);
+        else {
+          // Extract the info we need for future middlewares
+          const evts        = data.Items;
+          const package_ids = evts.map(evt => evt.get('package_id'));
+          resolve({ evts, package_ids });
+        }
       });
   });
 }
@@ -120,12 +126,12 @@ EventModel.postEvent = function(evt) {
 EventModel.deleteEvent = function(package_id) {
   return new Promise(function(resolve, reject) {
     EventModel.destroy(package_id, (err) => {
-      if (err) resolve({
+      if (err) return resolve({
         error  : true,
         message: err.message,
         stack  : err.stack
       });
-      else resolve({});
+      else resolve({ error: false });
     });
   });
 }

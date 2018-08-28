@@ -1,1388 +1,1388 @@
 [
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "C125",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [
-            "Tables"
-        ],
-        "maxOccupancy": "20",
-        "rmType": "Lounge",
-        "acadOrgUnitName": null,
-        "roomCategory": null,
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "C201",
-        "roomName": null,
-        "regionList": [
-            "1) University Classrooms",
-            "1) University Classrooms - Fixed AV Tech",
-            "1) University Classrooms - Level 1",
-            "1) University Classrooms - Space Utilization",
-            "Classroom-Computer",
-            "Cls Sched Manages Initial Room Assignment",
-            "College of Public Health",
-            "College of Public Health Classrooms",
-            "Event Management Process - Shared with Cls Sched",
-            "Event Scheduler CPHB",
-            "Room Type Group Computer (CP)",
-            "UCR Electronic Classrooms",
-            "Whiteboard Only Classrooms"
-        ],
-        "featureList": [
-            "A/C",
-            "Computer - Windows",
-            "Computer - Windows for Students",
-            "Disc Player - DVD",
-            "Dual Projection - Single Image",
-            "Electronic Access",
-            "Internet",
-            "Lecture Capture with Mic",
-            "Microphone - Fixed on Podium",
-            "Podium",
-            "Projection Screen - Fixed",
-            "Projector - Data/Video",
-            "Tables",
-            "Technology Control System",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "28",
-        "rmType": "Classroom-Computer",
-        "acadOrgUnitName": "704",
-        "roomCategory": "UNIVERSITY_CLASSROOM",
-        "roomTypeGroup": "Computer"
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "C210",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "College of Public Health Classrooms",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [
-            "Computer - Windows",
-            "Tables",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "24",
-        "rmType": "Computer Laboratory",
-        "acadOrgUnitName": "470",
-        "roomCategory": "SPECIALTY_SPACE",
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "C212",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "College of Public Health Conference Rooms",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [
-            "Computer - Windows",
-            "Tables",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "8",
-        "rmType": "Conference Room",
-        "acadOrgUnitName": null,
-        "roomCategory": "SPECIALTY_SPACE",
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "C217A",
-        "roomName": "2nd Floor Conference Room (left side)",
-        "regionList": [
-            "College of Public Health",
-            "College of Public Health Classrooms",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [
-            "Computer - Windows",
-            "Disc Player - DVD",
-            "Podium",
-            "Projector - Data/Video",
-            "Tables",
-            "Technology Control System",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "35",
-        "rmType": "Conference Room",
-        "acadOrgUnitName": null,
-        "roomCategory": "SPECIALTY_SPACE",
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "C217AB",
-        "roomName": "2nd Floor Conference Room (combined)",
-        "regionList": [
-            "College of Public Health",
-            "College of Public Health Classrooms",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [
-            "Computer - Windows",
-            "Disc Player - DVD",
-            "Podium",
-            "Projector - Data/Video",
-            "Tables",
-            "Technology Control System",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "68",
-        "rmType": "Conference Room",
-        "acadOrgUnitName": null,
-        "roomCategory": "SPECIALTY_SPACE",
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "C217B",
-        "roomName": "2nd Floor Conference Room (right side)", 
-        "regionList": [
-            "College of Public Health",
-            "College of Public Health Classrooms",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [
-            "Computer - Windows",
-            "Disc Player - DVD",
-            "Podium",
-            "Projector - Data/Video",
-            "Tables",
-            "Technology Control System",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "35",
-        "rmType": "Conference Room",
-        "acadOrgUnitName": null,
-        "roomCategory": "SPECIALTY_SPACE",
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "C301",
-        "roomName": "3rd Floor Conference Room",
-        "regionList": [
-            "1) Programmed Classrooms - Level 2",
-            "Classroom-Programmed",
-            "College of Public Health",
-            "College of Public Health Classrooms",
-            "Event Mgmt Process - Coordinated with Cls Sched",
-            "Event Scheduler CPHB",
-            "Surveyed Non-GAC Room",
-            "West"
-        ],
-        "featureList": [
-            "A/C",
-            "Computer - Windows",
-            "Podium",
-            "Projector - Data/Video",
-            "Tables",
-            "Technology Control System",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "20",
-        "rmType": "Classroom-Lecture",
-        "acadOrgUnitName": "414",
-        "roomCategory": "PROGRAMMED_CLASSROOM",
-        "roomTypeGroup": "Lecture"
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "C303",
-        "roomName": null,
-        "regionList": [
-            "1) Programmed Classrooms - Level 2",
-            "Classroom-Programmed",
-            "College of Public Health",
-            "College of Public Health Classrooms",
-            "Event Mgmt Process - Coordinated with Cls Sched",
-            "Surveyed Non-GAC Room",
-            "West"
-        ],
-        "featureList": [
-            "A/C",
-            "Computer - Windows",
-            "Projector - Data/Video",
-            "Tables",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "9",
-        "rmType": "Seminar",
-        "acadOrgUnitName": "414",
-        "roomCategory": "PROGRAMMED_CLASSROOM",
-        "roomTypeGroup": "Seminar/Discussion"
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "C310",
-        "roomName": null,
-        "regionList": [
-            "1) Specialty Spaces",
-            "College of Public Health",
-            "College of Public Health Classrooms",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [
-            "Computer - Linux",
-            "Disc Player - DVD",
-            "Podium",
-            "Projector - Data/Video",
-            "Tables",
-            "Technology Control System",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "24",
-        "rmType": "Computer Laboratory",
-        "acadOrgUnitName": "467",
-        "roomCategory": "SPECIALTY_SPACE",
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "C312",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "College of Public Health Conference Rooms",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [
-            "Computer - Windows",
-            "Tables",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "8",
-        "rmType": "Conference Room",
-        "acadOrgUnitName": null,
-        "roomCategory": "SPECIALTY_SPACE",
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "C401",
-        "roomName": null,
-        "regionList": [
-            "1) University Classrooms",
-            "1) University Classrooms - Fixed AV Tech",
-            "1) University Classrooms - Level 1",
-            "1) University Classrooms - Space Utilization",
-            "Classroom-Computer",
-            "Cls Sched Manages Initial Room Assignment",
-            "College of Public Health",
-            "College of Public Health Classrooms",
-            "Event Management Process - Shared with Cls Sched",
-            "Event Scheduler CPHB",
-            "Room Type Group Computer (CP)",
-            "UCR Electronic Classrooms",
-            "West",
-            "Whiteboard Only Classrooms"
-        ],
-        "featureList": [
-            "A/C",
-            "Computer - Windows",
-            "Computer - Windows for Students",
-            "Disc Player - DVD",
-            "Dual Projection - Single Image",
-            "Electronic Access",
-            "Internet",
-            "Lecture Capture with Mic",
-            "Microphone - Fixed on Podium",
-            "Podium",
-            "Projection Screen - Fixed",
-            "Projector - Data/Video",
-            "Tables",
-            "Technology Control System",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "28",
-        "rmType": "Classroom-Computer",
-        "acadOrgUnitName": "704",
-        "roomCategory": "UNIVERSITY_CLASSROOM",
-        "roomTypeGroup": "Computer"
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "C410",
-        "roomName": "4th Floor Conference Room",
-        "regionList": [
-            "1) Programmed Classrooms - Level 2",
-            "Classroom-Programmed",
-            "College of Public Health",
-            "College of Public Health Classrooms",
-            "Event Mgmt Process - Coordinated with Cls Sched",
-            "Event Scheduler CPHB",
-            "Surveyed Non-GAC Room",
-            "West"
-        ],
-        "featureList": [
-            "A/C",
-            "Computer - Windows",
-            "Podium",
-            "Projector - Data/Video",
-            "Tables",
-            "Technology Control System",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "26",
-        "rmType": "Classroom-Lecture",
-        "acadOrgUnitName": "414",
-        "roomCategory": "PROGRAMMED_CLASSROOM",
-        "roomTypeGroup": "Lecture"
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "C412",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "College of Public Health Conference Rooms",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [
-            "Computer - Windows",
-            "Tables",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "8",
-        "rmType": "Conference Room",
-        "acadOrgUnitName": null,
-        "roomCategory": "SPECIALTY_SPACE",
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "East Patio",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [],
-        "maxOccupancy": "100",
-        "rmType": "Outdoor Space",
-        "acadOrgUnitName": null,
-        "roomCategory": null,
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "N110",
-        "roomName": "Callaghan Auditorium",
-        "regionList": [
-            "1) University Classrooms",
-            "1) University Classrooms - Fixed AV Tech",
-            "1) University Classrooms - Level 1",
-            "1) University Classrooms - Space Utilization",
-            "60-90 Mid Range UCR",
-            "Auditoria/Large Classroom",
-            "Auditorium",
-            "Cls Sched Manages Initial Room Assignment",
-            "College of Public Health",
-            "College of Public Health Classrooms",
-            "Event Management Process - Shared with Cls Sched",
-            "Event Scheduler CPHB",
-            "Room Type Group Lecture (LE)",
-            "Surveyed Non-GAC Room",
-            "Tiered Flooring Configuration",
-            "UCR Electronic Classrooms",
-            "West",
-            "Whiteboard Only Classrooms"
-        ],
-        "featureList": [
-            "A/C",
-            "Computer - Windows",
-            "Document Camera",
-            "Dual Projection - 2 Images",
-            "Electronic Access",
-            "Internet",
-            "Lecture Capture with Mic",
-            "Mic Drawer",
-            "Microphone - Wireless",
-            "Podium",
-            "Projection Screen - Fixed",
-            "Projector - Data/Video",
-            "Seats - Moveable Tablet Arms",
-            "Seats - Theatre",
-            "Sound System",
-            "Technology Control System",
-            "Video Conferencing",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "193",
-        "rmType": "Auditorium",
-        "acadOrgUnitName": "704",
-        "roomCategory": "UNIVERSITY_CLASSROOM",
-        "roomTypeGroup": "Lecture"
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "N120",
-        "roomName": "Ellig Classroom",
-        "regionList": [
-            "1) University Classrooms",
-            "1) University Classrooms - Fixed AV Tech",
-            "1) University Classrooms - Level 1",
-            "1) University Classrooms - Space Utilization",
-            "60-90 Mid Range UCR",
-            "Auditoria/Large Classroom",
-            "Auditorium",
-            "Cls Sched Manages Initial Room Assignment",
-            "College of Public Health",
-            "College of Public Health Classrooms",
-            "Event Management Process - Shared with Cls Sched",
-            "Event Scheduler CPHB",
-            "Room Type Group Lecture (LE)",
-            "Surveyed Non-GAC Room",
-            "Tiered Flooring Configuration",
-            "UCR Electronic Classrooms",
-            "West",
-            "Whiteboard Only Classrooms"
-        ],
-        "featureList": [
-            "A/C",
-            "Computer - Windows",
-            "Document Camera",
-            "Dual Projection - 2 Images",
-            "Electronic Access",
-            "Internet",
-            "Lecture Capture with Mic",
-            "Mic Drawer",
-            "Microphone - Wireless",
-            "Podium",
-            "Projection Screen - Fixed",
-            "Projector - Data/Video",
-            "Seats - Theatre",
-            "Sound System",
-            "Tables",
-            "Technology Control System",
-            "Video Conferencing",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "98",
-        "rmType": "Auditorium",
-        "acadOrgUnitName": "704",
-        "roomCategory": "UNIVERSITY_CLASSROOM",
-        "roomTypeGroup": "Lecture"
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "N160",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "College of Public Health Conference Rooms",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [
-            "Computer - Windows",
-            "Tables",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "8",
-        "rmType": "Conference Room",
-        "acadOrgUnitName": null,
-        "roomCategory": "SPECIALTY_SPACE",
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "N171",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "College of Public Health Conference Rooms",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [
-            "Computer - Windows",
-            "Disc Player - DVD",
-            "Podium",
-            "Projector - Data/Video",
-            "Tables",
-            "Technology Control System",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "12",
-        "rmType": "Conference Room",
-        "acadOrgUnitName": null,
-        "roomCategory": "SPECIALTY_SPACE",
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "N202",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "College of Public Health Conference Rooms",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [
-            "Computer - Windows",
-            "Projector - Data/Video",
-            "Tables",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "22",
-        "rmType": "Conference Room",
-        "acadOrgUnitName": null,
-        "roomCategory": "SPECIALTY_SPACE",
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "N228",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "College of Public Health Conference Rooms",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [
-            "Library Materials",
-            "Tables",
-            "Whiteboard - Standard"
-        ],
-        "maxOccupancy": "4",
-        "rmType": "Conference Room",
-        "acadOrgUnitName": null,
-        "roomCategory": "SPECIALTY_SPACE",
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "N302",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "College of Public Health Conference Rooms",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [
-            "Computer - Windows",
-            "Projector - Data/Video",
-            "Tables",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "22",
-        "rmType": "Conference Room",
-        "acadOrgUnitName": null,
-        "roomCategory": "SPECIALTY_SPACE",
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "N350",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "College of Public Health Conference Rooms",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [
-            "Computer - Windows",
-            "Tables",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "6",
-        "rmType": "Conference Room",
-        "acadOrgUnitName": null,
-        "roomCategory": "SPECIALTY_SPACE",
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "N402",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "College of Public Health Conference Rooms",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [
-            "Computer - Windows",
-            "Projector - Data/Video",
-            "Tables",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "22",
-        "rmType": "Conference Room",
-        "acadOrgUnitName": null,
-        "roomCategory": "SPECIALTY_SPACE",
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "N450",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "College of Public Health Conference Rooms",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [
-            "Computer - Windows",
-            "Tables",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "6",
-        "rmType": "Conference Room",
-        "acadOrgUnitName": null,
-        "roomCategory": "SPECIALTY_SPACE",
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "N512",
-        "roomName": null,
-        "regionList": [
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [],
-        "maxOccupancy": "1",
-        "rmType": "Meeting Room",
-        "acadOrgUnitName": null,
-        "roomCategory": "SPECIALTY_SPACE",
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "S025A",
-        "roomName": "Basement Classroom (left side)",
-        "regionList": [
-            "1) University Classrooms",
-            "1) University Classrooms - Fixed AV Tech",
-            "1) University Classrooms - Level 1",
-            "1) University Classrooms - Space Utilization",
-            "Classroom-Multipurpose",
-            "Cls Sched Manages Initial Room Assignment",
-            "College of Public Health",
-            "College of Public Health Classrooms",
-            "Event Management Process - Shared with Cls Sched",
-            "Event Scheduler CPHB",
-            "Room Type Group Adaptable (AD)",
-            "Surveyed Non-GAC Room",
-            "UCR Electronic Classrooms",
-            "West",
-            "Whiteboard Only Classrooms"
-        ],
-        "featureList": [
-            "A/C",
-            "Computer - Windows",
-            "Document Camera",
-            "Electronic Access",
-            "Internet",
-            "Lecture Capture with Mic",
-            "Microphone - Fixed on Podium",
-            "Podium",
-            "Projection Screen - Fixed",
-            "Projector - Data/Video",
-            "Seats - Moveable Tablet Arms",
-            "Sound System",
-            "Technology Control System",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "25",
-        "rmType": "Classroom-Multipurpose",
-        "acadOrgUnitName": "704",
-        "roomCategory": "UNIVERSITY_CLASSROOM",
-        "roomTypeGroup": "Adaptable"
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "S025AB",
-        "roomName": "Basement Classroom (combined)",
-        "regionList": [
-            "1) University Classrooms",
-            "1) University Classrooms - Fixed AV Tech",
-            "1) University Classrooms - Level 1",
-            "1) University Classrooms - Managed",
-            "Classroom-Multipurpose",
-            "Cls Sched Manages Initial Room Assignment",
-            "College of Public Health",
-            "College of Public Health Classrooms",
-            "Event Management Process - Shared with Cls Sched",
-            "Event Scheduler CPHB",
-            "Room Type Group Adaptable (AD)",
-            "UCR Electronic Classrooms",
-            "West",
-            "Whiteboard Only Classrooms"
-        ],
-        "featureList": [
-            "A/C",
-            "Computer - Windows",
-            "Disc Player - DVD",
-            "Document Camera",
-            "Electronic Access",
-            "Internet",
-            "Lecture Capture with Mic",
-            "Microphone - Fixed on Podium",
-            "Podium",
-            "Projection Screen - Fixed",
-            "Projector - Data/Video",
-            "Seats - Moveable Tablet Arms",
-            "Sound System",
-            "Technology Control System",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "50",
-        "rmType": "Classroom-Multipurpose",
-        "acadOrgUnitName": "704",
-        "roomCategory": "UNIVERSITY_CLASSROOM",
-        "roomTypeGroup": "Adaptable"
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "S025B",
-        "roomName": "Basement Classroom (right side)",
-        "regionList": [
-            "1) University Classrooms",
-            "1) University Classrooms - Fixed AV Tech",
-            "1) University Classrooms - Level 1",
-            "1) University Classrooms - Space Utilization",
-            "Classroom-Multipurpose",
-            "Cls Sched Manages Initial Room Assignment",
-            "College of Public Health",
-            "College of Public Health Classrooms",
-            "Event Management Process - Shared with Cls Sched",
-            "Event Scheduler CPHB",
-            "Room Type Group Adaptable (AD)",
-            "Surveyed Non-GAC Room",
-            "UCR Electronic Classrooms",
-            "West",
-            "Whiteboard Only Classrooms"
-        ],
-        "featureList": [
-            "A/C",
-            "Computer - Windows",
-            "Document Camera",
-            "Electronic Access",
-            "Internet",
-            "Lecture Capture with Mic",
-            "Microphone - Fixed on Podium",
-            "Podium",
-            "Projection Screen - Fixed",
-            "Projector - Data/Video",
-            "Seats - Moveable Tablet Arms",
-            "Sound System",
-            "Technology Control System",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "25",
-        "rmType": "Classroom-Multipurpose",
-        "acadOrgUnitName": "704",
-        "roomCategory": "UNIVERSITY_CLASSROOM",
-        "roomTypeGroup": "Adaptable"
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "S030",
-        "roomName": "Basement Auditorium",
-        "regionList": [
-            "1) University Classrooms",
-            "1) University Classrooms - Fixed AV Tech",
-            "1) University Classrooms - Level 1",
-            "1) University Classrooms - Space Utilization",
-            "Classroom-Lecture",
-            "Cls Sched Manages Initial Room Assignment",
-            "College of Public Health",
-            "College of Public Health Classrooms",
-            "Event Management Process - Shared with Cls Sched",
-            "Event Scheduler CPHB",
-            "Room Type Group Lecture (LE)",
-            "Surveyed Non-GAC Room",
-            "Tiered Flooring Configuration",
-            "UCR Electronic Classrooms",
-            "West",
-            "Whiteboard Only Classrooms"
-        ],
-        "featureList": [
-            "A/C",
-            "Computer - Windows",
-            "Disc Player - DVD",
-            "Electronic Access",
-            "Internet",
-            "Mic Drawer",
-            "Microphone - Wireless",
-            "Podium",
-            "Projection Screen - Fixed",
-            "Projector - Data/Video",
-            "Sound System",
-            "Tables",
-            "Technology Control System",
-            "Video Conferencing",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "44",
-        "rmType": "Classroom-Lecture",
-        "acadOrgUnitName": "704",
-        "roomCategory": "UNIVERSITY_CLASSROOM",
-        "roomTypeGroup": "Lecture"
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "S106A",
-        "roomName": null,
-        "regionList": [
-            "1) Programmed Classrooms - Level 2",
-            "Classroom-Programmed",
-            "College of Public Health",
-            "College of Public Health Classrooms",
-            "Event Mgmt Process - Coordinated with Cls Sched",
-            "Event Scheduler CPHB",
-            "Surveyed Non-GAC Room",
-            "West"
-        ],
-        "featureList": [
-            "A/C",
-            "Computer - Windows",
-            "Mic Drawer",
-            "Podium",
-            "Projector - Data/Video",
-            "Seats - Moveable Tablet Arms",
-            "Tables",
-            "Technology Control System",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "25",
-        "rmType": "Classroom-Lecture",
-        "acadOrgUnitName": "414",
-        "roomCategory": "PROGRAMMED_CLASSROOM",
-        "roomTypeGroup": "Lecture"
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "S106AB",
-        "roomName": null,
-        "regionList": [
-            "1) Programmed Classrooms - Level 2",
-            "Classroom-Programmed",
-            "College of Public Health",
-            "College of Public Health Classrooms",
-            "Event Mgmt Process - Coordinated with Cls Sched",
-            "Event Scheduler CPHB",
-            "Surveyed Non-GAC Room",
-            "West"
-        ],
-        "featureList": [
-            "Computer - Windows",
-            "Document Camera",
-            "Mic Drawer",
-            "Podium",
-            "Projector - Data/Video",
-            "Seats - Moveable Tablet Arms",
-            "Tables",
-            "Technology Control System",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "43",
-        "rmType": "Classroom-Lecture",
-        "acadOrgUnitName": "414",
-        "roomCategory": "PROGRAMMED_CLASSROOM",
-        "roomTypeGroup": "Lecture"
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "S106B",
-        "roomName": null,
-        "regionList": [
-            "1) Programmed Classrooms - Level 2",
-            "Classroom-Programmed",
-            "College of Public Health",
-            "College of Public Health Classrooms",
-            "Event Mgmt Process - Coordinated with Cls Sched",
-            "Event Scheduler CPHB",
-            "Surveyed Non-GAC Room",
-            "West"
-        ],
-        "featureList": [
-            "A/C",
-            "Computer - Windows",
-            "Document Camera",
-            "Mic Drawer",
-            "Podium",
-            "Projector - Data/Video",
-            "Seats - Moveable Tablet Arms",
-            "Tables",
-            "Technology Control System",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "28",
-        "rmType": "Classroom-Lecture",
-        "acadOrgUnitName": "414",
-        "roomCategory": "PROGRAMMED_CLASSROOM",
-        "roomTypeGroup": "Lecture"
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "S162",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "College of Public Health Conference Rooms",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [
-            "Computer - Windows",
-            "Disc Player - DVD",
-            "Podium",
-            "Projector - Data/Video",
-            "Tables",
-            "Technology Control System",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "30",
-        "rmType": "Conference Room",
-        "acadOrgUnitName": null,
-        "roomCategory": "SPECIALTY_SPACE",
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "S206",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "College of Public Health Classrooms",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [
-            "Computer - Windows",
-            "Tables",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "24",
-        "rmType": "Computer Laboratory",
-        "acadOrgUnitName": "414",
-        "roomCategory": "SPECIALTY_SPACE",
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "S207",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [
-            "Computer - Windows",
-            "Tables",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "16",
-        "rmType": "Computer Laboratory",
-        "acadOrgUnitName": "414",
-        "roomCategory": "SPECIALTY_SPACE",
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "S225",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [],
-        "maxOccupancy": "12",
-        "rmType": "Lounge",
-        "acadOrgUnitName": null,
-        "roomCategory": null,
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "S240",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [
-            "Tables"
-        ],
-        "maxOccupancy": "30",
-        "rmType": "Lounge",
-        "acadOrgUnitName": null,
-        "roomCategory": null,
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "S302",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "College of Public Health Conference Rooms",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [
-            "Computer - Windows",
-            "Projector - Data/Video",
-            "Tables",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "22",
-        "rmType": "Conference Room",
-        "acadOrgUnitName": null,
-        "roomCategory": "SPECIALTY_SPACE",
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "S329",
-        "roomName": null,
-        "regionList": [
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [],
-        "maxOccupancy": "1",
-        "rmType": "Office",
-        "acadOrgUnitName": null,
-        "roomCategory": "SPECIALTY_SPACE",
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "S359",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "College of Public Health Conference Rooms",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [
-            "Computer - Windows",
-            "Tables",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "6",
-        "rmType": "Conference Room",
-        "acadOrgUnitName": null,
-        "roomCategory": "SPECIALTY_SPACE",
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "S402",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "College of Public Health Conference Rooms",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [
-            "Computer - Windows",
-            "Projector - Data/Video",
-            "Tables",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "20",
-        "rmType": "Conference Room",
-        "acadOrgUnitName": null,
-        "roomCategory": "SPECIALTY_SPACE",
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "S420",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "College of Public Health Conference Rooms",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [
-            "Computer - Windows",
-            "Tables",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "6",
-        "rmType": "Conference Room",
-        "acadOrgUnitName": null,
-        "roomCategory": "SPECIALTY_SPACE",
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "S459",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "College of Public Health Conference Rooms",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [
-            "Computer - Windows",
-            "Tables",
-            "Whiteboard - Standard",
-            "Wireless - Access"
-        ],
-        "maxOccupancy": "6",
-        "rmType": "Conference Room",
-        "acadOrgUnitName": null,
-        "roomCategory": "SPECIALTY_SPACE",
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "SC115",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [],
-        "maxOccupancy": "6",
-        "rmType": "Lounge",
-        "acadOrgUnitName": null,
-        "roomCategory": null,
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "SW Program Space",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [],
-        "maxOccupancy": "6",
-        "rmType": "Lounge",
-        "acadOrgUnitName": null,
-        "roomCategory": null,
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "XC100",
-        "roomName": "1st Floor Atrium",
-        "regionList": [
-            "College of Public Health",
-            "Event Scheduler CPHB",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [],
-        "maxOccupancy": "206",
-        "rmType": "Lounge",
-        "acadOrgUnitName": null,
-        "roomCategory": null,
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "XC200",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [],
-        "maxOccupancy": "8",
-        "rmType": "Lounge",
-        "acadOrgUnitName": null,
-        "roomCategory": null,
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "XC300",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [],
-        "maxOccupancy": "12",
-        "rmType": "Lounge",
-        "acadOrgUnitName": null,
-        "roomCategory": null,
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "XC400",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [],
-        "maxOccupancy": "12",
-        "rmType": "Lounge",
-        "acadOrgUnitName": null,
-        "roomCategory": null,
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "XC500",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [],
-        "maxOccupancy": "30",
-        "rmType": "Lounge",
-        "acadOrgUnitName": null,
-        "roomCategory": null,
-        "roomTypeGroup": null
-    },
-    {
-        "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
-        "buildingCode": "CPHB",
-        "roomNumber": "XS020",
-        "roomName": null,
-        "regionList": [
-            "College of Public Health",
-            "Non-GAC",
-            "West"
-        ],
-        "featureList": [],
-        "maxOccupancy": "12",
-        "rmType": "Lounge",
-        "acadOrgUnitName": null,
-        "roomCategory": null,
-        "roomTypeGroup": null
-    }
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "C125",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [
+      "Tables"
+    ],
+    "maxOccupancy": "20",
+    "rmType": "Lounge",
+    "acadOrgUnitName": null,
+    "roomCategory": null,
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "C201",
+    "roomName": null,
+    "regionList": [
+      "1) University Classrooms",
+      "1) University Classrooms - Fixed AV Tech",
+      "1) University Classrooms - Level 1",
+      "1) University Classrooms - Space Utilization",
+      "Classroom-Computer",
+      "Cls Sched Manages Initial Room Assignment",
+      "College of Public Health",
+      "College of Public Health Classrooms",
+      "Event Management Process - Shared with Cls Sched",
+      "Event Scheduler CPHB",
+      "Room Type Group Computer (CP)",
+      "UCR Electronic Classrooms",
+      "Whiteboard Only Classrooms"
+    ],
+    "featureList": [
+      "A/C",
+      "Computer - Windows",
+      "Computer - Windows for Students",
+      "Disc Player - DVD",
+      "Dual Projection - Single Image",
+      "Electronic Access",
+      "Internet",
+      "Lecture Capture with Mic",
+      "Microphone - Fixed on Podium",
+      "Podium",
+      "Projection Screen - Fixed",
+      "Projector - Data/Video",
+      "Tables",
+      "Technology Control System",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "28",
+    "rmType": "Classroom-Computer",
+    "acadOrgUnitName": "704",
+    "roomCategory": "UNIVERSITY_CLASSROOM",
+    "roomTypeGroup": "Computer"
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "C210",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "College of Public Health Classrooms",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [
+      "Computer - Windows",
+      "Tables",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "24",
+    "rmType": "Computer Laboratory",
+    "acadOrgUnitName": "470",
+    "roomCategory": "SPECIALTY_SPACE",
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "C212",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "College of Public Health Conference Rooms",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [
+      "Computer - Windows",
+      "Tables",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "8",
+    "rmType": "Conference Room",
+    "acadOrgUnitName": null,
+    "roomCategory": "SPECIALTY_SPACE",
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "C217A",
+    "roomName": "2nd Floor Conference Room (left side)",
+    "regionList": [
+      "College of Public Health",
+      "College of Public Health Classrooms",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [
+      "Computer - Windows",
+      "Disc Player - DVD",
+      "Podium",
+      "Projector - Data/Video",
+      "Tables",
+      "Technology Control System",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "35",
+    "rmType": "Conference Room",
+    "acadOrgUnitName": null,
+    "roomCategory": "SPECIALTY_SPACE",
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "C217AB",
+    "roomName": "2nd Floor Conference Room (combined)",
+    "regionList": [
+      "College of Public Health",
+      "College of Public Health Classrooms",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [
+      "Computer - Windows",
+      "Disc Player - DVD",
+      "Podium",
+      "Projector - Data/Video",
+      "Tables",
+      "Technology Control System",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "68",
+    "rmType": "Conference Room",
+    "acadOrgUnitName": null,
+    "roomCategory": "SPECIALTY_SPACE",
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "C217B",
+    "roomName": "2nd Floor Conference Room (right side)", 
+    "regionList": [
+      "College of Public Health",
+      "College of Public Health Classrooms",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [
+      "Computer - Windows",
+      "Disc Player - DVD",
+      "Podium",
+      "Projector - Data/Video",
+      "Tables",
+      "Technology Control System",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "35",
+    "rmType": "Conference Room",
+    "acadOrgUnitName": null,
+    "roomCategory": "SPECIALTY_SPACE",
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "C301",
+    "roomName": "3rd Floor Conference Room",
+    "regionList": [
+      "1) Programmed Classrooms - Level 2",
+      "Classroom-Programmed",
+      "College of Public Health",
+      "College of Public Health Classrooms",
+      "Event Mgmt Process - Coordinated with Cls Sched",
+      "Event Scheduler CPHB",
+      "Surveyed Non-GAC Room",
+      "West"
+    ],
+    "featureList": [
+      "A/C",
+      "Computer - Windows",
+      "Podium",
+      "Projector - Data/Video",
+      "Tables",
+      "Technology Control System",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "20",
+    "rmType": "Classroom-Lecture",
+    "acadOrgUnitName": "414",
+    "roomCategory": "PROGRAMMED_CLASSROOM",
+    "roomTypeGroup": "Lecture"
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "C303",
+    "roomName": null,
+    "regionList": [
+      "1) Programmed Classrooms - Level 2",
+      "Classroom-Programmed",
+      "College of Public Health",
+      "College of Public Health Classrooms",
+      "Event Mgmt Process - Coordinated with Cls Sched",
+      "Surveyed Non-GAC Room",
+      "West"
+    ],
+    "featureList": [
+      "A/C",
+      "Computer - Windows",
+      "Projector - Data/Video",
+      "Tables",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "9",
+    "rmType": "Seminar",
+    "acadOrgUnitName": "414",
+    "roomCategory": "PROGRAMMED_CLASSROOM",
+    "roomTypeGroup": "Seminar/Discussion"
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "C310",
+    "roomName": null,
+    "regionList": [
+      "1) Specialty Spaces",
+      "College of Public Health",
+      "College of Public Health Classrooms",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [
+      "Computer - Linux",
+      "Disc Player - DVD",
+      "Podium",
+      "Projector - Data/Video",
+      "Tables",
+      "Technology Control System",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "24",
+    "rmType": "Computer Laboratory",
+    "acadOrgUnitName": "467",
+    "roomCategory": "SPECIALTY_SPACE",
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "C312",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "College of Public Health Conference Rooms",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [
+      "Computer - Windows",
+      "Tables",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "8",
+    "rmType": "Conference Room",
+    "acadOrgUnitName": null,
+    "roomCategory": "SPECIALTY_SPACE",
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "C401",
+    "roomName": null,
+    "regionList": [
+      "1) University Classrooms",
+      "1) University Classrooms - Fixed AV Tech",
+      "1) University Classrooms - Level 1",
+      "1) University Classrooms - Space Utilization",
+      "Classroom-Computer",
+      "Cls Sched Manages Initial Room Assignment",
+      "College of Public Health",
+      "College of Public Health Classrooms",
+      "Event Management Process - Shared with Cls Sched",
+      "Event Scheduler CPHB",
+      "Room Type Group Computer (CP)",
+      "UCR Electronic Classrooms",
+      "West",
+      "Whiteboard Only Classrooms"
+    ],
+    "featureList": [
+      "A/C",
+      "Computer - Windows",
+      "Computer - Windows for Students",
+      "Disc Player - DVD",
+      "Dual Projection - Single Image",
+      "Electronic Access",
+      "Internet",
+      "Lecture Capture with Mic",
+      "Microphone - Fixed on Podium",
+      "Podium",
+      "Projection Screen - Fixed",
+      "Projector - Data/Video",
+      "Tables",
+      "Technology Control System",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "28",
+    "rmType": "Classroom-Computer",
+    "acadOrgUnitName": "704",
+    "roomCategory": "UNIVERSITY_CLASSROOM",
+    "roomTypeGroup": "Computer"
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "C410",
+    "roomName": "4th Floor Conference Room",
+    "regionList": [
+      "1) Programmed Classrooms - Level 2",
+      "Classroom-Programmed",
+      "College of Public Health",
+      "College of Public Health Classrooms",
+      "Event Mgmt Process - Coordinated with Cls Sched",
+      "Event Scheduler CPHB",
+      "Surveyed Non-GAC Room",
+      "West"
+    ],
+    "featureList": [
+      "A/C",
+      "Computer - Windows",
+      "Podium",
+      "Projector - Data/Video",
+      "Tables",
+      "Technology Control System",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "26",
+    "rmType": "Classroom-Lecture",
+    "acadOrgUnitName": "414",
+    "roomCategory": "PROGRAMMED_CLASSROOM",
+    "roomTypeGroup": "Lecture"
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "C412",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "College of Public Health Conference Rooms",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [
+      "Computer - Windows",
+      "Tables",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "8",
+    "rmType": "Conference Room",
+    "acadOrgUnitName": null,
+    "roomCategory": "SPECIALTY_SPACE",
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "East Patio",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [],
+    "maxOccupancy": "100",
+    "rmType": "Outdoor Space",
+    "acadOrgUnitName": null,
+    "roomCategory": null,
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "N110",
+    "roomName": "Callaghan Auditorium",
+    "regionList": [
+      "1) University Classrooms",
+      "1) University Classrooms - Fixed AV Tech",
+      "1) University Classrooms - Level 1",
+      "1) University Classrooms - Space Utilization",
+      "60-90 Mid Range UCR",
+      "Auditoria/Large Classroom",
+      "Auditorium",
+      "Cls Sched Manages Initial Room Assignment",
+      "College of Public Health",
+      "College of Public Health Classrooms",
+      "Event Management Process - Shared with Cls Sched",
+      "Event Scheduler CPHB",
+      "Room Type Group Lecture (LE)",
+      "Surveyed Non-GAC Room",
+      "Tiered Flooring Configuration",
+      "UCR Electronic Classrooms",
+      "West",
+      "Whiteboard Only Classrooms"
+    ],
+    "featureList": [
+      "A/C",
+      "Computer - Windows",
+      "Document Camera",
+      "Dual Projection - 2 Images",
+      "Electronic Access",
+      "Internet",
+      "Lecture Capture with Mic",
+      "Mic Drawer",
+      "Microphone - Wireless",
+      "Podium",
+      "Projection Screen - Fixed",
+      "Projector - Data/Video",
+      "Seats - Moveable Tablet Arms",
+      "Seats - Theatre",
+      "Sound System",
+      "Technology Control System",
+      "Video Conferencing",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "193",
+    "rmType": "Auditorium",
+    "acadOrgUnitName": "704",
+    "roomCategory": "UNIVERSITY_CLASSROOM",
+    "roomTypeGroup": "Lecture"
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "N120",
+    "roomName": "Ellig Classroom",
+    "regionList": [
+      "1) University Classrooms",
+      "1) University Classrooms - Fixed AV Tech",
+      "1) University Classrooms - Level 1",
+      "1) University Classrooms - Space Utilization",
+      "60-90 Mid Range UCR",
+      "Auditoria/Large Classroom",
+      "Auditorium",
+      "Cls Sched Manages Initial Room Assignment",
+      "College of Public Health",
+      "College of Public Health Classrooms",
+      "Event Management Process - Shared with Cls Sched",
+      "Event Scheduler CPHB",
+      "Room Type Group Lecture (LE)",
+      "Surveyed Non-GAC Room",
+      "Tiered Flooring Configuration",
+      "UCR Electronic Classrooms",
+      "West",
+      "Whiteboard Only Classrooms"
+    ],
+    "featureList": [
+      "A/C",
+      "Computer - Windows",
+      "Document Camera",
+      "Dual Projection - 2 Images",
+      "Electronic Access",
+      "Internet",
+      "Lecture Capture with Mic",
+      "Mic Drawer",
+      "Microphone - Wireless",
+      "Podium",
+      "Projection Screen - Fixed",
+      "Projector - Data/Video",
+      "Seats - Theatre",
+      "Sound System",
+      "Tables",
+      "Technology Control System",
+      "Video Conferencing",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "98",
+    "rmType": "Auditorium",
+    "acadOrgUnitName": "704",
+    "roomCategory": "UNIVERSITY_CLASSROOM",
+    "roomTypeGroup": "Lecture"
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "N160",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "College of Public Health Conference Rooms",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [
+      "Computer - Windows",
+      "Tables",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "8",
+    "rmType": "Conference Room",
+    "acadOrgUnitName": null,
+    "roomCategory": "SPECIALTY_SPACE",
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "N171",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "College of Public Health Conference Rooms",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [
+      "Computer - Windows",
+      "Disc Player - DVD",
+      "Podium",
+      "Projector - Data/Video",
+      "Tables",
+      "Technology Control System",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "12",
+    "rmType": "Conference Room",
+    "acadOrgUnitName": null,
+    "roomCategory": "SPECIALTY_SPACE",
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "N202",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "College of Public Health Conference Rooms",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [
+      "Computer - Windows",
+      "Projector - Data/Video",
+      "Tables",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "22",
+    "rmType": "Conference Room",
+    "acadOrgUnitName": null,
+    "roomCategory": "SPECIALTY_SPACE",
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "N228",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "College of Public Health Conference Rooms",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [
+      "Library Materials",
+      "Tables",
+      "Whiteboard - Standard"
+    ],
+    "maxOccupancy": "4",
+    "rmType": "Conference Room",
+    "acadOrgUnitName": null,
+    "roomCategory": "SPECIALTY_SPACE",
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "N302",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "College of Public Health Conference Rooms",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [
+      "Computer - Windows",
+      "Projector - Data/Video",
+      "Tables",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "22",
+    "rmType": "Conference Room",
+    "acadOrgUnitName": null,
+    "roomCategory": "SPECIALTY_SPACE",
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "N350",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "College of Public Health Conference Rooms",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [
+      "Computer - Windows",
+      "Tables",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "6",
+    "rmType": "Conference Room",
+    "acadOrgUnitName": null,
+    "roomCategory": "SPECIALTY_SPACE",
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "N402",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "College of Public Health Conference Rooms",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [
+      "Computer - Windows",
+      "Projector - Data/Video",
+      "Tables",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "22",
+    "rmType": "Conference Room",
+    "acadOrgUnitName": null,
+    "roomCategory": "SPECIALTY_SPACE",
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "N450",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "College of Public Health Conference Rooms",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [
+      "Computer - Windows",
+      "Tables",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "6",
+    "rmType": "Conference Room",
+    "acadOrgUnitName": null,
+    "roomCategory": "SPECIALTY_SPACE",
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "N512",
+    "roomName": null,
+    "regionList": [
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [],
+    "maxOccupancy": "1",
+    "rmType": "Meeting Room",
+    "acadOrgUnitName": null,
+    "roomCategory": "SPECIALTY_SPACE",
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "S025A",
+    "roomName": "Basement Classroom (left side)",
+    "regionList": [
+      "1) University Classrooms",
+      "1) University Classrooms - Fixed AV Tech",
+      "1) University Classrooms - Level 1",
+      "1) University Classrooms - Space Utilization",
+      "Classroom-Multipurpose",
+      "Cls Sched Manages Initial Room Assignment",
+      "College of Public Health",
+      "College of Public Health Classrooms",
+      "Event Management Process - Shared with Cls Sched",
+      "Event Scheduler CPHB",
+      "Room Type Group Adaptable (AD)",
+      "Surveyed Non-GAC Room",
+      "UCR Electronic Classrooms",
+      "West",
+      "Whiteboard Only Classrooms"
+    ],
+    "featureList": [
+      "A/C",
+      "Computer - Windows",
+      "Document Camera",
+      "Electronic Access",
+      "Internet",
+      "Lecture Capture with Mic",
+      "Microphone - Fixed on Podium",
+      "Podium",
+      "Projection Screen - Fixed",
+      "Projector - Data/Video",
+      "Seats - Moveable Tablet Arms",
+      "Sound System",
+      "Technology Control System",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "25",
+    "rmType": "Classroom-Multipurpose",
+    "acadOrgUnitName": "704",
+    "roomCategory": "UNIVERSITY_CLASSROOM",
+    "roomTypeGroup": "Adaptable"
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "S025AB",
+    "roomName": "Basement Classroom (combined)",
+    "regionList": [
+      "1) University Classrooms",
+      "1) University Classrooms - Fixed AV Tech",
+      "1) University Classrooms - Level 1",
+      "1) University Classrooms - Managed",
+      "Classroom-Multipurpose",
+      "Cls Sched Manages Initial Room Assignment",
+      "College of Public Health",
+      "College of Public Health Classrooms",
+      "Event Management Process - Shared with Cls Sched",
+      "Event Scheduler CPHB",
+      "Room Type Group Adaptable (AD)",
+      "UCR Electronic Classrooms",
+      "West",
+      "Whiteboard Only Classrooms"
+    ],
+    "featureList": [
+      "A/C",
+      "Computer - Windows",
+      "Disc Player - DVD",
+      "Document Camera",
+      "Electronic Access",
+      "Internet",
+      "Lecture Capture with Mic",
+      "Microphone - Fixed on Podium",
+      "Podium",
+      "Projection Screen - Fixed",
+      "Projector - Data/Video",
+      "Seats - Moveable Tablet Arms",
+      "Sound System",
+      "Technology Control System",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "50",
+    "rmType": "Classroom-Multipurpose",
+    "acadOrgUnitName": "704",
+    "roomCategory": "UNIVERSITY_CLASSROOM",
+    "roomTypeGroup": "Adaptable"
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "S025B",
+    "roomName": "Basement Classroom (right side)",
+    "regionList": [
+      "1) University Classrooms",
+      "1) University Classrooms - Fixed AV Tech",
+      "1) University Classrooms - Level 1",
+      "1) University Classrooms - Space Utilization",
+      "Classroom-Multipurpose",
+      "Cls Sched Manages Initial Room Assignment",
+      "College of Public Health",
+      "College of Public Health Classrooms",
+      "Event Management Process - Shared with Cls Sched",
+      "Event Scheduler CPHB",
+      "Room Type Group Adaptable (AD)",
+      "Surveyed Non-GAC Room",
+      "UCR Electronic Classrooms",
+      "West",
+      "Whiteboard Only Classrooms"
+    ],
+    "featureList": [
+      "A/C",
+      "Computer - Windows",
+      "Document Camera",
+      "Electronic Access",
+      "Internet",
+      "Lecture Capture with Mic",
+      "Microphone - Fixed on Podium",
+      "Podium",
+      "Projection Screen - Fixed",
+      "Projector - Data/Video",
+      "Seats - Moveable Tablet Arms",
+      "Sound System",
+      "Technology Control System",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "25",
+    "rmType": "Classroom-Multipurpose",
+    "acadOrgUnitName": "704",
+    "roomCategory": "UNIVERSITY_CLASSROOM",
+    "roomTypeGroup": "Adaptable"
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "S030",
+    "roomName": "Basement Auditorium",
+    "regionList": [
+      "1) University Classrooms",
+      "1) University Classrooms - Fixed AV Tech",
+      "1) University Classrooms - Level 1",
+      "1) University Classrooms - Space Utilization",
+      "Classroom-Lecture",
+      "Cls Sched Manages Initial Room Assignment",
+      "College of Public Health",
+      "College of Public Health Classrooms",
+      "Event Management Process - Shared with Cls Sched",
+      "Event Scheduler CPHB",
+      "Room Type Group Lecture (LE)",
+      "Surveyed Non-GAC Room",
+      "Tiered Flooring Configuration",
+      "UCR Electronic Classrooms",
+      "West",
+      "Whiteboard Only Classrooms"
+    ],
+    "featureList": [
+      "A/C",
+      "Computer - Windows",
+      "Disc Player - DVD",
+      "Electronic Access",
+      "Internet",
+      "Mic Drawer",
+      "Microphone - Wireless",
+      "Podium",
+      "Projection Screen - Fixed",
+      "Projector - Data/Video",
+      "Sound System",
+      "Tables",
+      "Technology Control System",
+      "Video Conferencing",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "44",
+    "rmType": "Classroom-Lecture",
+    "acadOrgUnitName": "704",
+    "roomCategory": "UNIVERSITY_CLASSROOM",
+    "roomTypeGroup": "Lecture"
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "S106A",
+    "roomName": null,
+    "regionList": [
+      "1) Programmed Classrooms - Level 2",
+      "Classroom-Programmed",
+      "College of Public Health",
+      "College of Public Health Classrooms",
+      "Event Mgmt Process - Coordinated with Cls Sched",
+      "Event Scheduler CPHB",
+      "Surveyed Non-GAC Room",
+      "West"
+    ],
+    "featureList": [
+      "A/C",
+      "Computer - Windows",
+      "Mic Drawer",
+      "Podium",
+      "Projector - Data/Video",
+      "Seats - Moveable Tablet Arms",
+      "Tables",
+      "Technology Control System",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "25",
+    "rmType": "Classroom-Lecture",
+    "acadOrgUnitName": "414",
+    "roomCategory": "PROGRAMMED_CLASSROOM",
+    "roomTypeGroup": "Lecture"
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "S106AB",
+    "roomName": null,
+    "regionList": [
+      "1) Programmed Classrooms - Level 2",
+      "Classroom-Programmed",
+      "College of Public Health",
+      "College of Public Health Classrooms",
+      "Event Mgmt Process - Coordinated with Cls Sched",
+      "Event Scheduler CPHB",
+      "Surveyed Non-GAC Room",
+      "West"
+    ],
+    "featureList": [
+      "Computer - Windows",
+      "Document Camera",
+      "Mic Drawer",
+      "Podium",
+      "Projector - Data/Video",
+      "Seats - Moveable Tablet Arms",
+      "Tables",
+      "Technology Control System",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "43",
+    "rmType": "Classroom-Lecture",
+    "acadOrgUnitName": "414",
+    "roomCategory": "PROGRAMMED_CLASSROOM",
+    "roomTypeGroup": "Lecture"
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "S106B",
+    "roomName": null,
+    "regionList": [
+      "1) Programmed Classrooms - Level 2",
+      "Classroom-Programmed",
+      "College of Public Health",
+      "College of Public Health Classrooms",
+      "Event Mgmt Process - Coordinated with Cls Sched",
+      "Event Scheduler CPHB",
+      "Surveyed Non-GAC Room",
+      "West"
+    ],
+    "featureList": [
+      "A/C",
+      "Computer - Windows",
+      "Document Camera",
+      "Mic Drawer",
+      "Podium",
+      "Projector - Data/Video",
+      "Seats - Moveable Tablet Arms",
+      "Tables",
+      "Technology Control System",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "28",
+    "rmType": "Classroom-Lecture",
+    "acadOrgUnitName": "414",
+    "roomCategory": "PROGRAMMED_CLASSROOM",
+    "roomTypeGroup": "Lecture"
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "S162",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "College of Public Health Conference Rooms",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [
+      "Computer - Windows",
+      "Disc Player - DVD",
+      "Podium",
+      "Projector - Data/Video",
+      "Tables",
+      "Technology Control System",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "30",
+    "rmType": "Conference Room",
+    "acadOrgUnitName": null,
+    "roomCategory": "SPECIALTY_SPACE",
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "S206",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "College of Public Health Classrooms",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [
+      "Computer - Windows",
+      "Tables",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "24",
+    "rmType": "Computer Laboratory",
+    "acadOrgUnitName": "414",
+    "roomCategory": "SPECIALTY_SPACE",
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "S207",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [
+      "Computer - Windows",
+      "Tables",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "16",
+    "rmType": "Computer Laboratory",
+    "acadOrgUnitName": "414",
+    "roomCategory": "SPECIALTY_SPACE",
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "S225",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [],
+    "maxOccupancy": "12",
+    "rmType": "Lounge",
+    "acadOrgUnitName": null,
+    "roomCategory": null,
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "S240",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [
+      "Tables"
+    ],
+    "maxOccupancy": "30",
+    "rmType": "Lounge",
+    "acadOrgUnitName": null,
+    "roomCategory": null,
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "S302",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "College of Public Health Conference Rooms",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [
+      "Computer - Windows",
+      "Projector - Data/Video",
+      "Tables",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "22",
+    "rmType": "Conference Room",
+    "acadOrgUnitName": null,
+    "roomCategory": "SPECIALTY_SPACE",
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "S329",
+    "roomName": null,
+    "regionList": [
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [],
+    "maxOccupancy": "1",
+    "rmType": "Office",
+    "acadOrgUnitName": null,
+    "roomCategory": "SPECIALTY_SPACE",
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "S359",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "College of Public Health Conference Rooms",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [
+      "Computer - Windows",
+      "Tables",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "6",
+    "rmType": "Conference Room",
+    "acadOrgUnitName": null,
+    "roomCategory": "SPECIALTY_SPACE",
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "S402",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "College of Public Health Conference Rooms",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [
+      "Computer - Windows",
+      "Projector - Data/Video",
+      "Tables",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "20",
+    "rmType": "Conference Room",
+    "acadOrgUnitName": null,
+    "roomCategory": "SPECIALTY_SPACE",
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "S420",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "College of Public Health Conference Rooms",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [
+      "Computer - Windows",
+      "Tables",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "6",
+    "rmType": "Conference Room",
+    "acadOrgUnitName": null,
+    "roomCategory": "SPECIALTY_SPACE",
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "S459",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "College of Public Health Conference Rooms",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [
+      "Computer - Windows",
+      "Tables",
+      "Whiteboard - Standard",
+      "Wireless - Access"
+    ],
+    "maxOccupancy": "6",
+    "rmType": "Conference Room",
+    "acadOrgUnitName": null,
+    "roomCategory": "SPECIALTY_SPACE",
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "SC115",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [],
+    "maxOccupancy": "6",
+    "rmType": "Lounge",
+    "acadOrgUnitName": null,
+    "roomCategory": null,
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "SW Program Space",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [],
+    "maxOccupancy": "6",
+    "rmType": "Lounge",
+    "acadOrgUnitName": null,
+    "roomCategory": null,
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "XC100",
+    "roomName": "1st Floor Atrium",
+    "regionList": [
+      "College of Public Health",
+      "Event Scheduler CPHB",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [],
+    "maxOccupancy": "206",
+    "rmType": "Lounge",
+    "acadOrgUnitName": null,
+    "roomCategory": null,
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "XC200",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [],
+    "maxOccupancy": "8",
+    "rmType": "Lounge",
+    "acadOrgUnitName": null,
+    "roomCategory": null,
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "XC300",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [],
+    "maxOccupancy": "12",
+    "rmType": "Lounge",
+    "acadOrgUnitName": null,
+    "roomCategory": null,
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "XC400",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [],
+    "maxOccupancy": "12",
+    "rmType": "Lounge",
+    "acadOrgUnitName": null,
+    "roomCategory": null,
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "XC500",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [],
+    "maxOccupancy": "30",
+    "rmType": "Lounge",
+    "acadOrgUnitName": null,
+    "roomCategory": null,
+    "roomTypeGroup": null
+  },
+  {
+    "buildingName": "COLLEGE OF PUBLIC HEALTH BLDG",
+    "buildingCode": "CPHB",
+    "roomNumber": "XS020",
+    "roomName": null,
+    "regionList": [
+      "College of Public Health",
+      "Non-GAC",
+      "West"
+    ],
+    "featureList": [],
+    "maxOccupancy": "12",
+    "rmType": "Lounge",
+    "acadOrgUnitName": null,
+    "roomCategory": null,
+    "roomTypeGroup": null
+  }
 ]

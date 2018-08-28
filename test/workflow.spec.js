@@ -51,19 +51,36 @@ describe('Workflow REST class', function() {
       assert.equal(faux_tool_uri, correct_tool_uri);
     });
 
-    it('Gets authentication token for appliction.', async function() {
-      let app_token = await Workflow.getAppToken();
-      assert.equal(typeof(app_token), "string");
-    });
-  });
+    it('Should create correct URI for a single package\'s permissions (number)', function() {
+      let pid = 1;
+      let queryString = Workflow.constructPermissionsURI(pid);
+      let correctQueryString = 'id=1';
 
-  // Requests
-  describe('#requests', function() {
-    it('Creates correct headers for removing a package', async function() {
-      let remove_result = await Workflow.removePackage(
-        faux_user_token, faux_ip_address, faux_package_id);
-      
-      assert.notEqual(remove_result.error, true);
+      assert.equal(queryString, correctQueryString);
+    });
+
+    it('Should create correct URI for a single package\'s permissions (string)', function() {
+      let pid = '1';
+      let queryString = Workflow.constructPermissionsURI(pid);
+      let correctQueryString = 'id=1';
+
+      assert.equal(queryString, correctQueryString);
+    });
+
+    it('Should create correct URI for a multiple package\'s permissions (numbers)', function() {
+      let pids = [1, 2, 3];
+      let queryString = Workflow.constructPermissionsURI(pids);
+      let correctQueryString = 'id=1&id=2&id=3';
+
+      assert.equal(queryString, correctQueryString);
+    });
+
+    it('Should create correct URI for a multiple package\'s permissions (strings)', function() {
+      let pids = ['1', '2', '3'];
+      let queryString = Workflow.constructPermissionsURI(pids);
+      let correctQueryString = 'id=1&id=2&id=3';
+
+      assert.equal(queryString, correctQueryString);
     });
   });
 });
