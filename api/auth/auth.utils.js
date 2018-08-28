@@ -97,7 +97,7 @@ async function checkSessionExistsMiddleware(request, response, next) {
   }
 
   // Check if user is developer
-  //else if (request.get('origin') === 'http://localhost:3000') return next();
+  else if (request.get('origin') === 'http://localhost:3000') return next();
   
   // Check if this request is being sent to /auth with a valid token
   else if (request.path.endsWith('/auth') && request.query.code) return next();
