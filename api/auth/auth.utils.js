@@ -103,7 +103,7 @@ async function checkSessionExistsMiddleware(request, response, next) {
   else if (request.path.endsWith('/auth') && request.query.code) return next();
 
   // No authenticated session? Expired?
-  else response.status(403).json({
+  else response.status(200).json({
     error   : true,
     loggedIn: false,
     message : "You are not logged in"
