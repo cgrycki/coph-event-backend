@@ -1,8 +1,8 @@
 /**
-* Authentication middleware.
-*/
+ * Authentication middleware.
+ */
 
-/* Dependencies -------------------------------------------------------------*/
+/** Dependencies -------------------------------------------------------------*/
 const { check } = require('express-validator/check');
 const hawkids   = require('../../config/hawkids');
 const {
@@ -14,7 +14,7 @@ const {
 } = require('./auth.app');
 
 
-/* Parameters ---------------------------------------------------------------*/
+/** Parameters ---------------------------------------------------------------*/
 const validParamCode = check('code').exists().isAlphanumeric();
 
 /**
@@ -28,11 +28,11 @@ const isAdmin = hawkid => hawkids.has(hawkid);
 /* Middlewares --------------------------------------------------------------*/
 
 /**
-* Completes the authentication handshake with U. Iowa servers.
-* @param {object} request - Workflow callback HTTP request after successful user login. 
-* @param {object} response - HTTP response to return.
-* @param {function} next - Next function in our middleware stack. 
-*/
+ * Completes the authentication handshake with U. Iowa servers.
+ * @param {object} request - Workflow callback HTTP request after successful user login. 
+ * @param {object} response - HTTP response to return.
+ * @param {function} next - Next function in our middleware stack. 
+ */
 async function authUserCodeMiddleware(request, response, next) {
   const code = request.query.code;
 
@@ -97,7 +97,7 @@ async function checkSessionExistsMiddleware(request, response, next) {
   }
 
   // Check if user is developer
-  else if (request.get('origin') === 'http://localhost:3000') return next();
+  //else if (request.get('origin') === 'http://localhost:3000') return next();
   
   // Check if this request is being sent to /auth with a valid token
   else if (request.path.endsWith('/auth') && request.query.code) return next();
