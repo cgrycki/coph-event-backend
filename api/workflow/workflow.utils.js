@@ -175,6 +175,7 @@ async function patchWorkflowEventMiddleware(request, response, next) {
   response.status(200).json({
     slim_dynamo_data    : slim_dynamo_data,
     dynamo_data         : dynamo_data,
+    workflow_data       : workflow_data,
     shouldUpdateWorkflow: shouldUpdateWorkflow,
     package_id          : package_id,
     wf_env              : process.env.WF_ENV
