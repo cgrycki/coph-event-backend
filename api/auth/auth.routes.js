@@ -21,10 +21,10 @@ router.param('code', validParamCode);
 
 
 /* RESTful Endpoints --------------------------------------------------------*/
-// GET /auth/:code -- Authenticates code sent from Campus Login tools
+// GET /auth/:code -- Authenticates login from Campus Login tools 
 router.get('/',
   authUserCodeMiddleware, 
-  (req, res) => res.status(200).redirect(process.env.FRONTEND_URI));
+  (req, res) => res.status(200).redirect(`${process.env.FRONTEND_URI}/dashboard`));
 
 
 // GET /auth/logout -- Ends a user's session and redirects them to the login URL.
