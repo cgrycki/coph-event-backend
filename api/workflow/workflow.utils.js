@@ -172,29 +172,25 @@ async function patchWorkflowEventMiddleware(request, response, next) {
   const shouldUpdateWorkflow = shouldUpdateEvent(slim_dynamo_data, workflow_data);
 
 
-  response.status(200).json({
+  /*response.status(200).json({
     slim_dynamo_data    : slim_dynamo_data,
     dynamo_data         : dynamo_data,
     workflow_data       : workflow_data,
     shouldUpdateWorkflow: shouldUpdateWorkflow,
     package_id          : package_id,
     wf_env              : process.env.WF_ENV
-  });
+  });*/
   
 
   // Should we update workflow or just Dynamo?
-  /*if (shouldUpdateWorkflow) {
+  if (shouldUpdateWorkflow) {
     const result = await Workflow.updatePackage(auth_token, ip, package_id, workflow_data);
 
     // Should we continue with the request or was there an error while updating?
     if (result.error) return response.status(400).json(result);
-    else {
-      response.workflow_response = result;
-      //return next();
-    };
+    else response.workflow_response = result;
   }
-  else return next();
-  */
+  return next();
 }
 
 
