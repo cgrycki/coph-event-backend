@@ -170,22 +170,30 @@ async function patchWorkflowEventMiddleware(request, response, next) {
   // NOTE: Our DynamoDB model holds it data internally in a 'attrs' object. 
   const slim_dynamo_data     = extractWorkflowInfo(dynamo_data.attrs);
   const shouldUpdateWorkflow = shouldUpdateEvent(slim_dynamo_data, workflow_data);
+
+
+  response.status(200).json({
+    slim_dynamo_data    : slim_dynamo_data,
+    dynamo_data         : dynamo_data,
+    shouldUpdateWorkflow: shouldUpdateWorkflow,
+    package_id          : package_id,
+    wf_env              : process.env.WF_ENV
+  });
   
+
   // Should we update workflow or just Dynamo?
-  if (shouldUpdateWorkflow) {
+  /*if (shouldUpdateWorkflow) {
     const result = await Workflow.updatePackage(auth_token, ip, package_id, workflow_data);
-
-
-    //return response.status(400).json({ result, workflow_data, dynamo_data });
 
     // Should we continue with the request or was there an error while updating?
     if (result.error) return response.status(400).json(result);
     else {
       response.workflow_response = result;
-      return next();
+      //return next();
     };
   }
   else return next();
+  */
 }
 
 
