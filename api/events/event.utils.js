@@ -40,7 +40,7 @@ async function getDynamoEventMiddleware(request, response, next) {
   // Otherwise we found the event object, convert 'approval' from string => bool
   else {
     // Some of our objects are still using booleans (woof)
-    evt[0].approval = evt[0].approval === "true"
+    //evt[0].approval = evt[0].approval === "true"
 
     request.evt = evt[0];
     return next();
