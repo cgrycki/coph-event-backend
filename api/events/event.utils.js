@@ -162,7 +162,11 @@ async function processWorkflowCallback(request, response) {
   let { packageId: package_id, state } = request.body;
   let result;
 
-  console.log(request.body, request.params, request.query);
+  console.log('body', request.body);
+  console.log('params', request.params);
+  console.log('query', request.query);
+  console.log('ogURL', request.originalUrl);
+  console.log('METHOD', request.method);
 
   if (state === 'COMPLETE') {
     result = await EventModel.patchEvent({ package_id: package_id, approved: 'true'});
@@ -171,9 +175,10 @@ async function processWorkflowCallback(request, response) {
   // else ROUTING
 
   // Handle response
-  if (result.error) {
-    console.log(request.body);
-    return response.status(400).json(result);
+  if (result === undefined) return response.status(400).end();
+  else if (request.error) {
+    console.log('ERROR', result);
+    return response.status(400).end();
   }
   else return response.status(200).end();
 }
