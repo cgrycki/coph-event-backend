@@ -137,4 +137,23 @@ EventModel.deleteEvent = function(package_id) {
 }
 
 
+/**
+ * Updates an event object in our DynamoDB `events` table.
+ * @param {Object} evt Object with Package ID and attributes to update
+ * @returns {Promise} 
+ */
+EventModel.patchEvent = function(evt) {
+  return new Promise(function(resolve, reject) {
+    EventModel.update(evt, function(err, data) {
+      if (err) return resolve({
+        error  : true,
+        message: err.message,
+        stack  : err.stack
+      });
+      else resolve(data);
+    })
+  });
+}
+
+
 module.exports = EventModel;
