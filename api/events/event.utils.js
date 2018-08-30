@@ -143,6 +143,37 @@ async function postDynamoEventMiddleware(request, response, next) {
 }
 
 
+async function patchDynamoEventMiddleware(request, response, next) {
+  // Assumes patchWorkflowEventMiddleware has been called before this
+  const pid    = +request.params.package_id;
+  const evt    = { package_id: pid, ...request.body };
+  const result = await EventModel.patchEvent(evt);
+
+  // If there was an error return, otherwise pass on the information
+  if (result.error) return response.status(400).json(result);
+  else {
+    request.dynamo_data = result;
+    return next();
+  };
+}
+
+
+async function processWorkflowCallback(request, response) {
+  let { packageId: package_id, state, stop, lockId, entry } = request.body;
+  let result;
+
+  if (state === 'COMPLETE') {
+    result = await EventModel.patchEvent({ package_id: package_id, approved: 'true'});
+  }
+  // else if (state === 'VOID')
+  // else ROUTING
+
+  // Handle response
+  if (result.error) return response.status(400).json(result);
+  else return response.status(200).end();
+}
+
+
 /* DELETE Functions ---------------------------------------------------------*/
 async function deleteDynamoEventMiddleware(request, response, next) {
   // Get hashKey of dynamo object
@@ -162,5 +193,6 @@ module.exports = {
   getDynamoEventsMiddleware,
   validateEvent,
   postDynamoEventMiddleware,
-  deleteDynamoEventMiddleware
+  deleteDynamoEventMiddleware,
+  processWorkflowCallback
 };

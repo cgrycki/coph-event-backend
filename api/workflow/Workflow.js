@@ -272,11 +272,12 @@ Workflow.prototype.voidPackage = async function(user_token, ip_address, package_
     method : 'PUT',
     uri    : `${this.constructURI(tools=true)}/${package_id}`,
     headers: await this.headers(user_token, ip_address),
-    body   : JSON.stringify({
+    json   : true,
+    body   : {
       id        : package_id,
       state     : 'VOID',
       voidReason: voidReason
-    })
+    }
   };
 
   const result = await this.request(options);
@@ -403,8 +404,40 @@ Workflow.prototype.getPermissions = async function(user_token, ip_address, packa
 }
 
 
-// Validate callback
-Workflow.prototype.validateCallback = async function(callback) {
+// Unfreeze routing after callback
+// DELETE https://apps.its.uiowa.edu/workflow/{env}/api/developer/forms/{form_id}/packages/{package_id}/notification_locks/{lock_id}
+
+
+
+/**
+ * @todo
+ * Validate callback
+ * 
+ * 
+ * @example
+ * 
+ * Sample Callback: ```
+ * {
+ *   "@class" : "developer",
+ *   "formId" : 100,
+ *   "packageId" : 1285,
+ *   "state" : "COMPLETE",
+ *   "createdAt" : "2016-02-24T17:04:48",
+ *   "stop" : null,
+ *   "lockId" : 123456,
+ *   "entry" : {
+ *     "field_1_naturalKey" : "field_1_value",
+ *     "field_2_naturalKey" : "field_2_value",
+ *     "field_3_naturalKey" : "field_3_value",
+ *     "field_4_naturalKey" : "field_4_value",
+ *     "field_5_naturalKey" : "field_5_value"
+ *   }
+ * }```
+ */
+Workflow.prototype.processCallback = async function(callback) {
+
+  const { packageId: package_id, state, stop, lockId, entry } = callback;
+
   return null;
 }
 
