@@ -51,12 +51,6 @@ describe('Workflow REST class', function() {
       assert.equal(faux_tool_uri, correct_tool_uri);
     });
 
-    /*it('Gets authentication token for appliction.', async function() {
-      let app_token = await Workflow.getAppToken();
-      assert.equal(typeof(app_token), "string");
-    });
-    */
-
     it('Should create correct URI for a single package\'s permissions (number)', function() {
       let pid = 1;
       let queryString = Workflow.constructPermissionsURI(pid);
