@@ -159,7 +159,7 @@ async function patchDynamoEventMiddleware(request, response, next) {
 
 
 async function processWorkflowCallback(request, response) {
-  let { packageId: package_id, state, stop, lockId, entry } = request.body;
+  let { packageId: package_id, state } = request.body;
   let result;
 
   if (state === 'COMPLETE') {
@@ -169,7 +169,10 @@ async function processWorkflowCallback(request, response) {
   // else ROUTING
 
   // Handle response
-  if (result.error) return response.status(400).json(result);
+  if (result.error) {
+    console.log(request.body);
+    return response.status(400).json(result);
+  }
   else return response.status(200).end();
 }
 
@@ -193,6 +196,7 @@ module.exports = {
   getDynamoEventsMiddleware,
   validateEvent,
   postDynamoEventMiddleware,
+  patchDynamoEventMiddleware,
   deleteDynamoEventMiddleware,
   processWorkflowCallback
 };
