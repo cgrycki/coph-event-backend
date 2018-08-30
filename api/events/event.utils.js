@@ -162,6 +162,8 @@ async function processWorkflowCallback(request, response) {
   let { packageId: package_id, state } = request.body;
   let result;
 
+  console.log(request.body, request.params, request.query);
+
   if (state === 'COMPLETE') {
     result = await EventModel.patchEvent({ package_id: package_id, approved: 'true'});
   }
