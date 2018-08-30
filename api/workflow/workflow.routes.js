@@ -9,34 +9,32 @@
  */
 
 /* Router dependencies ------------------------------------------------------*/
-const router      = require('express').Router();
-const { session } = require('../auth/auth.session');
-const { 
-  getInboxRedirect
-}                  = require('./workflow.utils');
-const {
-  checkSessionExistsMiddleware,
-  retrieveSessionInfoMiddleware
-}                  = require("../auth/auth.utils");
+const router                      = require('express').Router();
+const { session }                 = require('../auth/auth.session');
+const { getInboxRedirect }        = require('./workflow.utils');
+const { processWorkflowCallback } = require('../events/event.utils');
 
 
 router.use(session);
 
 
 /* RESTful functions --------------------------------------------------------*/
+// POST /callback -- Process Workflow package change
+router.post('/callback', (req, res) => processWorkflowCallback(req, res));
+
+
 // GET: forward workflow inbox redirect to frontend
-router.get('/inbox', (request, response) => {
+router.get('/inbox', (req, res) => {
   // Grab query params from workflow call
-  const package_id   = request.query.packageId;
-  const signature_id = request.query.signatureId;
+  const package_id   = req.query.packageId;
+  const signature_id = req.query.signatureId;
 
   // Create specific event URL from query params
   let event_uri = getInboxRedirect(package_id, signature_id);
 
   // Redirect the response to our frontend
-  response.status(200).redirect(event_uri);
+  res.status(200).redirect(event_uri);
 });
-
 
 
 
