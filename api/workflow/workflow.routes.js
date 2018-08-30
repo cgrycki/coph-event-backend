@@ -10,17 +10,18 @@
 
 /* Router dependencies ------------------------------------------------------*/
 const router                      = require('express').Router();
-const { session }                 = require('../auth/auth.session');
 const { getInboxRedirect }        = require('./workflow.utils');
 const { processWorkflowCallback } = require('../events/event.utils');
 
-
-router.use(session);
 
 
 /* RESTful functions --------------------------------------------------------*/
 // POST /callback -- Process Workflow package change
 router.post('/callback', (req, res) => processWorkflowCallback(req, res));
+router.patch('/callback', (req, res) => processWorkflowCallback(req, res));
+router.put('/callback', (req, res) => processWorkflowCallback(req, res));
+router.get('/callback', (req, res) => processWorkflowCallback(req, res));
+
 
 
 // GET: forward workflow inbox redirect to frontend
