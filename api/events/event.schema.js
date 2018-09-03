@@ -21,7 +21,7 @@ const time    = jString.allow(options_time).required();
 const package_id    = Joi.number().integer();
 // Approved is actually a boolean, but we cast it to string because DynamoDB 
 // has weird attribute types for it's indices
-const approved      = Joi.string().optional().allow(["true", "false"]).default("false");
+const approved      = Joi.string().optional().allow(["true", "void", "false"]).default("false");
 const user_email    = email.regex(/uiowa\.edu$/).required();
 const contact_email = email;
 const coph_email    = email.regex(/uiowa\.edu$/).default("");
@@ -43,6 +43,7 @@ const course = Joi.object().keys({
     })
 });
 
+
 const setup = Joi.object().keys({
   setup_required: jBool,
   setup_mfk     : jString
@@ -55,6 +56,43 @@ const setup = Joi.object().keys({
       then: jString.required()
     })
 });
+
+const setup_mfk = Joi.object().keys({
+  setup_required: jBool,
+  setup_mfk: Joi.object()
+    .keys({
+      FUND    : jString,
+      ORG     : jString,
+      DEPT    : jString,
+      SUBDEPT : jString,
+      GRANT   : jString,
+      INSTACCT: jString,
+      ORGACCT : jString,
+      DEPTACCT: jString,
+      FUNC    : jString,
+      COSTCNTR: jString,
+    })
+    .when('setup_required', {
+      is: true,
+      then: Joi.object({
+        FUND    : jString.required().length(3),
+        ORG     : jString.required().length(2),
+        DEPT    : jString.required().length(4),
+        SUBDEPT : jString.optional().length(5),
+        GRANT   : jString.optional().length(8),
+        INSTACCT: jString.optional().length(4),
+        ORGACCT : jString.optional().length(3),
+        DEPTACCT: jString.optional().length(5),
+        FUNC    : jString.required().length(2),
+        COSTCNTR: jString.optional().length(4)
+      })
+    })
+});
+
+
+
+
+
 
 const ModelSchema = {
   // Workflow attributes
@@ -80,12 +118,39 @@ const ModelSchema = {
   references_course   : jBool,
   referenced_course   : jString.allow("").required(),
 
-  setup_required      : jBool,
-  setup_mfk           : jString.allow("").required(),
-
   food_drink_required : jBool,
   food_provider       : jString.allow("").required(),
-  alcohol_provider    : jString.allow("").required()
+  alcohol_provider    : jString.allow("").required(),
+
+  setup_required      : jBool,
+  setup_mfk: Joi.object()
+    .keys({
+      FUND    : jString,
+      ORG     : jString,
+      DEPT    : jString,
+      SUBDEPT : jString,
+      GRANT   : jString,
+      INSTACCT: jString,
+      ORGACCT : jString,
+      DEPTACCT: jString,
+      FUNC    : jString,
+      COSTCNTR: jString,
+    })
+    .when('setup_required', {
+      is: true,
+      then: Joi.object({
+        FUND    : jString.required().length(3),
+        ORG     : jString.required().length(2),
+        DEPT    : jString.required().length(4),
+        SUBDEPT : jString.optional().length(5),
+        GRANT   : jString.optional().length(8),
+        INSTACCT: jString.optional().length(4),
+        ORGACCT : jString.optional().length(3),
+        DEPTACCT: jString.optional().length(5),
+        FUNC    : jString.required().length(2),
+        COSTCNTR: jString.optional().length(4)
+      })
+    })
 };
 
 
@@ -101,3 +166,4 @@ exports.course        = course;
 exports.setup         = setup;
 exports.approved      = approved;
 exports.ModelSchema   = ModelSchema;
+exports.setup_mfk     = setup_mfk;

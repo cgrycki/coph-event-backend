@@ -17,7 +17,7 @@ const Schema = require('../api/events/event.schema');
 const runJoiTest = (description, value, schema, trueValue) => {
   return it(description, function() {
     const {error, val} = Joi.validate(value, schema);
-    assert.notEqual(error, trueValue);
+    assert.notDeepEqual(error, trueValue);
   });
 };
 
@@ -149,6 +149,66 @@ describe('Event Schema (Individual)', function() {
       scheme, Error);
   });
 
+  // New setup
+  describe('#Setup MFK', function() {
+    let scheme = Schema.setup_mfk;
+    
+    runJoiTest('accepts an empty MFK dict when setup is not required',
+      {
+        setup_required: false,
+        setup_mfk: {}
+      }, scheme, Error);
+    
+    runJoiTest('accepts an complete MFK dict when setup is required',
+      {
+        setup_required: true,
+        setup_mfk: {
+          FUND    : '123',
+          ORG     : '45',
+          DEPT    : '1234',
+          SUBDEPT : '12345',
+          GRANT   : '12345678',
+          INSTACCT: '1234',
+          ORGACCT : '123',
+          DEPTACCT: '12345',
+          FUNC    : '12',
+          COSTCNTR: '1234'
+        }
+      }, scheme, Error);
+
+    runJoiTest('accepts an *required* MFK dict when setup is required',
+      {
+        setup_required: true,
+        setup_mfk: {
+          FUND    : '123',
+          ORG     : '45',
+          DEPT    : '1234',
+          FUNC    : '12'
+        }
+      }, scheme, Error);
+
+    runJoiTest('rejects an MFK dict with incorrect formats',
+      {
+        setup_required: true,
+        setup_mfk: {
+          ORG     : 45,
+          DEPT    : '1234',
+          FUNC    : '12'
+        }
+      }, scheme, Error);
+
+    it('rejects a MFK when required key is missing', function() {
+      let { error, val } = Joi.validate({
+        setup_required: true,
+        setup_mfk: {
+          ORG     : '45',
+          DEPT    : '1234',
+          FUNC    : '12'
+        }}, scheme);
+      assert.notDeepEqual(error, null);
+    });
+  })
+
   /** Approved:
    * To use an index, we chose 'Binary' for the attribute. Thus, we need to 
    * convert our 'approved' attribute to binary. The schema defaults to 'false'
@@ -189,7 +249,18 @@ describe('Event Schema (Total)', function() {
       references_course: false,
       referenced_course: '',
       setup_required: false,
-      setup_mfk: '',
+      setup_mfk: {
+        FUND    : '',
+        ORG     : '',
+        DEPT    : '',
+        SUBDEPT : '',
+        GRANT   : '',
+        INSTACCT: '',
+        ORGACCT : '',
+        DEPTACCT: '',
+        FUNC    : '',
+        COSTCNTR: ''
+      },
       food_drink_required: false,
       food_provider: '',
       alcohol_provider: ''
@@ -206,5 +277,43 @@ describe('Event Schema (Total)', function() {
       
       assert.deepEqual(res.value, dynamo_obj);
     });
+  });
+
+  describe('#Conditional schemas', function() {
+    let info = {
+      user_email: 'test@uiowa.edu',
+      contact_email: '',
+      coph_email: '',
+      event_name: 'Curing Cancer',
+      comments: '',
+      date: '2018-08-01',
+      start_time: '8:00 AM',
+      end_time: '12:00 PM',
+      room_number: 'XC100',
+      num_people: 1,
+      references_course: true,
+      referenced_course: 'Introduction to Public Health',
+      setup_required: true,
+      setup_mfk: {
+        FUND    : '111',
+        ORG     : '11',
+        DEPT    : '1111',
+        SUBDEPT : '',
+        GRANT   : '',
+        INSTACCT: '',
+        ORGACCT : '',
+        DEPTACCT: '',
+        FUNC    : '11',
+        COSTCNTR: ''
+      },
+      food_drink_required: true,
+      food_provider: 'Jimmy Johns',
+      alcohol_provider: ''
+    };
+
+    runJoiTest(
+      'Should validate an object with conditionals',
+      info,
+      schema, Error);
   });
 });
