@@ -24,6 +24,7 @@ router.post('/',
   (req, res, next) => {
     // Stub
     req.package_id = 123;
+    next();
   },  
   validateEventJSON,
   validateLayout,
@@ -32,6 +33,13 @@ router.post('/',
     res.status(200).json({ uiowa_access_token, user_ip_address, body });
   });
 
+
+// router.post('/')
+//router.get('/:package_id', )
+//router.patch('/:package_id', )
+//router.delete('/:package_id', )
+//router.get('/filter/my')
+//router.get('/filter/public')
 
 
 
