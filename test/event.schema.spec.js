@@ -119,37 +119,7 @@ describe('Event Schema (Individual)', function() {
       scheme, Error);
   });
 
-  // Setup
-  describe('#Setup', function() {
-    let scheme = Schema.setup;
-
-    runJoiTest(
-      'Should not allow empty values for both course values',
-      {setup_required: null, setup_mfk: null},
-      scheme, null);
-    runJoiTest(
-      'Should not allow empty values for setup_required',
-      {setup_required: null, setup_mfk: ""},
-      scheme, null);
-    runJoiTest(
-      'Should not allow empty values for setup_mfk',
-      {setup_required: false, setup_mfk: null},
-      scheme, null);
-    runJoiTest(
-      'Should allow empty string when setup_required is false',
-      {setup_required: false, setup_mfk: ""},
-      scheme, Error);
-    runJoiTest(
-      'Should NOT allow empty string when setup_required is true',
-      {setup_required: true, setup_mfk: ""},
-      scheme, null);
-    runJoiTest(
-      'Should allow populated string when setup_required is true',
-      {setup_required: true, setup_mfk: "1234567890"},
-      scheme, Error);
-  });
-
-  // New setup
+  // Setup and Accounting MFK
   describe('#Setup MFK', function() {
     let scheme = Schema.setup_mfk;
     

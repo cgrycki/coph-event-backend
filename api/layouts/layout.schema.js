@@ -1,23 +1,25 @@
 /**
  * Layout schema for DynamoDB
  */
-const Joi = require('joi');
+const Joi             = require('joi');
+const jNum            = Joi.number().required();
 const furniture_types = ['chair', 'circle', 'cocktail', 'rect', 'display', 'trash'];
+
 
 
 /** Schema for furniture counts and 'Heads Up Display'. */
 const countSchema = Joi.object().keys({
-  chairs_per_table  : Joi.number().required().allow([6, 8]).default(6),
-  num_chairs        : Joi.number().required().default(0),
-  num_chair_racks   : Joi.number().required().default(0),
-  num_circles       : Joi.number().required().default(0),
-  num_circle_racks  : Joi.number().required().default(0),
-  num_rects         : Joi.number().required().default(0),
-  num_rect_racks    : Joi.number().required().default(0),
-  num_cocktails     : Joi.number().required().default(0),
-  num_cockrail_racks: Joi.number().required().default(0),
-  num_displays      : Joi.number().required().default(0),
-  num_trashs        : Joi.number().required().default(0)
+  chairs_per_table  : jNum.allow([6, 8]).default(6),
+  num_chairs        : jNum.default(0),
+  num_chair_racks   : jNum.default(0),
+  num_circles       : jNum.default(0),
+  num_circle_racks  : jNum.default(0),
+  num_rects         : jNum.default(0),
+  num_rect_racks    : jNum.default(0),
+  num_cocktails     : jNum.default(0),
+  num_cockrail_racks: jNum.default(0),
+  num_displays      : jNum.default(0),
+  num_trashs        : jNum.default(0)
 });
 
 /** Schema for a single furniture item object, all fields required. */

@@ -43,34 +43,20 @@ const course = Joi.object().keys({
     })
 });
 
-
-const setup = Joi.object().keys({
-  setup_required: jBool,
-  setup_mfk     : jString
-    .when('setup_required', {
-      is  : false,
-      then: jString.allow("").required()
-    })
-    .when('setup_required', {
-      is  : true,
-      then: jString.required()
-    })
-});
-
 const setup_mfk = Joi.object().keys({
   setup_required: jBool,
   setup_mfk: Joi.object()
     .keys({
-      FUND    : jString,
-      ORG     : jString,
-      DEPT    : jString,
-      SUBDEPT : jString,
-      GRANT   : jString,
-      INSTACCT: jString,
-      ORGACCT : jString,
-      DEPTACCT: jString,
-      FUNC    : jString,
-      COSTCNTR: jString,
+      FUND    : jString.allow(''),
+      ORG     : jString.allow(''),
+      DEPT    : jString.allow(''),
+      SUBDEPT : jString.allow(''),
+      GRANT   : jString.allow(''),
+      INSTACCT: jString.allow(''),
+      ORGACCT : jString.allow(''),
+      DEPTACCT: jString.allow(''),
+      FUNC    : jString.allow(''),
+      COSTCNTR: jString.allow(''),
     })
     .when('setup_required', {
       is: true,
@@ -88,8 +74,6 @@ const setup_mfk = Joi.object().keys({
       })
     })
 });
-
-
 
 
 
@@ -125,16 +109,16 @@ const ModelSchema = {
   setup_required      : jBool,
   setup_mfk: Joi.object()
     .keys({
-      FUND    : jString,
-      ORG     : jString,
-      DEPT    : jString,
-      SUBDEPT : jString,
-      GRANT   : jString,
-      INSTACCT: jString,
-      ORGACCT : jString,
-      DEPTACCT: jString,
-      FUNC    : jString,
-      COSTCNTR: jString,
+      FUND    : jString.allow(''),
+      ORG     : jString.allow(''),
+      DEPT    : jString.allow(''),
+      SUBDEPT : jString.allow(''),
+      GRANT   : jString.allow(''),
+      INSTACCT: jString.allow(''),
+      ORGACCT : jString.allow(''),
+      DEPTACCT: jString.allow(''),
+      FUNC    : jString.allow(''),
+      COSTCNTR: jString.allow(''),
     })
     .when('setup_required', {
       is: true,
@@ -163,7 +147,6 @@ exports.time          = time;
 exports.comments      = comments;
 exports.num_people    = num_people;
 exports.course        = course;
-exports.setup         = setup;
 exports.approved      = approved;
 exports.ModelSchema   = ModelSchema;
 exports.setup_mfk     = setup_mfk;
