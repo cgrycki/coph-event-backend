@@ -11,8 +11,12 @@ const { layoutSchema }  = require('./layout.schema');
 
 
 function validateLayout(request, response, next) {
-  // Get layout information from JSON body
-  let layout_info = { ...request.body.layout };
+  // Get Package ID from prior middleware and layout information from JSON body
+  let layout_info = { 
+    count     : request.body.layout.count,
+    items     : request.body.layout.items,
+    package_id: request.package_id
+  };
   let { error, value } = layoutSchema.validate(layout_info, {abortEarly: false});
 
   // Return the error if the layout info is not valid

@@ -126,7 +126,7 @@ function validateEventJSON(request, response, next) {
   else {
     //request.workflow_data = extractWorkflowInfo(value);
     next();
-  }//
+  }
 }
 
 

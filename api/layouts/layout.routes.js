@@ -23,7 +23,7 @@ router.use(retrieveSessionInfoMiddleware);
 router.post('/', 
   (req, res, next) => {
     // Stub
-    request.package_id = 123;
+    req.package_id = 123;
   },  
   validateEventJSON,
   validateLayout,
