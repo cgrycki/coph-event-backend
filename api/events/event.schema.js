@@ -18,7 +18,7 @@ const time    = jString.allow(options_time).required();
 
 
 /* SCHEMA + CASES ------------------------------------------------------------*/
-const package_id    = Joi.number().integer();
+const package_id    = Joi.number().integer().allow(null);
 // Approved is actually a boolean, but we cast it to string because DynamoDB 
 // has weird attribute types for it's indices
 const approved      = Joi.string().optional().allow(["true", "void", "false"]).default("false");

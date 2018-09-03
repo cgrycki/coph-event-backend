@@ -119,14 +119,14 @@ function validateEvent(request, response, next) {
 function validateEventJSON(request, response, next) {
   // Gather form data from body json object
   let form_info = { ...request.body.form };
-  let { error, value } = ModelSchema.validate(form_info, { abortEarly: false });
+  let { error, value } = Joi.validate(form_info, EventSchema, {abortEarly: false});
 
   // Check for errors
   if (error !== null) return response.status(400).json({ error, form_info });
   else {
     //request.workflow_data = extractWorkflowInfo(value);
     next();
-  }
+  }//
 }
 
 

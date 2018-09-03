@@ -25,7 +25,18 @@ function validateLayout(request, response, next) {
 }
 
 
-async function getLayoutMiddleware(request, response, next) {}
+async function getLayoutMiddleware(request, response, next) {
+  // Assumes prior middleware has been called
+  const pid = request.package_id || +request.params.package_id;
+  
+  try {
+    const result = await LayoutModel.getLayout(pid);
+    request.layout = result[0];
+    return next();
+  } catch (err) {
+    return response.status(400).json({ error: err, package_id: pid });
+  }
+}
 
 
 async function postLayoutMiddleware(request, response, next) {}

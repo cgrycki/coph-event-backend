@@ -17,7 +17,7 @@ const countSchema = Joi.object().keys({
   num_rects         : jNum.default(0),
   num_rect_racks    : jNum.default(0),
   num_cocktails     : jNum.default(0),
-  num_cockrail_racks: jNum.default(0),
+  num_cocktail_racks: jNum.default(0),
   num_displays      : jNum.default(0),
   num_trashs        : jNum.default(0)
 });
