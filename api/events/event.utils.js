@@ -116,6 +116,20 @@ function validateEvent(request, response, next) {
   };
 }
 
+function validateEventJSON(request, response, next) {
+  // Gather form data from body json object
+  let form_info = { ...request.body.form };
+  let { error, value } = EventSchema.validate(form_info, { abortEarly: false });
+
+  // Check for errors
+  if (error !== null) return response.status(400).json({ error, form_info });
+  else {
+    request.workflow_data = extractWorkflowInfo(value);
+    next();
+  }//
+}
+
+
 
 /**
  * Asynchronously creates/overwrites an event object in DynamoDB `events` table. If the event exists, we overwrite it.
@@ -200,9 +214,10 @@ async function deleteDynamoEventMiddleware(request, response, next) {
 
 
 module.exports = {
+  validateEvent,
+  validateEventJSON,
   getDynamoEventMiddleware,
   getDynamoEventsMiddleware,
-  validateEvent,
   postDynamoEventMiddleware,
   patchDynamoEventMiddleware,
   deleteDynamoEventMiddleware,
