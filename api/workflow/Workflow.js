@@ -10,6 +10,7 @@ const { getAppAuthToken } = require('../auth/auth.app');
 class Workflow {
   /**
    * Constructs a new instance of the helper class, configured with environment variables.
+   * @class
    */
   constructor() {
     this.form_id       = process.env.FORM_ID;
@@ -66,7 +67,7 @@ Workflow.prototype.constructURI = function(tools=false) {
 
 /**
  * Returns a URI query for package ID(s).
- * @param {array[number]}
+ * @param {number[]}
  * @returns {string} queryString String to tack onto the Workflow permissions URI.
  * 
  * @example
@@ -87,7 +88,11 @@ Workflow.prototype.constructPermissionsURI = function(pidOrPids) {
  * Executes an asynchronous Promise to the Workflow API.
  * @param {object} options - Request options: uri, method, headers, body
  * @param {function} callback - Optional function to use after request completes. 
- * @returns {object} response - A successful response or error.
+ * @returns {Promise}
+ * @fufill {object} Successful response from Workflow REST call.
+ * @reject {object} Error message and stack.
+ * 
+ * @async
  */
 Workflow.prototype.request = async function(options) {
   // Create a mutable pointer to hold REST response or error, respectively.
@@ -109,6 +114,8 @@ Workflow.prototype.request = async function(options) {
  * @param {string} user_token User's OAuth token taken from request's session
  * @param {string} ip_address Request's originating IP address.
  * @returns {object} headers Object with content types and OAuth tokens.
+ * 
+ * @async
  * 
  * @example
  * 
@@ -141,6 +148,8 @@ Workflow.prototype.headers = async function(user_token, ip_address) {
  * @param {string} ip_address - Originating IP address taken from request.
  * @param {object} data - Package information.
  * @returns {object} result - RESTful Promise result.
+ * 
+ * @async
  * 
  * @example
  * 
@@ -213,6 +222,9 @@ Workflow.prototype.postPackage = async function(user_token, ip_address, data) {
  * @param {string} user_token OAuth token taken from session store.
  * @param {string} ip_address IP address of originating request.
  * @param {Object} data Extracted information from user Event update.
+ * @returns {Object} Response from Workflow.
+ * 
+ * @async
  * 
  * @example
  * 
@@ -232,6 +244,7 @@ Workflow.prototype.postPackage = async function(user_token, ip_address, data) {
  * }
  * 
  * RESPONSE: Reflects body if successful
+ * ```
  */
 Workflow.prototype.updatePackage = async function(user_token, ip_address, package_id, data) {
   // Create a body for the update
@@ -266,6 +279,8 @@ Workflow.prototype.updatePackage = async function(user_token, ip_address, packag
  * @param {integer} package_id - Package ID
  * @param {string} voidReason - One of { "DUPLICATE_TRANSACTION", "INCORRECT_FORM", "TRANSACTION_CANCELLED", "TRANSACTION_DENIED" }
  * @returns {object} result - Response object from Workflow if successful or error.
+ * 
+ * @async
  */
 Workflow.prototype.voidPackage = async function(user_token, ip_address, package_id, voidReason) {
   const options = {
@@ -416,7 +431,8 @@ Workflow.prototype.getPermissions = async function(user_token, ip_address, packa
  * 
  * @example
  * 
- * Sample Callback: ```
+ * Sample Callback: 
+ * ```
  * {
  *   "@class" : "developer",
  *   "formId" : 100,
@@ -434,9 +450,9 @@ Workflow.prototype.getPermissions = async function(user_token, ip_address, packa
  *   }
  * }```
  */
-Workflow.prototype.processCallback = async function(callback) {
+Workflow.prototype.validateCallback = async function(access_token) {
 
-  const { packageId: package_id, state, stop, lockId, entry } = callback;
+  
 
   return null;
 }
