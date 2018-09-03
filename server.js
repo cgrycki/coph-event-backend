@@ -25,8 +25,8 @@ app.options('*', cors());
 
 // Parsing HTTP Requests: cookies, application/json, application/www-url, and validation
 app.use(cookieParser(process.env.MY_AWS_SECRET_ACCESS_KEY));
-app.use(bodyParser.json({ type: 'application/*json' }));
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ type: 'application/json' }));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(validator());
 
 // Reverse proxy
