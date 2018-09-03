@@ -25,7 +25,7 @@ const furnitureItemSchema = Joi.object().keys({
   x   : Joi.number().min(0).max(3000).required(),
   y   : Joi.number().min(0).max(3000).required(),
   id  : Joi.string().alphanum().required(),
-  type: Joi.string().valid(furniture_types).required()
+  furn: Joi.string().valid(furniture_types).required()
 });
 
 /** Schema for furniture items array, empty or filled with furniture items AND unique IDs. */

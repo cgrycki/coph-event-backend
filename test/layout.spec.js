@@ -18,22 +18,22 @@ describe('#Layouts', function() {
     });
 
     it('rejects furniture items with invalid furniture types', function() {
-      let itemBad = { x: 100, y: 100, id: 'circle1', type: 'not in valid furniture types' };
+      let itemBad = { x: 100, y: 100, id: 'circle1', furn: 'not in valid furniture types' };
       let { error: badErr, value: badVal } = furnitureItemSchema.validate(itemBad);
       assert.notEqual(badErr, null);
     });
 
     it('accepts known good furniture items', function() {
-      let itemGood = {x: 100, y: 100, id: 'circle1', type: 'circle' };
+      let itemGood = {x: 100, y: 100, id: 'circle1', furn: 'circle' };
       let { error: goodErr, value: goodVal } = furnitureItemSchema.validate(itemGood);
       assert.notEqual(goodErr, Error);
     });
 
     it('rejects an array of furniture items with duplicated furniture ids', function() {
       let badItems = [
-        {id: 'circle1', type: 'circle2', x: 10, y: 100},
-        {id: 'circle1', type: 'circle2', x: 10, y: 100},
-        {id: 'circle3', type: 'circle2', x: 10, y: 100}
+        {id: 'circle1', furn: 'circle', x: 10, y: 100},
+        {id: 'circle1', furn: 'circle', x: 10, y: 100},
+        {id: 'circle3', furn: 'circle', x: 10, y: 100}
       ];
       
       let { error: badItemsErr, value: badItemsValue } = furnitureItemsSchema.validate(badItems);
@@ -42,9 +42,9 @@ describe('#Layouts', function() {
 
     it('accepts an array of valid furniture items', function() {
       let goodItems = [
-        {id: 'circle1', type: 'circle2', x: 10, y: 100},
-        {id: 'circle2', type: 'circle2', x: 10, y: 100},
-        {id: 'circle3', type: 'circle2', x: 10, y: 100}
+        {id: 'circle1', furn: 'circle', x: 10, y: 100},
+        {id: 'circle2', furn: 'circle', x: 10, y: 100},
+        {id: 'circle3', furn: 'circle', x: 10, y: 100}
       ];
       
       let { error: goodItemsErr, value: goodItemsValue } = furnitureItemsSchema.validate(goodItems);
@@ -69,7 +69,7 @@ describe('#Layouts', function() {
           num_displays: 0,
           num_trashs: 0
         },
-        items: [{ id: 'circle1', type: 'circle', x: 100, y: 100}]
+        items: [{ id: 'circle1', furn: 'circle', x: 100, y: 100}]
       };
       
       let { error: goodLayoutErr, value: goodLayoutVal } = layoutSchema.validate(goodLayout);

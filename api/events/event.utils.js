@@ -1,5 +1,6 @@
 /**
- * Event Utilities
+ * Event Utilities: middleware functions mapping HTTP requests to our REST 
+ * classes and DynamoDB models. Includes validation and error catching.
  */
 
 
