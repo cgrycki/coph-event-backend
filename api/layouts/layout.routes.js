@@ -31,18 +31,18 @@ router.post('/',
   (req, res) => res.status(200).json({ layout: req.validateLayout }));
 
 
-router.get('/:package_id',
+router.get('/:id',
   getLayoutMiddleware, 
   (req, res) => res.status(200).json(req.layout));
 
 
-router.delete('/:package_id',
+router.delete('/:id',
   deleteLayoutMiddleware,
-  (req, res) => res.status(200).json({ package_id: req.params.package_id }));
+  (req, res) => res.status(200).json({ package_id: req.params.id }));
 
 
 
-router.patch('/:package_id',
+router.patch('/:id',
   validateLayout,
   patchLayoutMiddleware,
   (req, res) => res.status(200).json({ layout: req.validLayout }));
