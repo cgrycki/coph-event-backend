@@ -285,5 +285,32 @@ describe('Event Schema (Total)', function() {
       'Should validate an object with conditionals',
       info,
       schema, Error);
+
+    it('accepts this typical POST data', function() {
+      let postData = {
+        alcohol_provider   : "",
+        comments           : "",
+        contact_email      : "",
+        coph_email         : "",
+        date               : "2018-09-04",
+        end_time           : "7:00 PM",
+        event_name         : "This is a testing title",
+        food_drink_required: false,
+        food_provider      : "",
+        num_people         : 1,
+        //package_id         : null,
+        referenced_course  : "",
+        references_course  : false,
+        room_number        : "S030",
+        setup_mfk          : {FUND: "111", ORG: "11", DEPT: "1111", GRANT: "", INSTACCT: "1111", ORGACCT: "", SUBDEPT: "", FUNC: "11", COSTCNTR: ""},
+        setup_required     : true,
+        start_time         : "6:30 PM",
+        user_email         : "rlrson@uiowa.edu"
+      };
+
+      let { error, value } = Joi.validate(postData, schema);
+      console.log(value);
+      assert.deepEqual(error, null);
+    });
   });
 });

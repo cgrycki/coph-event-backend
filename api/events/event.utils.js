@@ -5,7 +5,10 @@
 
 
 /* Dependencies -------------------------------------------------------------*/
-const { extractWorkflowInfo } = require('../utils/');
+const { 
+  extractWorkflowInfo,
+  removeEmptyKeys 
+}                             = require('../utils/');
 const EventModel              = require('./event.model');
 const { 
   ModelSchema,
@@ -141,9 +144,12 @@ function validateEventJSON(request, response, next) {
  * @param {Object} next Next function in middleware stack.
  */
 async function postDynamoEventMiddleware(request, response, next) {
-  // Assumes post/patchWorkflowEventMiddleware has been called before this
+  // Assumes postWorkflowEventMiddleware has been called before this to attach the package_id
   const pid    = request.package_id;
-  const evt    = { package_id: pid, ...request.body.form };
+  let evt    = { ...request.body.form, package_id: pid };
+  removeEmptyKeys(evt.setup_mfk);   // Strip empty values from the Setup_MFK
+
+  // Create the event
   const result = await EventModel.postEvent(evt);
 
   // If there was an error return, otherwise pass on the information
