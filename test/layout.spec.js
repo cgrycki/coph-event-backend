@@ -55,7 +55,7 @@ describe('#Layouts', function() {
   describe('layout schema', function() {
     it('accepts a good layout object', function() {
       let goodLayout = {
-        package_id: 123,
+        id: 123,
         count: {
           num_chairs: 10,
           num_chair_racks: 1,
@@ -64,7 +64,7 @@ describe('#Layouts', function() {
           num_rects: 10,
           num_rect_racks: 2,
           num_cocktails: 6,
-          num_cockrail_racks: 1,
+          num_cocktail_racks: 1,
           chairs_per_table: 6,
           num_displays: 0,
           num_trashs: 0

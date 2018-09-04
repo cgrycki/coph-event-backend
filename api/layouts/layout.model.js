@@ -13,7 +13,7 @@ const table_name          = 'layouts';
 /* MODEL --------------------------------------------------------------------*/
 const LayoutModel = dynamo.define('Layout', {
   // Primary Key
-  hashKey: 'package_id',
+  hashKey: 'id', //package_id
 
   // Timestamps
   timestamps: false,
@@ -78,7 +78,10 @@ LayoutModel.patchLayout = function(layout) {
   return new Promise((resolve, reject) => {
     LayoutModel.update(layout, (err, data) => {
       if (err) return reject(err);
-      else resolve(data);
+      else {
+        const dynamo_layout = data.get();
+        resolve(dynamo_layout);
+      }
     });
   });
 }
