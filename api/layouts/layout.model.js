@@ -59,7 +59,10 @@ LayoutModel.postLayout = function(layout) {
   return new Promise((resolve, reject) => {
     LayoutModel.create(layout, (err, data) => {
       if (err) return reject(err);
-      else resolve(data);
+      else {
+        const dynamo_layout = data.get();
+        resolve(dynamo_layout);
+      }
     });
   });
 }
