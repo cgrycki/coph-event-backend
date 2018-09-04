@@ -9,8 +9,13 @@ const {
   retrieveSessionInfoMiddleware 
 }  = require('../auth/auth.utils');
 
-const { validateEventJSON } = require('../events/event.utils');
-const { validateLayout    } = require('./layout.utils');
+const { 
+  validateLayout,
+  postLayoutMiddleware,
+  getLayoutMiddleware,
+  deleteLayoutMiddleware,
+  patchLayoutMiddleware
+} = require('./layout.utils');
 
 
 /* Parameters + Sessions ----------------------------------------------------*/
@@ -20,27 +25,30 @@ router.use(retrieveSessionInfoMiddleware);
 
 
 /* Routes -------------------------------------------------------------------*/
-router.post('/', 
-  (req, res, next) => {
-    // Stub
-    req.package_id = 123;
-    next();
-  },  
-  validateEventJSON,
+router.post('/',
   validateLayout,
-  (req, res) => {
-    const { uiowa_access_token, user_ip_address, body } = req;
-    res.status(200).json({ uiowa_access_token, user_ip_address, body });
-  });
+  postLayoutMiddleware,
+  (req, res) => res.status(200).json({ layout: req.validateLayout }));
 
 
-// router.post('/')
-//router.get('/:package_id', )
-//router.patch('/:package_id', )
-//router.delete('/:package_id', )
+router.get('/:package_id',
+  getLayoutMiddleware, 
+  (req, res) => res.status(200).json(req.layout));
+
+
+router.delete('/:package_id',
+  deleteLayoutMiddleware,
+  (req, res) => res.status(200).json({ package_id: req.params.package_id }));
+
+
+
+router.patch('/:package_id',
+  validateLayout,
+  patchLayoutMiddleware,
+  (req, res) => res.status(200).json({ layout: req.validLayout }));
+
+
 //router.get('/filter/my')
 //router.get('/filter/public')
-
-
 
 module.exports = router;
