@@ -43,6 +43,8 @@ const course = Joi.object().keys({
     })
 });
 
+
+
 const setup_mfk = Joi.object().keys({
   setup_required: jBool,
   setup_mfk: Joi.object()
@@ -74,6 +76,7 @@ const setup_mfk = Joi.object().keys({
       })
     })
 });
+
 
 
 
