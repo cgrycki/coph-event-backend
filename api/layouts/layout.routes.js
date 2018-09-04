@@ -28,7 +28,7 @@ router.use(retrieveSessionInfoMiddleware);
 router.post('/',
   validateLayout,
   postLayoutMiddleware,
-  (req, res) => res.status(200).json({ layout: req.validateLayout }));
+  (req, res) => res.status(200).json({ layout: req.validLayout }));
 
 
 router.get('/:id',
@@ -39,7 +39,6 @@ router.get('/:id',
 router.delete('/:id',
   deleteLayoutMiddleware,
   (req, res) => res.status(200).json({ package_id: req.params.id }));
-
 
 
 router.patch('/:id',
