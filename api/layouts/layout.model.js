@@ -96,9 +96,9 @@ LayoutModel.patchLayout = function(layout) {
  */
 LayoutModel.deleteLayout = function(package_id) {
   return new Promise((resolve, reject) => {
-    LayoutModel.destroy(package_id, (err, data) => {
+    LayoutModel.destroy(package_id, (err) => {
       if (err) return reject(err);
-      else resolve(data);
+      else resolve();
     });
   });
 }

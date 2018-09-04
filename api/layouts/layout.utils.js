@@ -86,7 +86,7 @@ async function deleteLayoutMiddleware(request, response, next) {
 
   try {
     const result = LayoutModel.deleteLayout(pid);
-    return next();
+    next();
   } catch(err) {
     return response.status(400).json({error: err, package_id: pid});
   }
