@@ -88,7 +88,7 @@ async function deleteLayoutMiddleware(request, response, next) {
   const id = request.params.id;
 
   try {
-    const result = LayoutModel.deleteLayout(id);
+    const result = await LayoutModel.deleteLayout(id);
     next();
   } catch(err) {
     return response.status(400).json({error: err, id: id});
@@ -96,9 +96,39 @@ async function deleteLayoutMiddleware(request, response, next) {
 }
 
 
+/** Queries layouts table for either user's or public layouts. */
+async function getLayoutsMiddleware(request, response, next) {
+  // Infer index attributes from request path
+  const path_to_field = {
+    "/filter/my"    : "user_email",
+    "/filter/public": "type"
+  };
+  const path_to_value = {
+    "/filter/my"    : `${request.hawkid}@uiowa.edu`,
+    "/filter/public": "public"
+  };
+
+
+  // Make request
+  const field = path_to_field[request.path];
+  const value = path_to_value[request.path];
+
+  try {
+    const {layouts} = await LayoutModel.getLayouts(field, value);
+    request.layouts = layouts;
+    next();
+  } catch(err) {
+    return response.status(400).json(err);
+  }
+}
+
+
+
+
 module.exports = {
   validateLayout,
   getLayoutMiddleware,
+  getLayoutsMiddleware,
   postLayoutMiddleware,
   patchLayoutMiddleware,
   deleteLayoutMiddleware

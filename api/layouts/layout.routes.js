@@ -13,6 +13,7 @@ const {
   validateLayout,
   postLayoutMiddleware,
   getLayoutMiddleware,
+  getLayoutsMiddleware,
   deleteLayoutMiddleware,
   patchLayoutMiddleware
 } = require('./layout.utils');
@@ -47,7 +48,14 @@ router.patch('/:id',
   (req, res) => res.status(200).json({ layout: req.validLayout }));
 
 
-//router.get('/filter/my')
-//router.get('/filter/public')
+router.get('/filter/my',
+  getLayoutsMiddleware,
+  (req, res) => res.status(200).json({ layouts: req.layouts }));
+
+
+router.get('/filter/public',
+  getLayoutsMiddleware,
+  (req, res) => res.status(200).json({ layouts: req.layouts }));
+
 
 module.exports = router;

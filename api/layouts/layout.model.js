@@ -20,7 +20,13 @@ const LayoutModel = dynamo.define('Layout', {
   schema: layoutSchema,
 
   // Dynamic Table names depending on our WF environment
-  tableName: createTableName(table_name)
+  tableName: createTableName(table_name),
+
+  // Indices for filtering queries
+  indexes: [
+    {hashKey: 'user_email', rangeKey: 'id', name: 'LayoutUserIndex', type: 'global'},
+    {hashKey: 'type',       rangeKey: 'id', name: 'LayoutTypeIndex', type: 'global'}
+  ]
 });
 
 
@@ -43,6 +49,36 @@ LayoutModel.getLayout = function(package_id) {
       });
   });
 }
+
+
+/**
+ * Returns a filtered list of layouts as a Promise.
+ * @param {string} field String designating which attribute to filter upon.
+ * @param {string} value String denoting the field value to restrict query to: user_email or 'public'
+ * @returns {Promise}
+ * @resolve {object[]} List of layouts
+ * @reject {error} Error from Dynamo
+ */
+LayoutModel.getLayouts = function(field, value) {
+  return new Promise((resolve, reject) => {
+    // Create field => index mapping
+    const indexMap = {
+      'user_email': 'LayoutUserIndex',
+      'type'      : 'LayoutTypeIndex'
+    };
+
+    LayoutModel
+      .query(value)
+      .usingIndex(indexMap[field])
+      .exec((err, data) => {
+        if (err) return reject(err);
+        else {
+          const layouts = data.Items;
+          resolve({ layouts });
+        }
+      })
+  });
+} 
 
 
 /**
