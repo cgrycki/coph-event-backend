@@ -35,9 +35,31 @@ const furnitureItemsSchema = Joi.array().required().min(0).items(furnitureItemSc
 
 /** Schema for the complete layout object. Package ID is not constrained to number because we have public layouts too. */
 const layoutSchema = Joi.object().keys({
-  id: Joi.required(),
-  count     : countSchema.required(),
-  items     : furnitureItemsSchema
+  id   : Joi.string().required(),
+  count: countSchema.required(),
+  items: furnitureItemsSchema
+});
+
+
+const assignID = context => context.package_id.toString();
+assignID.description = 'Assign ID or package_id';
+
+const newLayoutSchema = Joi.object().when('package_id', {
+  is: Joi.any(),
+  then: Joi.object({
+    id        : Joi.string().default(assignID),
+    package_id: Joi.number().required(),
+    user_email: Joi.string().email().required(),
+    type      : Joi.string().valid('private'),
+    items     : furnitureItemsSchema
+  }),
+  otherwise: Joi.object({
+    id        : Joi.string().required(),
+    package_id: Joi.number().optional(),
+    user_email: Joi.string().email().optional(),
+    type      : Joi.string().valid('private'),
+    items     : furnitureItemsSchema
+  })
 });
 
 
@@ -45,5 +67,6 @@ module.exports = {
   countSchema,
   furnitureItemSchema,
   furnitureItemsSchema,
-  layoutSchema
+  layoutSchema,
+  newLayoutSchema
 };

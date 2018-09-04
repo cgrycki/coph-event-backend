@@ -4,13 +4,14 @@ const {
   countSchema,
   furnitureItemSchema,
   furnitureItemsSchema,
-  layoutSchema
+  layoutSchema,
+  newLayoutSchema
 } = require('../api/layouts/layout.schema');
 const LayoutModel = require('../api/layouts/layout.model');
 
 
 const goodLayout = {
-  id: 123,
+  id: '123',
   count: {
     num_chairs: 10,
     num_chair_racks: 1,
@@ -100,8 +101,46 @@ describe('#Layout', function() {
         assert.equal(goodLayoutErr, null);
       });
     });
+
+    describe('New Layout', function() {
+      it('accepts a public layout and adds "public" to schema', function() {
+        let publicLayout = {
+          id: 'TESTING LAYOUT',
+          items: [{id: 'circle1', furn: 'circle', x: 1, y: 1}]
+        };
+
+        let shouldBe = {
+          ...publicLayout,
+          type: 'public'
+        };
+
+        let { error, value } = newLayoutSchema.validate(publicLayout);
+        assert.deepEqual(error, null);
+        assert.deepEqual(value, shouldBe);
+      });
+
+      it('accepts a private layout and adds "private" type, "id", and "user_email" to schema', function() {
+        let privateLayout = {
+          package_id: 123,
+          user_email: 'test@gmail.com',
+          items: [{id: 'circle1', furn: 'circle', x: 1, y: 1}]
+        };
+
+        let shouldBe = {
+          ...privateLayout,
+          id: '123',
+          type: 'private'
+        };
+
+        let { error, value } = newLayoutSchema.validate(privateLayout);
+        console.log(value);
+        assert.deepEqual(error, null);
+        assert.deepEqual(value, shouldBe);
+      });
+    });
   });
 
+  /*
   describe('Model', function() {
     it('Creates an new layout', function(done) {
       LayoutModel.postLayout(goodLayout)
@@ -155,7 +194,7 @@ describe('#Layout', function() {
         });
     });
 
-  });
+  });*/
 
   describe('Middleware', function() {
 
