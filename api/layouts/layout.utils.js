@@ -5,24 +5,27 @@
 
 
 /* Dependencies -------------------------------------------------------------*/
-const LayoutModel       = require('./layout.model');
-const { layoutSchema }  = require('./layout.schema');
+const LayoutModel         = require('./layout.model');
+const {layoutValidation}  = require('./layout.schema');
 
 
 /** Validates a layout object */
 function validateLayout(request, response, next) {
-  // Get Package ID from prior middleware and layout information from JSON body
-  let layout_info = { 
-    count: request.body.layout.count,
-    items: request.body.layout.items,
-    id   : request.params.package_id || request.package_id.toString()
-  };
-  let { error, value } = layoutSchema.validate(layout_info, {abortEarly: false});
+  // Create object that we will validate against
+  let layout_info = { items: request.body.layout.items };
+  
+  // Check if request came from user (private layout)
+  if (!request.body.layout.id) {
+    layout_info.package_id = request.package_id;
+    layout_info.user_email = `${request.hawkid}@uiowa.edu`;
+  } 
+  else layout_info.id = request.body.layout.id;
 
-  // Return the error if the layout info is not valid
+  // Validate and return if response fails
+  let { error, value } = layoutValidation(layout_info);
   if (error !== null) return response.status(400).json({ error, layout_info });
   else {
-    request.validLayout = layout_info;
+    request.validLayout = value;
     next();
   }
 }
@@ -68,27 +71,27 @@ async function patchLayoutMiddleware(request, response, next) {
 
 /** Queries DyanmoDB `layouts` table for a layout object. */
 async function getLayoutMiddleware(request, response, next) {
-  const pid = request.params.package_id;
+  const id = request.params.id;
   
   try {
-    const result = await LayoutModel.getLayout(pid);
+    const result = await LayoutModel.getLayout(id);
     request.layout = result[0];
     return next();
   } catch (err) {
-    return response.status(400).json({ error: err, package_id: pid });
+    return response.status(400).json({ error: err, id: pid });
   }
 }
 
 
 /** Deletes a layout object with hashKey ${package_id} from DynamoDB. */
 async function deleteLayoutMiddleware(request, response, next) {
-  const pid = request.params.package_id;
+  const id = request.params.id;
 
   try {
-    const result = LayoutModel.deleteLayout(pid);
+    const result = LayoutModel.deleteLayout(id);
     next();
   } catch(err) {
-    return response.status(400).json({error: err, package_id: pid});
+    return response.status(400).json({error: err, id: id});
   }
 }
 

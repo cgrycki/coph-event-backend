@@ -5,7 +5,8 @@ const {
   furnitureItemsSchema,
   publicLayoutSchema,
   privateLayoutSchema,
-  layoutSchema
+  layoutSchema,
+  layoutValidation
 } = require('../api/layouts/layout.schema');
 
 
@@ -83,7 +84,7 @@ describe('Layouts', function() {
 
     it('correctly casts (public) layout type', function() {
       let shouldBe = { ...publicLayout, type: 'public' };
-      let { error, value } = layoutSchema(publicLayout);
+      let { error, value } = layoutValidation(publicLayout);
 
       assert.deepEqual(error, null);
       assert.deepEqual(value, shouldBe);
@@ -91,10 +92,36 @@ describe('Layouts', function() {
 
     it('correctly casts (private) layout type', function() {
       let shouldBe = { ...privateLayout, type: 'private', id: '123' };
-      let { error, value } = layoutSchema(privateLayout);
+      let { error, value } = layoutValidation(privateLayout);
 
       assert.deepEqual(error, null);
       assert.deepEqual(value, shouldBe);
     });
+
+    it('DynamoDB model validates (public) casted layouts', function() {
+      let shouldBe = { ...publicLayout, type: 'public' };
+      let { error, value } = layoutValidation(publicLayout);
+
+      // assert there was no errors while casting
+      assert.deepEqual(error, null);
+      assert.deepEqual(value, shouldBe);
+
+      // Validate casted layout object passes model
+      let { error: castErr, value: castVal } = Joi.validate(value, layoutSchema);
+      assert.deepEqual(castErr, null);
+    })
+
+    it('DynamoDB model validates (private) casted layouts', function() {
+      let shouldBe = { ...privateLayout, type: 'private', id: '123' };
+      let { error, value } = layoutValidation(privateLayout);
+
+      // assert there was no errors while casting
+      assert.deepEqual(error, null);
+      assert.deepEqual(value, shouldBe);
+
+      // Validate casted layout object passes model
+      let { error: castErr, value: castVal } = Joi.validate(value, layoutSchema);
+      assert.deepEqual(castErr, null);
+    })
   });
 });

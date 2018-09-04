@@ -54,6 +54,17 @@ const privateLayoutSchema = Joi.object().keys({
 });
 
 
+/** Schema for DynamoDB model */
+const layoutSchema = Joi.object().keys({
+  id        : Joi.string().required(),
+  type      : Joi.string().required().valid(['public', 'private']),
+  package_id: Joi.number().optional(),
+  user_email: Joi.string().email().optional(),
+  items     : furnitureItemsSchema
+});
+
+
+
 /**
  * Validates a layout, assigning layout type and casting ID if necc.
  * @param {object} layout Layout object to validate against.
@@ -64,7 +75,7 @@ const privateLayoutSchema = Joi.object().keys({
  * @returns {object.error} Null if valid, containing errors otherwise.
  * @returns {object.value} Input cast to correct layout shape.
  */
-const layoutSchema = layout => Joi.validate(
+const layoutValidation = layout => Joi.validate(
   layout, 
   Joi.alternatives().try(publicLayoutSchema, privateLayoutSchema),
   {abortEarly: false}
@@ -77,5 +88,6 @@ module.exports = {
   furnitureItemsSchema,
   publicLayoutSchema,
   privateLayoutSchema,
-  layoutSchema
+  layoutSchema,
+  layoutValidation
 };

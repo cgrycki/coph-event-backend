@@ -1,9 +1,7 @@
 /* DEPENDENCIES -------------------------------------------------------------*/
 var dynamo            = require('dynamodb');
 dynamo.AWS.config.update({ region: process.env.AWS_DEFAULT_REGION });
-const {
-  layoutSchema
-} = require('./layout.schema');
+const { layoutSchema } = require('./layout.schema');
 
 // Create table names depending on environment
 const { createTableName } = require('../utils/index');
