@@ -3,7 +3,11 @@
  */
 /* DEPENDENCIES -------------------------------------------------------------*/
 var dynamo            = require('dynamodb');
-dynamo.AWS.config.update({ region: process.env.AWS_DEFAULT_REGION });
+dynamo.AWS.config.update({ 
+  region: process.env.AWS_DEFAULT_REGION,
+  convertEmptyValues: true 
+});
+
 const { 
   ModelSchema,
   package_id

@@ -142,7 +142,7 @@ function validateEventJSON(request, response, next) {
  */
 async function postDynamoEventMiddleware(request, response, next) {
   // Assumes post/patchWorkflowEventMiddleware has been called before this
-  const pid    = request.package_id || +request.params.package_id;
+  const pid    = request.package_id;
   const evt    = { package_id: pid, ...request.body.form };
   const result = await EventModel.postEvent(evt);
 
