@@ -1,15 +1,27 @@
 const assert = require('assert');
 const Joi    = require('joi');
 const {
-  countSchema,
   furnitureItemSchema,
   furnitureItemsSchema,
+  publicLayoutSchema,
+  privateLayoutSchema,
   layoutSchema
 } = require('../api/layouts/layout.schema');
 
 
+// EXAMPLES
+const ex_items = [
+  {id: 'circle1', furn: 'circle', x: 10, y: 100},
+  {id: 'circle2', furn: 'circle', x: 10, y: 100},
+  {id: 'circle3', furn: 'circle', x: 10, y: 100}
+];
 
-describe('#Layouts', function() {
+const publicLayout = { id: 'TESTING TITLE', items: ex_items };
+const privateLayout = { package_id: 123, user_email: 'test@gmail.com', items: ex_items};
+
+
+
+describe('Layouts', function() {
   describe('item schema', function() {
     it('rejects furniture items without all attributes', function() {
       let itemMissing = { x: 100, y: 100, id: 'circle1' };
@@ -53,28 +65,36 @@ describe('#Layouts', function() {
   });
 
   describe('layout schema', function() {
-    it('accepts a good layout object', function() {
-      let goodLayout = {
-        id: 123,
-        count: {
-          num_chairs: 10,
-          num_chair_racks: 1,
-          num_circles: 6,
-          num_circle_racks: 1,
-          num_rects: 10,
-          num_rect_racks: 2,
-          num_cocktails: 6,
-          num_cocktail_racks: 1,
-          chairs_per_table: 6,
-          num_displays: 0,
-          num_trashs: 0
-        },
-        items: [{ id: 'circle1', furn: 'circle', x: 100, y: 100}]
-      };
-      
-      let { error: goodLayoutErr, value: goodLayoutVal } = layoutSchema.validate(goodLayout);
-      assert.equal(goodLayoutErr, null);
+    it('accepts a public layout schema', function() {
+      let shouldBe = { ...publicLayout, type: 'public' };
+      let { error, value } = Joi.validate(publicLayout, publicLayoutSchema);
+
+      assert.deepEqual(error, null);
+      assert.deepEqual(value, shouldBe);
     });
 
+    it('accepts a private layout schema', function() {
+      let shouldBe = { ...privateLayout, type: 'private', id: '123' };
+      let { error, value } = Joi.validate(privateLayout, privateLayoutSchema);
+
+      assert.deepEqual(error, null);
+      assert.deepEqual(value, shouldBe);
+    });
+
+    it('correctly casts (public) layout type', function() {
+      let shouldBe = { ...publicLayout, type: 'public' };
+      let { error, value } = layoutSchema(publicLayout);
+
+      assert.deepEqual(error, null);
+      assert.deepEqual(value, shouldBe);
+    });
+
+    it('correctly casts (private) layout type', function() {
+      let shouldBe = { ...privateLayout, type: 'private', id: '123' };
+      let { error, value } = layoutSchema(privateLayout);
+
+      assert.deepEqual(error, null);
+      assert.deepEqual(value, shouldBe);
+    });
   });
 });
