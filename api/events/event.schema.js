@@ -126,13 +126,13 @@ const ModelSchema = {
         FUND    : jString.required().length(3),
         ORG     : jString.required().length(2),
         DEPT    : jString.required().length(4),
-        SUBDEPT : jString.optional().length(5),
-        GRANT   : jString.optional().length(8),
-        INSTACCT: jString.optional().length(4),
-        ORGACCT : jString.optional().length(3),
-        DEPTACCT: jString.optional().length(5),
+        SUBDEPT : jString.allow('').optional().length(5),
+        GRANT   : jString.allow('').optional().length(8),
+        INSTACCT: jString.allow('').optional().length(4),
+        ORGACCT : jString.allow('').optional().length(3),
+        DEPTACCT: jString.allow('').optional().length(5),
         FUNC    : jString.required().length(2),
-        COSTCNTR: jString.optional().length(4)
+        COSTCNTR: jString.allow('').optional().length(4)
       })
     })
 };
