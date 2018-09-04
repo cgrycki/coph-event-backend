@@ -40,9 +40,6 @@ async function getDynamoEventMiddleware(request, response, next) {
   
   // Otherwise we found the event object, convert 'approval' from string => bool
   else {
-    // Some of our objects are still using booleans (woof)
-    //evt[0].approval = evt[0].approval === "true"
-
     request.evt = evt[0];
     return next();
   };
@@ -124,9 +121,9 @@ function validateEventJSON(request, response, next) {
   // Check for errors
   if (error !== null) return response.status(400).json({ error, form_info });
   else {
-    //request.workflow_data = extractWorkflowInfo(value);
+    request.workflow_data = extractWorkflowInfo(value);
     next();
-  }//
+  }
 }
 
 
@@ -146,7 +143,7 @@ function validateEventJSON(request, response, next) {
 async function postDynamoEventMiddleware(request, response, next) {
   // Assumes post/patchWorkflowEventMiddleware has been called before this
   const pid    = request.package_id || +request.params.package_id;
-  const evt    = { package_id: pid, ...request.body };
+  const evt    = { package_id: pid, ...request.body.form };
   const result = await EventModel.postEvent(evt);
 
   // If there was an error return, otherwise pass on the information
@@ -158,10 +155,11 @@ async function postDynamoEventMiddleware(request, response, next) {
 }
 
 
+/** Updates an Event object in our DynamoDB `events` table. */
 async function patchDynamoEventMiddleware(request, response, next) {
   // Assumes patchWorkflowEventMiddleware has been called before this
   const pid    = +request.params.package_id;
-  const evt    = { package_id: pid, ...request.body };
+  const evt    = { package_id: pid, ...request.body.form };
   const result = await EventModel.patchEvent(evt);
 
   // If there was an error return, otherwise pass on the information

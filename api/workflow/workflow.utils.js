@@ -93,10 +93,7 @@ async function postWorkflowEventMiddleware(request, response, next) {
 
   // Gather params and wait for REST Promise to resolve
   const { uiowa_access_token, user_ip_address, workflow_data } = request;
-  const result = await Workflow.postPackage(
-    uiowa_access_token, 
-    user_ip_address,
-    workflow_data);
+  const result = await Workflow.postPackage(uiowa_access_token, user_ip_address, workflow_data);
 
   // Either return the error or attach data to the request and pass along
   if (result.error) return response.status(400).json({
@@ -170,7 +167,6 @@ async function patchWorkflowEventMiddleware(request, response, next) {
   // NOTE: Our DynamoDB model holds it data internally in a 'attrs' object. 
   const slim_dynamo_data     = extractWorkflowInfo(dynamo_data.attrs);
   const shouldUpdateWorkflow = shouldUpdateEvent(slim_dynamo_data, workflow_data);
-
 
   return response.status(200).json({
     slim_dynamo_data    : slim_dynamo_data,
