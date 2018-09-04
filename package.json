@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon ./bin/www",
     "populate-rooms": "node -r dotenv/config bin/rooms/populate-database.js",
-    "test": "clear && mocha",
+    "test": "clear && mocha --timeout 10000",
     "predeploy": "claudia generate-serverless-express-proxy --express-module server",
     "deploy": "npm run predeploy && exec bin/claudia-deploy.sh",
     "update": "npm run predeploy && TMPDIR=/tmp claudia update --use-local-dependencies --set-env-from-json",

@@ -36,7 +36,7 @@ const furnitureItemsSchema = Joi.array().required().min(0).items(furnitureItemSc
 /** Schema for the complete layout object. Package ID is not constrained to number because we have public layouts too. */
 const layoutSchema = Joi.object().keys({
   id: Joi.required(),
-  count     : countSchema,
+  count     : countSchema.required(),
   items     : furnitureItemsSchema
 });
 
