@@ -147,7 +147,7 @@ async function postDynamoEventMiddleware(request, response, next) {
   const result = await EventModel.postEvent(evt);
 
   // If there was an error return, otherwise pass on the information
-  if (result.error) return response.status(400).json(result);
+  if (result.error) return response.status(400).json({error: result, data: evt});
   else {
     request.dynamo_data = result;
     return next();
