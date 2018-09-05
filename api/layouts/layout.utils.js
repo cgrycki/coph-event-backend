@@ -81,14 +81,15 @@ async function patchLayoutMiddleware(request, response, next) {
 
 /** Queries DyanmoDB `layouts` table for a layout object. */
 async function getLayoutMiddleware(request, response, next) {
-  const id = request.params.id;
+  // Middleware could be called from /layouts OR /events
+  const id = request.params.id || request.params.package_id;
   
   try {
-    let result = await LayoutModel.getLayout(id);
-    request.layout = result[0] || result;
+    let result     = await LayoutModel.getLayout(id);
+    request.layout = result;
     return next();
   } catch (err) {
-    return response.status(400).json({ error: err, id: pid });
+    return response.status(400).json({ error: err, id });
   }
 }
 

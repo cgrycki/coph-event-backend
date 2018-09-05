@@ -64,7 +64,7 @@ router.get('/my',
 router.get('/:package_id',
   getWorkflowPermissionsMiddleware,
   getDynamoEventMiddleware,
-  //getLayoutMiddleware
+  getLayoutMiddleware,
   (req, res) => res.status(200).json({
     evt        : req.evt,
     permissions: req.permissions,
