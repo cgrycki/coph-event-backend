@@ -11,10 +11,15 @@ const {layoutValidation}  = require('./layout.schema');
 
 /** Validates a layout object */
 function validateLayout(request, response, next) {
+  // Before we go any further, check if layout even has items
+  if ((!request.body.hasOwnProperty('layout')) ||
+      (!request.body.layout.hasOwnProperty('items')) ||
+      (request.body.layout.items.length === 0)) return next();
+
   // Create object that we will validate against
   let layout_info = { items: request.body.layout.items };
   
-  // Check if request came from user (private layout)
+  // Check if request came from user (private layout) to assign type
   if (!request.body.layout.id) {
     layout_info.package_id = request.package_id;
     layout_info.user_email = `${request.hawkid}@uiowa.edu`;
@@ -33,26 +38,32 @@ function validateLayout(request, response, next) {
 
 /** Creates a new layout in DynamoDB `layouts` table. */
 async function postLayoutMiddleware(request, response, next) {
+  if (!request.hasOwnProperty('validLayout')) return next();
+
   // Get validated information passed from validateLayout()
   const layout = request.validLayout;
-
-  // Check if we need to create a layout: some (most?) events won't have one
-  if (layout.items.length !== 0) {
-    try {
-      const result        = await LayoutModel.postLayout(layout);
-      request.validLayout = result;
-      next();
-
-    } catch (err) {
-      return response.status(400).json({ error: err, layout });
-    }
+  try {
+    const result        = await LayoutModel.postLayout(layout);
+    request.validLayout = result;
+    next();
+  } catch (err) {
+    return response.status(400).json({ error: err, layout });
   }
-  
-  next();
 }
 
 
-/** Updates a layout object in DynamoDB table. */
+/**
+ * Updates a layout object in DynamoDB table. 
+ * 
+ * Cases:
+    Prior event HAD a layout (1 >= items.length)
+      this request has 0 items => DELETE layout
+      this request has 1 >= items => PATCH AND OVERWRITE
+
+    Prior event DIDNT have a layout
+      this request has 0 items => do nothing, `next()`
+      this request has 1 >= items => POST
+ */
 async function patchLayoutMiddleware(request, response, next) {
   // Get validated information passed from validateLayout()
   const layout = request.validLayout;
