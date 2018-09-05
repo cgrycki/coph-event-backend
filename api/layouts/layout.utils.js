@@ -43,8 +43,8 @@ async function postLayoutMiddleware(request, response, next) {
   // Get validated information passed from validateLayout()
   const layout = request.validLayout;
   try {
-    const result        = await LayoutModel.postLayout(layout);
-    request.validLayout = result;
+    const result  = await LayoutModel.postLayout(layout);
+    request.items = result.items;
     next();
   } catch (err) {
     return response.status(400).json({ error: err, layout });
@@ -85,8 +85,13 @@ async function getLayoutMiddleware(request, response, next) {
   const id = request.params.id || request.params.package_id;
   
   try {
+    // Result should be an array with a single object
     let result     = await LayoutModel.getLayout(id);
-    request.layout = result;
+
+    // So if DDB didn't return a layout, assign an empty list
+    if (result.length === 0) request.items = result;
+    else request.items = result[0].items;
+
     return next();
   } catch (err) {
     return response.status(400).json({ error: err, id });
