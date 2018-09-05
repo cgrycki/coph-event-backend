@@ -84,8 +84,8 @@ async function getLayoutMiddleware(request, response, next) {
   const id = request.params.id;
   
   try {
-    const result = await LayoutModel.getLayout(id);
-    request.layout = result[0];
+    let result = await LayoutModel.getLayout(id);
+    request.layout = result[0] || result;
     return next();
   } catch (err) {
     return response.status(400).json({ error: err, id: pid });
@@ -95,7 +95,8 @@ async function getLayoutMiddleware(request, response, next) {
 
 /** Deletes a layout object with hashKey ${package_id} from DynamoDB. */
 async function deleteLayoutMiddleware(request, response, next) {
-  const id = request.params.id;
+  // Middleware could be called from /layouts OR /events
+  const id = request.params.id || request.params.package_id;
 
   try {
     const result = await LayoutModel.deleteLayout(id);
