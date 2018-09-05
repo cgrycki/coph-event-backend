@@ -44,7 +44,7 @@ async function postLayoutMiddleware(request, response, next) {
   const layout = request.validLayout;
   try {
     const result  = await LayoutModel.postLayout(layout);
-    request.items = result.items;
+    request.layout = result;
     next();
   } catch (err) {
     return response.status(400).json({ error: err, layout });
@@ -89,8 +89,8 @@ async function getLayoutMiddleware(request, response, next) {
     let result     = await LayoutModel.getLayout(id);
 
     // So if DDB didn't return a layout, assign an empty list
-    if (result.length === 0) request.items = result;
-    else request.items = result[0]['items'];
+    if (result.length === 0) request.layout = {};
+    else request.layout = result[0];
 
     return next();
   } catch (err) {

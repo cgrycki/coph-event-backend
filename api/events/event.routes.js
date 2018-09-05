@@ -48,7 +48,7 @@ router.post('/',
   (req, res) => res.status(201).json({ 
     evt        : req.dynamo_data,
     permissions: req.permissions,
-    items      : req.items
+    layout     : req.layout
   }));
 
 
@@ -68,7 +68,7 @@ router.get('/:package_id',
   (req, res) => res.status(200).json({
     evt        : req.evt,
     permissions: req.permissions,
-    items      : req.items
+    layout     : req.layout
   }));
 
 
