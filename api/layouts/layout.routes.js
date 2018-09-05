@@ -26,33 +26,39 @@ router.use(retrieveSessionInfoMiddleware);
 
 
 /* Routes -------------------------------------------------------------------*/
+/** Creates a new layout */
 router.post('/',
   validateLayout,
   postLayoutMiddleware,
   (req, res) => res.status(200).json({ layout: req.validLayout }));
 
 
+/** Returns a layout with matching `id` */
 router.get('/:id',
   getLayoutMiddleware, 
   (req, res) => res.status(200).json(req.layout));
 
 
+/** Deletes a layout */
 router.delete('/:id',
   deleteLayoutMiddleware,
   (req, res) => res.status(200).json({ package_id: req.params.id }));
 
 
+/** Updates a layout */
 router.patch('/:id',
   validateLayout,
   patchLayoutMiddleware,
   (req, res) => res.status(200).json({ layout: req.validLayout }));
 
 
+/** Returns a filtered list of user's layouts. */
 router.get('/filter/my',
   getLayoutsMiddleware,
   (req, res) => res.status(200).json({ layouts: req.layouts }));
 
 
+/** Returns public layouts accessible to all users. */
 router.get('/filter/public',
   getLayoutsMiddleware,
   (req, res) => res.status(200).json({ layouts: req.layouts }));

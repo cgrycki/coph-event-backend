@@ -18,13 +18,13 @@ function validateLayout(request, response, next) {
   if (!request.body.layout.id) {
     layout_info.package_id = request.package_id;
     layout_info.user_email = `${request.hawkid}@uiowa.edu`;
-  } 
-  else layout_info.id = request.body.layout.id;
+  } else layout_info.id    = request.body.layout.id;
 
   // Validate and return if response fails
   let { error, value } = layoutValidation(layout_info);
   if (error !== null) return response.status(400).json({ error, layout_info });
   else {
+    // Attach the formatted layout to the request
     request.validLayout = value;
     next();
   }
@@ -47,8 +47,7 @@ async function postLayoutMiddleware(request, response, next) {
       return response.status(400).json({ error: err, layout });
     }
   }
-
-  request.layout = layout;
+  
   next();
 }
 
