@@ -95,28 +95,16 @@ async function getDynamoEventsMiddleware(request, response, next) {
 
 
 /* POST + PATCH Functions ---------------------------------------------------*/
+
+
 /**
  * Validates the potential Event information in a POST request.  
  * @param {Object} request HTTP request containing form data.
- * @param [request.body] {Object} - Form Data as an object, parsed by Multer.
+ * @param [request.body.form] {Object} - Object containing form fields from frontend.
  * @param {Object} response HTTP response
  * @param {Object} next Next function in middleware stack.
  */
 function validateEvent(request, response, next) {
-  // Gather the form information. Then validate with Joi.
-  let form_info = { ...request.body };
-  let { error, value:valid_info } = Joi.validate(form_info, EventSchema, { abortEarly: false });
-
-  // If there's any invalid fields, return with information
-  if (error !== null) return response.status(400).json({ error, valid_info });
-  // Otherwise, create a Workflow entry (slimmed down information for inbox)
-  else {
-    request.workflow_data = extractWorkflowInfo(valid_info);
-    return next();
-  };
-}
-
-function validateEventJSON(request, response, next) {
   // Gather form data from body json object
   let form_info = { ...request.body.form };
   let { error, value } = Joi.validate(form_info, EventSchema, {abortEarly: false});
@@ -219,7 +207,6 @@ async function deleteDynamoEventMiddleware(request, response, next) {
 
 module.exports = {
   validateEvent,
-  validateEventJSON,
   getDynamoEventMiddleware,
   getDynamoEventsMiddleware,
   postDynamoEventMiddleware,
