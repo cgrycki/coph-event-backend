@@ -4,14 +4,14 @@ const { session } = require('../auth/auth.session');
 
 
 /* Middlewares  -------------------------------------------------------------*/
-const { 
-  checkSessionExistsMiddleware, 
-  retrieveSessionInfoMiddleware 
+const {
+  checkSessionExistsMiddleware,
+  retrieveSessionInfoMiddleware
 }                               = require('../auth/auth.utils');
-const { 
+const {
+  validateEvent,
   getDynamoEventMiddleware,
   getDynamoEventsMiddleware,
-  validateEventJSON,
   postDynamoEventMiddleware,
   patchDynamoEventMiddleware,
   deleteDynamoEventMiddleware
@@ -40,7 +40,7 @@ router.use(retrieveSessionInfoMiddleware);
 /* Routes -------------------------------------------------------------------*/
 // POST -- Create event in workflow, dynamoDB, and (TODO) Office365
 router.post('/',
-  validateEventJSON,
+  validateEvent,
   postWorkflowEventMiddleware,
   postDynamoEventMiddleware,
   //validateLayout,
@@ -83,7 +83,7 @@ router.delete('/:package_id',
 
 // PATCH/:package_id -- Update a given event
 router.patch('/:package_id',
-  validateEventJSON,
+  validateEvent,
   getDynamoEventMiddleware,
   patchWorkflowEventMiddleware,
   patchDynamoEventMiddleware,

@@ -5,7 +5,10 @@
 
 
 /* Dependencies -------------------------------------------------------------*/
-const { extractWorkflowInfo } = require('../utils/');
+const { 
+  extractWorkflowInfo,
+  removeEmptyKeys 
+}                             = require('../utils/');
 const EventModel              = require('./event.model');
 const { 
   ModelSchema,
@@ -92,28 +95,16 @@ async function getDynamoEventsMiddleware(request, response, next) {
 
 
 /* POST + PATCH Functions ---------------------------------------------------*/
+
+
 /**
  * Validates the potential Event information in a POST request.  
  * @param {Object} request HTTP request containing form data.
- * @param [request.body] {Object} - Form Data as an object, parsed by Multer.
+ * @param [request.body.form] {Object} - Object containing form fields from frontend.
  * @param {Object} response HTTP response
  * @param {Object} next Next function in middleware stack.
  */
 function validateEvent(request, response, next) {
-  // Gather the form information. Then validate with Joi.
-  let form_info = { ...request.body };
-  let { error, value:valid_info } = Joi.validate(form_info, EventSchema, { abortEarly: false });
-
-  // If there's any invalid fields, return with information
-  if (error !== null) return response.status(400).json({ error, valid_info });
-  // Otherwise, create a Workflow entry (slimmed down information for inbox)
-  else {
-    request.workflow_data = extractWorkflowInfo(valid_info);
-    return next();
-  };
-}
-
-function validateEventJSON(request, response, next) {
   // Gather form data from body json object
   let form_info = { ...request.body.form };
   let { error, value } = Joi.validate(form_info, EventSchema, {abortEarly: false});
@@ -141,13 +132,16 @@ function validateEventJSON(request, response, next) {
  * @param {Object} next Next function in middleware stack.
  */
 async function postDynamoEventMiddleware(request, response, next) {
-  // Assumes post/patchWorkflowEventMiddleware has been called before this
-  const pid    = request.package_id || +request.params.package_id;
-  const evt    = { package_id: pid, ...request.body.form };
+  // Assumes postWorkflowEventMiddleware has been called before this to attach the package_id
+  const pid    = request.package_id;
+  let evt    = { ...request.body.form, package_id: pid };
+  removeEmptyKeys(evt.setup_mfk);   // Strip empty values from the Setup_MFK
+
+  // Create the event
   const result = await EventModel.postEvent(evt);
 
   // If there was an error return, otherwise pass on the information
-  if (result.error) return response.status(400).json(result);
+  if (result.error) return response.status(400).json({error: result, data: evt, workflow_data: request.workflow_data});
   else {
     request.dynamo_data = result;
     return next();
@@ -213,7 +207,6 @@ async function deleteDynamoEventMiddleware(request, response, next) {
 
 module.exports = {
   validateEvent,
-  validateEventJSON,
   getDynamoEventMiddleware,
   getDynamoEventsMiddleware,
   postDynamoEventMiddleware,

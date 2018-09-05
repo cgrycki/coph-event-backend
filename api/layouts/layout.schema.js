@@ -1,10 +1,8 @@
-/**
- * Layout schema for DynamoDB
- */
+/** Layout schema for DynamoDB */
+// Dependencies
 const Joi             = require('joi');
 const jNum            = Joi.number().required();
 const furniture_types = ['chair', 'circle', 'cocktail', 'rect', 'display', 'trash'];
-
 
 
 /** Schema for furniture counts and 'Heads Up Display'. */
@@ -22,6 +20,7 @@ const countSchema = Joi.object().keys({
   num_trashs        : jNum.default(0)
 });
 
+
 /** Schema for a single furniture item object, all fields required. */
 const furnitureItemSchema = Joi.object().keys({
   x   : Joi.number().min(0).max(3000).required(),
@@ -30,43 +29,65 @@ const furnitureItemSchema = Joi.object().keys({
   furn: Joi.string().valid(furniture_types).required()
 });
 
+
 /** Schema for furniture items array, empty or filled with furniture items AND unique IDs. */
 const furnitureItemsSchema = Joi.array().required().min(0).items(furnitureItemSchema).unique('id');
 
-/** Schema for the complete layout object. Package ID is not constrained to number because we have public layouts too. */
-const layoutSchema = Joi.object().keys({
+
+/** Schema for Public layouts */
+const publicLayoutSchema = Joi.object().keys({
   id   : Joi.string().required(),
-  count: countSchema.required(),
+  type : Joi.string().optional().default('public'),
   items: furnitureItemsSchema
 });
 
 
-const assignID = context => context.package_id.toString();
-assignID.description = 'Assign ID or package_id';
-
-const newLayoutSchema = Joi.object().when('package_id', {
-  is: Joi.any(),
-  then: Joi.object({
-    id        : Joi.string().default(assignID),
-    package_id: Joi.number().required(),
-    user_email: Joi.string().email().required(),
-    type      : Joi.string().valid('private'),
-    items     : furnitureItemsSchema
-  }),
-  otherwise: Joi.object({
-    id        : Joi.string().required(),
-    package_id: Joi.number().optional(),
-    user_email: Joi.string().email().optional(),
-    type      : Joi.string().valid('private'),
-    items     : furnitureItemsSchema
-  })
+/** Schema for Private layouts */
+const privateLayoutSchema = Joi.object().keys({
+  id: Joi.string().default(function(context) {
+    return context.package_id.toString();
+  }, 'Convert package id to string'),
+  type: Joi.string().default('private'),
+  package_id: Joi.number().required(),
+  user_email: Joi.string().email(),
+  items: furnitureItemsSchema
 });
 
 
+/** Schema for DynamoDB model */
+const layoutSchema = Joi.object().keys({
+  id        : Joi.string().required(),
+  type      : Joi.string().required().valid(['public', 'private']),
+  package_id: Joi.number().optional(),
+  user_email: Joi.string().email().optional(),
+  items     : furnitureItemsSchema
+});
+
+
+
+/**
+ * Validates a layout, assigning layout type and casting ID if necc.
+ * @param {object} layout Layout object to validate against.
+ * @param [layout.id] {string} Hash Key of object, optional.
+ * @param [layout.package_id] {number} Package ID of layout, if created for an event.
+ * @param [layout.user_email] {string} Email of user, if created for an event.
+ * @returns {object} Validation result
+ * @returns {object.error} Null if valid, containing errors otherwise.
+ * @returns {object.value} Input cast to correct layout shape.
+ */
+const layoutValidation = layout => Joi.validate(
+  layout, 
+  Joi.alternatives().try(publicLayoutSchema, privateLayoutSchema),
+  {abortEarly: false}
+);
+
+
+
 module.exports = {
-  countSchema,
   furnitureItemSchema,
   furnitureItemsSchema,
+  publicLayoutSchema,
+  privateLayoutSchema,
   layoutSchema,
-  newLayoutSchema
+  layoutValidation
 };

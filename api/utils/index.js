@@ -95,11 +95,21 @@ const shouldUpdateEvent = (old_data, new_data) => {
 };
 
 
+/**
+ * Removes keys with empty string values from an object. Useful for posting to DynamoDB.
+ * @param {object} obj Object to remove empty values from
+ */
+const removeEmptyKeys = obj => {
+  Object.keys(obj).forEach(key => (obj[key] === '') && delete obj[key]);
+}
+
+
 
 module.exports = {
   errorFormatter,
   validateParams,
   createTableName,
   extractWorkflowInfo,
-  shouldUpdateEvent
+  shouldUpdateEvent,
+  removeEmptyKeys
 };

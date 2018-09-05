@@ -5,7 +5,8 @@
 const assert            = require('assert');
 const {
   extractWorkflowInfo,
-  shouldUpdateEvent
+  shouldUpdateEvent,
+  removeEmptyKeys
 }                       = require('../api/utils/');
 const { getFormattedDate } = require('../api/utils/date.utils');
 
@@ -89,5 +90,14 @@ describe("Date Utility functions", function() {
     const correctStr = `${times[0]}-${times[1].padStart(2, '0')}-${times[2].padStart(2, '0')}`;
 
     assert.equal(formattedStr, correctStr);
+  });
+});
+
+describe('Empty Keys utility', function() {
+  it('removes empty keys from an object', function() {
+    let shouldBe = { a: 'a' };
+    let testObj = { a: 'a', b: '', c: '' };
+    removeEmptyKeys(testObj);
+    assert.deepEqual(testObj, shouldBe);
   });
 });
