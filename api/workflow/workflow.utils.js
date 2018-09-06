@@ -61,7 +61,7 @@ async function getWorkflowPermissionsMiddleware(request, response, next) {
   else if (permissions.length > 1) {
     const events = request.events;
     const evts_with_permissions = events.map((evt, i) => ({
-      evt: evt, 
+      event: evt, 
       permissions: {
         canEdit         : permissions[i].canEdit,
         canInitiatorVoid: permissions[i].canInitiatorVoid,

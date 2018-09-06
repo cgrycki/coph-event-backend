@@ -43,7 +43,7 @@ async function getDynamoEventMiddleware(request, response, next) {
   
   // Otherwise we found the event object, convert 'approval' from string => bool
   else {
-    request.evt = evt[0];
+    request.event = evt[0];
     return next();
   };
 }

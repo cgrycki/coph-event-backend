@@ -49,7 +49,7 @@ router.post('/',
   (req, res) => res.status(201).json({ 
     event      : req.dynamo_data,
     permissions: req.permissions,
-    layout     : req.layout
+    items      : req.items
   }));
 
 
@@ -67,9 +67,9 @@ router.get('/:package_id',
   getDynamoEventMiddleware,
   getLayoutMiddleware,
   (req, res) => res.status(200).json({
-    event      : req.evt,
+    event      : req.event,
     permissions: req.permissions,
-    layout     : req.layout
+    items      : req.items
   }));
 
 
