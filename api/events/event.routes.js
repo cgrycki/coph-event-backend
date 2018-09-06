@@ -25,6 +25,7 @@ const {
 const {
   validateLayout,
   getLayoutMiddleware,
+  getLayoutsMiddleware,
   postLayoutMiddleware,
   patchLayoutMiddleware,
   deleteLayoutMiddleware

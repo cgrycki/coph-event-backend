@@ -104,6 +104,33 @@ const removeEmptyKeys = obj => {
 }
 
 
+/**
+ * Zips events to their respective layouts. If no layout exists for an event,
+ * an empty array will be assigned to it's items.
+ * @param {object[]} events List of events returned by DynamoDB.
+ * @param {object[]} layouts List of layouts returned by DynamoDB.
+ * @returns {events} Events array with an `items` list assigned to each event obj.
+ */
+function zipperEventsAndLayouts(events, layouts) {
+  // Case: no events and thus no layouts to assign
+  if (!events || events.length === 0) return [];
+  // Case: All layouts have an event, but not all events have a layout.
+  if (!layouts || layouts.length > events.length) throw new Error('Invalid number of layouts');
+
+  // Create a lookup table for layouts based on their package_ids
+  const layoutLookup = layouts.reduce((lookupObj, layout) => {
+    lookupObj[layout.package_id] = layout;
+    return lookupObj;
+  }, {});
+
+  // Iterate through the events, and check if the event's ID is in the lookup.
+  events.forEach(evt => evt.items = (evt.package_id in layoutLookup) ? 
+      layoutLookup[evt.package_id].items : []);
+  
+  return events;
+}
+
+
 
 module.exports = {
   errorFormatter,
@@ -111,5 +138,6 @@ module.exports = {
   createTableName,
   extractWorkflowInfo,
   shouldUpdateEvent,
-  removeEmptyKeys
+  removeEmptyKeys,
+  zipperEventsAndLayouts
 };

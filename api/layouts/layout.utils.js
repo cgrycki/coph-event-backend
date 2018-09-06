@@ -5,8 +5,9 @@
 
 
 /* Dependencies -------------------------------------------------------------*/
-const LayoutModel         = require('./layout.model');
-const {layoutValidation}  = require('./layout.schema');
+const LayoutModel              = require('./layout.model');
+const {layoutValidation}       = require('./layout.schema');
+const {zipperEventsAndLayouts} = require('../utils');
 
 
 /** Validates a layout object */
@@ -125,7 +126,6 @@ async function getLayoutsMiddleware(request, response, next) {
     "/filter/public": "public"
   };
 
-
   // Make request
   const field = path_to_field[request.path];
   const value = path_to_value[request.path];
@@ -133,6 +133,13 @@ async function getLayoutsMiddleware(request, response, next) {
   try {
     const {layouts} = await LayoutModel.getLayouts(field, value);
     request.layouts = layouts;
+
+    // Zipper layout and events if any events are present
+    // Events are present when this middleware is called from event (private) endpoint
+    // Events aren't present when calling for public events
+    if ("events" in request) 
+      request.events = zipperEventsAndLayouts(request.events, layouts);
+
     next();
   } catch(err) {
     return response.status(400).json(err);
