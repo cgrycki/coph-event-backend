@@ -124,10 +124,17 @@ function zipperEventsAndLayouts(events, layouts) {
   }, {});
 
   // Iterate through the events, and check if the event's ID is in the lookup.
-  events.forEach(evt => evt.items = (evt.package_id in layoutLookup) ? 
-      layoutLookup[evt.package_id].items : []);
+  const events_with_items = events.map(evt => {
+    const event_pid = evt.event.package_id;
+    const items = (event_pid in layoutLookup) ? layoutLookup[event_pid].items : [];
+    return {
+      event: evt.event,
+      items: items,
+      permissions: evt.permissions
+    };
+  });
   
-  return events;
+  return events_with_items;
 }
 
 
