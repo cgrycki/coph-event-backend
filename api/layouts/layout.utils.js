@@ -118,11 +118,13 @@ async function deleteLayoutMiddleware(request, response, next) {
 async function getLayoutsMiddleware(request, response, next) {
   // Infer index attributes from request path
   const path_to_field = {
-    "/filter/my"    : "user_email",
+    "/filter/my"    : "user_email", // from layouts
+    "/my"           : "user_email", // from events
     "/filter/public": "type"
   };
   const path_to_value = {
     "/filter/my"    : `${request.hawkid}@uiowa.edu`,
+    "/my"           : `${request.hawkid}@uiowa.edu`,
     "/filter/public": "public"
   };
 
