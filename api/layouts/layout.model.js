@@ -73,7 +73,7 @@ LayoutModel.getLayouts = function(field, value) {
       .exec((err, data) => {
         if (err) return reject(err);
         else {
-          const layouts = data.Items;
+          const layouts = data.Items.map(lay => lay.get());
           resolve({ layouts });
         }
       })
