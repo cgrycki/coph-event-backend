@@ -59,8 +59,8 @@ async function getWorkflowPermissionsMiddleware(request, response, next) {
   // Otherwise this was called by getDynamoEvent*S*, and we have a list of permissions
   // So map the permissions back onto the events and modify the request
   else if (permissions.length > 1) {
-    const evts = request.evts;
-    const evts_with_permissions = evts.map((evt, i) => ({
+    const events = request.events;
+    const evts_with_permissions = events.map((evt, i) => ({
       evt: evt, 
       permissions: {
         canEdit         : permissions[i].canEdit,
@@ -72,7 +72,7 @@ async function getWorkflowPermissionsMiddleware(request, response, next) {
       }
     }));
 
-    request.evts = evts_with_permissions;
+    request.events = evts_with_permissions;
   };
 
   return next();

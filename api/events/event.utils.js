@@ -79,14 +79,14 @@ async function getDynamoEventsMiddleware(request, response, next) {
   const value  = path_to_value[request.path];
   const {
     error,
-    evts,
+    events,
     package_ids
   }            = await EventModel.getEvents(field, value);
 
   // Either response with error or pass on the DynamoDB info
   if (error !== undefined) return response.status(400).json(result);
   else {
-    request.evts        = evts;
+    request.events      = events;
     request.package_ids = package_ids;
     return next();
   };
@@ -95,8 +95,6 @@ async function getDynamoEventsMiddleware(request, response, next) {
 
 
 /* POST + PATCH Functions ---------------------------------------------------*/
-
-
 /**
  * Validates the potential Event information in a POST request.  
  * @param {Object} request HTTP request containing form data.
@@ -116,7 +114,6 @@ function validateEvent(request, response, next) {
     next();
   }
 }
-
 
 
 /**

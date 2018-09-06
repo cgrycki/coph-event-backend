@@ -56,8 +56,8 @@ router.post('/',
 router.get('/my',
   getDynamoEventsMiddleware,
   getWorkflowPermissionsMiddleware,
-  //getLayoutsMiddleware
-  (req, res) => res.status(200).json(req.evts));
+  getLayoutsMiddleware,
+  (req, res) => res.status(200).json(req.events));
 
 
 // GET package_id -- Get specific package 
