@@ -140,8 +140,8 @@ async function getLayoutsMiddleware(request, response, next) {
     // Events are present when this middleware is called from event (private) endpoint
     // Events aren't present when calling for public events
     if ("events" in request) {
-      const {events_with_items, layoutLookup } = zipperEventsAndLayouts(request.events, layouts);
-      request.events = events_with_items;
+      const {events_with_items, layoutLookup} = zipperEventsAndLayouts(request.events, layouts);
+      request.events  = events_with_items;
       request.layouts = layoutLookup;
     }
 

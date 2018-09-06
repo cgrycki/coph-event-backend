@@ -73,6 +73,7 @@ LayoutModel.getLayouts = function(field, value) {
       .exec((err, data) => {
         if (err) return reject(err);
         else {
+          // Map the modeled DynamoDB object to plain JS attr obj
           const layouts = data.Items.map(lay => lay.get());
           resolve({ layouts });
         }
