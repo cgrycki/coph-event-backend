@@ -134,7 +134,7 @@ function zipperEventsAndLayouts(events, layouts) {
     };
   });
   
-  return events_with_items;
+  return {events_with_items, layoutLookup};
 }
 
 
