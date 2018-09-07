@@ -95,17 +95,14 @@ async function checkSessionExistsMiddleware(request, response, next) {
     setUserAuthToken(new_token, request);
     return next();
   }
-
-  // Check if user is developer
-  else if (request.get('origin') === 'http://localhost:3000') return next();
   
   // Check if this request is being sent to /auth with a valid token
   else if (request.path.endsWith('/auth') && request.query.code) return next();
 
   // No authenticated session? Expired?
   else response.status(200).json({
-    error   : true,
     loggedIn: false,
+    is_admin: false,
     message : "You are not logged in"
   });
 }
