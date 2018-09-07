@@ -39,13 +39,17 @@ function validateLayout(request, response, next) {
 
 /** Creates a new layout in DynamoDB `layouts` table. */
 async function postLayoutMiddleware(request, response, next) {
-  if (!request.hasOwnProperty('validLayout')) return next();
+  // Attach stub for events without a layout
+  if (!request.hasOwnProperty('validLayout')) {
+    request.items = []
+    return next();
+  }
 
   // Get validated information passed from validateLayout()
   const layout = request.validLayout;
   try {
     const result  = await LayoutModel.postLayout(layout);
-    request.items = layout.items;
+    request.items = result.get('items');
     next();
   } catch (err) {
     return response.status(400).json({ error: err, layout });
