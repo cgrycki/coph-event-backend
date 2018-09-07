@@ -114,17 +114,20 @@ const removeEmptyKeys = obj => {
 function zipperEventsAndLayouts(events, layouts) {
   // Case: no events and thus no layouts to assign
   if (!events || events.length === 0) return [];
+
   // Case: All layouts have an event, but not all events have a layout.
   if (!layouts || layouts.length > events.length) throw new Error('Invalid number of layouts');
 
   // Create a lookup table for layouts based on their package_ids
   const layoutLookup = layouts.reduce((lookupObj, layout) => {
+    // Layout it a DynamoDB model object
     lookupObj[layout.get('package_id')] = layout.get('items');
     return lookupObj;
   }, {});
 
   // Iterate through the events, and check if the event's ID is in the lookup.
   let events_with_items = events.map(evt => {
+    // Event is a DynamoDB model object
     const event_pid = evt.event.get('package_id');
     let items = (layoutLookup.hasOwnProperty(event_pid)) ? layoutLookup[event_pid] : [];
     return {
@@ -134,7 +137,7 @@ function zipperEventsAndLayouts(events, layouts) {
     };
   });
   
-  return {events_with_items, layoutLookup};
+  return events_with_items;
 }
 
 

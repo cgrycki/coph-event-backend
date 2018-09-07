@@ -58,7 +58,7 @@ router.get('/my',
   getDynamoEventsMiddleware,
   getWorkflowPermissionsMiddleware,
   getLayoutsMiddleware,
-  (req, res) => res.status(200).json({ events: req.events, layouts: req.layouts }));
+  (req, res) => res.status(200).json(req.events));
 
 
 // GET package_id -- Get specific package 
