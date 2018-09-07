@@ -95,7 +95,7 @@ async function getLayoutMiddleware(request, response, next) {
 
     // So if DDB didn't return a layout, assign an empty list
     if (result.length === 0) request.items = result;
-    else request.items = result[0];
+    else request.items = result[0].get('items');
 
     return next();
   } catch (err) {
