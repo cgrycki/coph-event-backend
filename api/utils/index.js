@@ -119,13 +119,13 @@ function zipperEventsAndLayouts(events, layouts) {
 
   // Create a lookup table for layouts based on their package_ids
   const layoutLookup = layouts.reduce((lookupObj, layout) => {
-    lookupObj[layout.package_id] = layout.items;
+    lookupObj[layout.get('package_id')] = layout.get('items');
     return lookupObj;
   }, {});
 
   // Iterate through the events, and check if the event's ID is in the lookup.
   let events_with_items = events.map(evt => {
-    const event_pid = evt.event.package_id;
+    const event_pid = evt.event.get('package_id');
     let items = (layoutLookup.hasOwnProperty(event_pid)) ? layoutLookup[event_pid] : [];
     return {
       event      : evt.event,
