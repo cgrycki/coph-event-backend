@@ -49,7 +49,7 @@ async function postLayoutMiddleware(request, response, next) {
   const layout = request.validLayout;
   try {
     const result  = await LayoutModel.postLayout(layout);
-    request.items = result[0].get('items');
+    request.items = result.items;
     next();
   } catch (err) {
     return response.status(400).json({ error: err, layout });
