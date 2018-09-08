@@ -84,7 +84,7 @@ async function patchLayoutMiddleware(request, response, next) {
   let result;
   try {
 
-    // CASE 0: neither iteration of this event had furniture items
+    // CASE 0: neither iteration of this event had furniture items => PASS
     if (currentlayout === undefined && oldLayout.length === 0) {
       request.items = [];
       return next();
@@ -102,7 +102,7 @@ async function patchLayoutMiddleware(request, response, next) {
       request.items = [];
     }
 
-    // CASE 3: Old event had furniture and so this one: => Overwrite via PATCH
+    // CASE 3: Old event had furniture and so does this one: => Overwrite via PATCH
     else if (currentlayout !== undefined && oldLayout.length > 0) {
       result = await LayoutModel.patchLayout(currentlayout);
       request.items = result.items;
@@ -121,7 +121,11 @@ async function patchLayoutMiddleware(request, response, next) {
 
     next();
   } catch(err) {
-    return response.status(400).json({ error: err, layout: layout });
+    return response.status(400).json({
+      error: err,
+      oldLayout,
+      currentlayout
+    });
   }
 }
 
