@@ -132,7 +132,9 @@ async function postDynamoEventMiddleware(request, response, next) {
   // Assumes postWorkflowEventMiddleware has been called before this to attach the package_id
   const pid    = request.package_id;
   let evt    = { ...request.body.form, package_id: pid };
-  removeEmptyKeys(evt.setup_mfk);   // Strip empty values from the Setup_MFK
+
+  // Strip empty values from the Setup_MFK
+  removeEmptyKeys(evt.setup_mfk);
 
   // Create the event
   const result = await EventModel.postEvent(evt);
@@ -148,8 +150,6 @@ async function postDynamoEventMiddleware(request, response, next) {
 
 /** Updates an Event object in our DynamoDB `events` table. */
 async function patchDynamoEventMiddleware(request, response, next) {
-  // Assumes patchWorkflowEventMiddleware has been called before this
-  const pid    = +request.params.package_id;
   const evt    = { ...request.body.form };
 
   // Strip empty values from the Setup_MFK

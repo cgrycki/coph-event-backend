@@ -87,9 +87,13 @@ router.patch('/:package_id',
   validateEvent,
   getDynamoEventMiddleware,
   patchWorkflowEventMiddleware,
+  getWorkflowPermissionsMiddleware,
   patchDynamoEventMiddleware,
   //patchLayoutMiddleware
-  (req, res) => res.status(200).json(req.dynamo_data));
+  (req, res) => res.status(200).json({
+    event: req.dynamo_data,
+    permissions: req.permissions
+  }));
 
 
 module.exports = router;
