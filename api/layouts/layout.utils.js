@@ -77,7 +77,7 @@ async function patchLayoutMiddleware(request, response, next) {
   const currentlayout = request.validLayout;
 
   // Get current request's call to the layout table to see if this event 
-  // had a layout. GET layout returns an empty if not found 
+  // had a layout. GET layout returns an empty array if not found 
   const oldLayout = request.items;
   
   // Keep a variable for the database operations

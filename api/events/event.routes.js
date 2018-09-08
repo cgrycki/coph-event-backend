@@ -95,7 +95,7 @@ router.patch('/:package_id',
   (req, res) => res.status(200).json({
     event      : req.dynamo_data,
     permissions: req.permissions,
-    items      : request.items
+    items      : req.items
   }));
 
 
