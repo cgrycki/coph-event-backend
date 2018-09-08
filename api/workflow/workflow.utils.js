@@ -158,7 +158,7 @@ async function patchWorkflowEventMiddleware(request, response, next) {
     params            : { package_id },
     uiowa_access_token: auth_token,
     user_ip_address   : ip,
-    evt               : dynamo_data,
+    event             : dynamo_data,
     workflow_data
   } = request;
 

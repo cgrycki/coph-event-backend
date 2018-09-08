@@ -150,7 +150,7 @@ async function postDynamoEventMiddleware(request, response, next) {
 async function patchDynamoEventMiddleware(request, response, next) {
   // Assumes patchWorkflowEventMiddleware has been called before this
   const pid    = +request.params.package_id;
-  const evt    = { package_id: pid, ...request.body.form };
+  const evt    = { ...request.body.form };
   const result = await EventModel.patchEvent(evt);
 
   // If there was an error return, otherwise pass on the information
