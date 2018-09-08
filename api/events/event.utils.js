@@ -151,6 +151,10 @@ async function patchDynamoEventMiddleware(request, response, next) {
   // Assumes patchWorkflowEventMiddleware has been called before this
   const pid    = +request.params.package_id;
   const evt    = { ...request.body.form };
+
+  // Strip empty values from the Setup_MFK
+  removeEmptyKeys(evt.setup_mfk);
+
   const result = await EventModel.patchEvent(evt);
 
   // If there was an error return, otherwise pass on the information
