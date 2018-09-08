@@ -90,6 +90,7 @@ router.patch('/:package_id',
   getWorkflowPermissionsMiddleware,
   patchDynamoEventMiddleware,
   validateLayout,
+  getLayoutMiddleware,
   patchLayoutMiddleware,
   (req, res) => res.status(200).json({
     event      : req.dynamo_data,
