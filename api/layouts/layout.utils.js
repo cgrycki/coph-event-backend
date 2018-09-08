@@ -70,14 +70,56 @@ async function postLayoutMiddleware(request, response, next) {
       this request has 1 >= items => POST
  */
 async function patchLayoutMiddleware(request, response, next) {
-  // Get validated information passed from validateLayout()
-  const layout = request.validLayout;
+  // Get id of event from request, don't coerce to number because layout hashkey
+  const package_id = request.params.package_id;
 
+  // Get current request's layout information from layout validation
+  const currentlayout = request.validLayout;
+
+  // Get current request's call to the layout table to see if this event 
+  // had a layout. GET layout returns an empty if not found 
+  const oldLayout = request.items;
+  
+  // Keep a variable for the database operations
+  let result;
   try {
-    const result        = await LayoutModel.patchLayout(layout);
-    request.validLayout = result;
-    next();
 
+    // CASE 0: neither iteration of this event had furniture items
+    if (currentlayout === undefined && oldLayout.length === 0) {
+      request.items = [];
+      return next();
+    }
+
+    // CASE 1: old event didn't have furniture and now it does => POST
+    else if (currentlayout !== undefined && oldLayout.length === 0) {
+      result = await LayoutModel.postLayout(currentlayout);
+      request.items = result.items;
+    }
+
+    // CASE 2: Old event had furniture and current request layout is empty => DELETE
+    else if (currentlayout === undefined && oldLayout.length > 0) {
+      result = await LayoutModel.deleteLayout(package_id);
+      request.items = [];
+    }
+
+    // CASE 3: Old event had furniture and so this one: => Overwrite via PATCH
+    else if (currentlayout !== undefined && oldLayout.length > 0) {
+      result = await LayoutModel.patchLayout(currentlayout);
+      request.items = result.items;
+    }
+
+    // CASE: ERROR
+    else {
+      return response.status(400).json({
+        error: true,
+        currentlayout,
+        oldLayout,
+        package_id,
+        message: 'Something went wrong in your conditional expressions'
+      });
+    };
+
+    next();
   } catch(err) {
     return response.status(400).json({ error: err, layout: layout });
   }
