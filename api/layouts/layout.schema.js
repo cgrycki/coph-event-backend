@@ -23,8 +23,9 @@ const countSchema = Joi.object().keys({
 
 /** Schema for a single furniture item object, all fields required. */
 const furnitureItemSchema = Joi.object().keys({
-  x   : Joi.number().min(0).max(3000).required(),
-  y   : Joi.number().min(0).max(3000).required(),
+  x   : Joi.number().min(0).max(1920).required(),
+  y   : Joi.number().min(0).max(1500).required(),
+  rot : Joi.number().min(0).max(360).required(),
   id  : Joi.string().alphanum().required(),
   furn: Joi.string().valid(furniture_types).required()
 });
@@ -38,7 +39,8 @@ const furnitureItemsSchema = Joi.array().required().min(0).items(furnitureItemSc
 const publicLayoutSchema = Joi.object().keys({
   id   : Joi.string().required(),
   type : Joi.string().optional().default('public'),
-  items: furnitureItemsSchema
+  items: furnitureItemsSchema,
+  chairs_per_table: Joi.number().required().valid([6, 8])
 });
 
 
@@ -47,20 +49,22 @@ const privateLayoutSchema = Joi.object().keys({
   id: Joi.string().default(function(context) {
     return context.package_id.toString();
   }, 'Convert package id to string'),
-  type: Joi.string().default('private'),
-  package_id: Joi.number().required(),
-  user_email: Joi.string().email(),
-  items: furnitureItemsSchema
+  type            : Joi.string().default('private'),
+  package_id      : Joi.number().required(),
+  user_email      : Joi.string().email(),
+  items           : furnitureItemsSchema,
+  chairs_per_table: Joi.number().required().valid([6, 8])
 });
 
 
 /** Schema for DynamoDB model */
 const layoutSchema = Joi.object().keys({
-  id        : Joi.string().required(),
-  type      : Joi.string().required().valid(['public', 'private']),
-  package_id: Joi.number().optional(),
-  user_email: Joi.string().email().optional(),
-  items     : furnitureItemsSchema
+  id              : Joi.string().required(),
+  type            : Joi.string().required().valid(['public', 'private']),
+  package_id      : Joi.number().optional(),
+  user_email      : Joi.string().email().optional(),
+  chairs_per_table: Joi.number().required().valid([6, 8]),
+  items           : furnitureItemsSchema
 });
 
 

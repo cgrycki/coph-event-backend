@@ -10,6 +10,13 @@ const {layoutValidation}       = require('./layout.schema');
 const {zipperEventsAndLayouts} = require('../utils');
 
 
+// Stub layout
+const stub = {
+  items: [],
+  chairs_per_table: 6
+};
+
+
 /** Validates a layout object */
 function validateLayout(request, response, next) {
   // Before we go any further, check if layout even has items
@@ -18,7 +25,10 @@ function validateLayout(request, response, next) {
       (request.body.layout.items.length === 0)) return next();
 
   // Create object that we will validate against
-  let layout_info = { items: request.body.layout.items };
+  let layout_info = {
+    items           : request.body.layout.items,
+    chairs_per_table: request.body.layout.chairs_per_table
+  };
   
   // Check if request came from user (private layout) to assign type
   if (!request.body.layout.id) {
@@ -41,7 +51,7 @@ function validateLayout(request, response, next) {
 async function postLayoutMiddleware(request, response, next) {
   // Attach stub for events without a layout
   if (!request.hasOwnProperty('validLayout')) {
-    request.items = []
+    request.layout = stub;
     return next();
   }
 
@@ -49,7 +59,10 @@ async function postLayoutMiddleware(request, response, next) {
   const layout = request.validLayout;
   try {
     const result  = await LayoutModel.postLayout(layout);
-    request.items = result.items;
+    request.layout = {
+      items           : result.items,
+      chairs_per_table: result.chairs_per_table
+    };
     next();
   } catch (err) {
     return response.status(400).json({ error: err, layout });
@@ -78,7 +91,7 @@ async function patchLayoutMiddleware(request, response, next) {
 
   // Get current request's call to the layout table to see if this event 
   // had a layout. GET layout returns an empty array if not found 
-  const oldLayout = request.items;
+  const oldLayout = request.layout.items;
   
   // Keep a variable for the database operations
   let result;
@@ -86,26 +99,31 @@ async function patchLayoutMiddleware(request, response, next) {
 
     // CASE 0: neither iteration of this event had furniture items => PASS
     if (currentlayout === undefined && oldLayout.length === 0) {
-      request.items = [];
+      request.layout = stub;
       return next();
     }
 
     // CASE 1: old event didn't have furniture and now it does => POST
     else if (currentlayout !== undefined && oldLayout.length === 0) {
       result = await LayoutModel.postLayout(currentlayout);
-      request.items = result.items;
+      request.layout = {
+        items           : result.items,
+        chairs_per_table: result.chairs_per_table
+      };
     }
 
     // CASE 2: Old event had furniture and current request layout is empty => DELETE
     else if (currentlayout === undefined && oldLayout.length > 0) {
       result = await LayoutModel.deleteLayout(package_id);
-      request.items = [];
     }
 
     // CASE 3: Old event had furniture and so does this one: => Overwrite via PATCH
     else if (currentlayout !== undefined && oldLayout.length > 0) {
       result = await LayoutModel.patchLayout(currentlayout);
-      request.items = result.items;
+      request.layout = {
+        items           : result.items,
+        chairs_per_table: result.chairs_per_table
+      };
     }
 
     // CASE: ERROR
@@ -140,9 +158,13 @@ async function getLayoutMiddleware(request, response, next) {
     let result     = await LayoutModel.getLayout(id);
 
     // So if DDB didn't return a layout, assign an empty list
-    if (result.length === 0) request.items = result;
-    else request.items = result[0].get('items');
-
+    if (result.length === 0) request.layout = stub;
+    else {
+      request.layout = {
+        items           : result[0].get('items'),
+        chairs_per_table: result[0].get('chairs_per_table')
+      };
+    }
     return next();
   } catch (err) {
     return response.status(400).json({ error: err, id });

@@ -3,6 +3,10 @@
  */
 /* Dependencies -------------------------------------------------------------*/
 const { validationResult } = require('express-validator/check');
+const stubLayout = {
+  items           : [],
+  chairs_per_table: 6
+};
 
 
 /* Utilities ----------------------------------------------------------------*/
@@ -121,7 +125,10 @@ function zipperEventsAndLayouts(events, layouts) {
   // Create a lookup table for layouts based on their package_ids
   const layoutLookup = layouts.reduce((lookupObj, layout) => {
     // Layout it a DynamoDB model object
-    lookupObj[layout.get('package_id')] = layout.get('items');
+    lookupObj[layout.get('package_id')] = {
+      items           : layout.get('items'),
+      chairs_per_table: layout.get('chairs_per_table')
+    };
     return lookupObj;
   }, {});
 
@@ -129,11 +136,11 @@ function zipperEventsAndLayouts(events, layouts) {
   let events_with_items = events.map(evt => {
     // Event is a DynamoDB model object
     const event_pid = evt.event.get('package_id');
-    let items = (layoutLookup.hasOwnProperty(event_pid)) ? layoutLookup[event_pid] : [];
+    let layout = layoutLookup.hasOwnProperty(event_pid) ? layoutLookup[event_pid] : stubLayout;
     return {
       event      : evt.event,
-      items,
-      permissions: evt.permissions
+      permissions: evt.permissions,
+      layout
     };
   });
   
