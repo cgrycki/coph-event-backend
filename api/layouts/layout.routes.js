@@ -1,6 +1,6 @@
 /* Router dependencies ------------------------------------------------------*/
 const router      = require('express/lib/router')();
-const { session } = require('../auth/auth.session');
+//const { session } = require('../auth/auth.session');
 
 
 /* Middlewares  -------------------------------------------------------------*/
@@ -20,9 +20,9 @@ const {
 
 
 /* Parameters + Sessions ----------------------------------------------------*/
-router.use(session);
-router.use(checkSessionExistsMiddleware);
-router.use(retrieveSessionInfoMiddleware);
+//router.use(session);
+//router.use(checkSessionExistsMiddleware);
+//router.use(retrieveSessionInfoMiddleware);
 
 
 /* Routes -------------------------------------------------------------------*/
@@ -42,14 +42,14 @@ router.get('/:id',
 /** Deletes a layout */
 router.delete('/:id',
   deleteLayoutMiddleware,
-  (req, res) => res.status(200).json({ package_id: req.params.id }));
+  (req, res) => res.status(200).json({ id: req.params.id }));
 
 
 /** Updates a layout */
 router.patch('/:id',
   validateLayout,
   patchLayoutMiddleware,
-  (req, res) => res.status(200).json({ layout: req.validLayout }));
+  (req, res) => res.status(200).json({ layout: req.layout }));
 
 
 /** Returns a filtered list of user's layouts. */
