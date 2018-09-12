@@ -12,13 +12,14 @@ const {
 
 // EXAMPLES
 const ex_items = [
-  {id: 'circle1', furn: 'circle', x: 10, y: 100},
-  {id: 'circle2', furn: 'circle', x: 10, y: 100},
-  {id: 'circle3', furn: 'circle', x: 10, y: 100}
+  {id: 'circle1', furn: 'circle', x: 10, y: 100, rot: 0},
+  {id: 'circle2', furn: 'circle', x: 10, y: 100, rot: 0},
+  {id: 'circle3', furn: 'circle', x: 10, y: 100, rot: 0}
 ];
+const ex_cpt = 6;
 
-const publicLayout = { id: 'TESTING TITLE', items: ex_items };
-const privateLayout = { package_id: 123, user_email: 'test@gmail.com', items: ex_items};
+const publicLayout = { id: 'TESTING TITLE', items: ex_items, chairs_per_table: ex_cpt};
+const privateLayout = { package_id: 123, user_email: 'test@gmail.com', items: ex_items, chairs_per_table: ex_cpt};
 
 
 
@@ -31,22 +32,22 @@ describe('Layouts', function() {
     });
 
     it('rejects furniture items with invalid furniture types', function() {
-      let itemBad = { x: 100, y: 100, id: 'circle1', furn: 'not in valid furniture types' };
+      let itemBad = { x: 100, y: 100, id: 'circle1', furn: 'not in valid furniture types', rot: 0};
       let { error: badErr, value: badVal } = furnitureItemSchema.validate(itemBad);
       assert.notEqual(badErr, null);
     });
 
     it('accepts known good furniture items', function() {
-      let itemGood = {x: 100, y: 100, id: 'circle1', furn: 'circle' };
+      let itemGood = {x: 100, y: 100, id: 'circle1', furn: 'circle', rot: 0 };
       let { error: goodErr, value: goodVal } = furnitureItemSchema.validate(itemGood);
       assert.notEqual(goodErr, Error);
     });
 
     it('rejects an array of furniture items with duplicated furniture ids', function() {
       let badItems = [
-        {id: 'circle1', furn: 'circle', x: 10, y: 100},
-        {id: 'circle1', furn: 'circle', x: 10, y: 100},
-        {id: 'circle3', furn: 'circle', x: 10, y: 100}
+        {id: 'circle1', furn: 'circle', x: 10, y: 100, rot: 0},
+        {id: 'circle1', furn: 'circle', x: 10, y: 100, rot: 0},
+        {id: 'circle3', furn: 'circle', x: 10, y: 100, rot: 0}
       ];
       
       let { error: badItemsErr, value: badItemsValue } = furnitureItemsSchema.validate(badItems);
@@ -55,9 +56,9 @@ describe('Layouts', function() {
 
     it('accepts an array of valid furniture items', function() {
       let goodItems = [
-        {id: 'circle1', furn: 'circle', x: 10, y: 100},
-        {id: 'circle2', furn: 'circle', x: 10, y: 100},
-        {id: 'circle3', furn: 'circle', x: 10, y: 100}
+        {id: 'circle1', furn: 'circle', x: 10, y: 100, rot: 0},
+        {id: 'circle2', furn: 'circle', x: 10, y: 100, rot: 0},
+        {id: 'circle3', furn: 'circle', x: 10, y: 100, rot: 0}
       ];
       
       let { error: goodItemsErr, value: goodItemsValue } = furnitureItemsSchema.validate(goodItems);
