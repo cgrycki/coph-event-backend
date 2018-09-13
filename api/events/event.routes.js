@@ -49,7 +49,7 @@ router.post('/',
   (req, res) => res.status(201).json({ 
     event      : req.dynamo_data,
     permissions: req.permissions,
-    items      : req.items
+    layout     : req.layout
   }));
 
 
@@ -69,7 +69,7 @@ router.get('/:package_id',
   (req, res) => res.status(200).json({
     event      : req.event,
     permissions: req.permissions,
-    items      : req.items
+    layout     : req.layout
   }));
 
 
@@ -95,7 +95,7 @@ router.patch('/:package_id',
   (req, res) => res.status(200).json({
     event      : req.dynamo_data,
     permissions: req.permissions,
-    items      : req.items
+    layout     : req.layout
   }));
 
 
