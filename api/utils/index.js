@@ -109,6 +109,29 @@ const removeEmptyKeys = obj => {
 
 
 /**
+ * Combines events and their permissions from Workflow.
+ * @param {object[]} events List of event's information returned from DynamoDB
+ * @param {object[]} permissions List of permissions returned from Workflow.
+ * @returns {object[]} Array of nested object.
+ */
+function zipperEventsAndPermissions(events, permissions) {
+  const events_with_permissions = events.map((evt, idx) => ({
+    event: evt,
+    permissions: {
+      canEdit         : permissions[idx].canEdit,
+      canInitiatorVoid: permissions[idx].canInitiatorVoid,
+      canVoid         : permissions[idx].canVoid,
+      canVoidAfter    : permissions[idx].canVoidAfter,
+      canSign         : permissions[idx].canSign,
+      signatureId     : permissions[idx].signatureId
+    }
+  }));
+
+  return events_with_permissions;
+}
+
+
+/**
  * Zips events to their respective layouts. If no layout exists for an event,
  * an empty array will be assigned to it's items.
  * @param {object[]} events List of events returned by DynamoDB.
@@ -156,5 +179,6 @@ module.exports = {
   extractWorkflowInfo,
   shouldUpdateEvent,
   removeEmptyKeys,
+  zipperEventsAndPermissions,
   zipperEventsAndLayouts
 };
