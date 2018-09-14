@@ -71,7 +71,7 @@ LayoutModel.getLayouts = function(field, value) {
       .query(value)
       .usingIndex(indexMap[field])
       .exec((err, data) => {
-        if (err) return reject(err);
+        if (err) return reject({err: { err, field, value }});
         else {
           const layouts = data.Items;
           resolve({ layouts });
