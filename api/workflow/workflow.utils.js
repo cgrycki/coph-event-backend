@@ -6,7 +6,8 @@ const FRONTEND_URI          = process.env.FRONTEND_URI;
 const Workflow              = require('./Workflow');
 const {
   extractWorkflowInfo,
-  shouldUpdateEvent
+  shouldUpdateEvent,
+  zipperEventsAndPermissions
 }                           = require('../utils/');
 
 
@@ -41,41 +42,21 @@ async function getWorkflowPermissionsMiddleware(request, response, next) {
 
   // Check if user has no events before calling workflow
   if (pid.length === 0) return next();
-  const permissions = await Workflow.getPermissions(auth_token, ip_addr, pid);
-  
-  // Check for errors in REST call
-  if (permissions.error) return response.status(400).json(permissions);
-  
-  // Permissions should be a list regardless of how many packageIDs we passed
-  // So if we only passed one (from getDynamoEvent) we'll only have one permission object
-  if (permissions.length === 1) request.permissions = {
-      canEdit         : permissions[0].canEdit,
-      canInitiatorVoid: permissions[0].canInitiatorVoid,
-      canVoid         : permissions[0].canVoid,
-      canVoidAfter    : permissions[0].canVoidAfter,
-      canSign         : permissions[0].canSign,
-      signatureId     : permissions[0].signatureId
-    };
-  // Otherwise this was called by getDynamoEvent*S*, and we have a list of permissions
-  // So map the permissions back onto the events and modify the request
-  else if (permissions.length > 1) {
-    const events = request.events;
-    const evts_with_permissions = events.map((evt, i) => ({
-      event: evt, 
-      permissions: {
-        canEdit         : permissions[i].canEdit,
-        canInitiatorVoid: permissions[i].canInitiatorVoid,
-        canVoid         : permissions[i].canVoid,
-        canVoidAfter    : permissions[i].canVoidAfter,
-        canSign         : permissions[i].canSign,
-        signatureId     : permissions[i].signatureId
-      }
-    }));
 
-    request.events = evts_with_permissions;
-  };
+  try {
+    const list_of_permissions = await Workflow.getPermissions(auth_token, ip_addr, pid);
+    
+    // Check for errors in REST call
+    if (list_of_permissions.error) return response.status(400).json(list_of_permissions);
+    
+    // Permissions should be a list regardless of how many packageIDs we passed
+    const events_with_permissions = zipperEventsAndPermissions(request.events, list_of_permissions);
+    request.events = events_with_permissions;
 
-  return next();
+    return next();
+  } catch (permissionErr) {
+    return response.status(400).json({ error: permissionErr, events: request.events });
+  }
 };
 
 
@@ -158,14 +139,14 @@ async function patchWorkflowEventMiddleware(request, response, next) {
     params            : { package_id },
     uiowa_access_token: auth_token,
     user_ip_address   : ip,
-    event             : dynamo_data,
+    events            : dynamo_data,
     workflow_data
   } = request;
 
 
   // Get only the portion of data Workflow cares about and test inequality.
   // NOTE: Our DynamoDB model holds it data internally in a 'attrs' object. 
-  const slim_dynamo_data     = extractWorkflowInfo(dynamo_data.attrs);
+  const slim_dynamo_data     = extractWorkflowInfo(dynamo_data[0].attrs);
   const shouldUpdateWorkflow = shouldUpdateEvent(slim_dynamo_data, workflow_data);
 
   return response.status(200).json({
