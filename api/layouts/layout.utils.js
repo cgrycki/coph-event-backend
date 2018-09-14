@@ -154,16 +154,12 @@ async function getLayoutMiddleware(request, response, next) {
   
   try {
     // Result should be an array with a single object
-    let result     = await LayoutModel.getLayout(id);
+    const result     = await LayoutModel.getLayout(id);
 
-    // So if DDB didn't return a layout, assign an empty list
-    if (result.length === 0) request.layout = stub;
-    else {
-      request.layout = {
-        items           : result[0].get('items'),
-        chairs_per_table: result[0].get('chairs_per_table')
-      };
-    }
+    // Zip with our util function
+    const events_with_layouts = zipperEventsAndLayouts(request.events, result);
+    request.events = events_with_layouts;
+    
     return next();
   } catch (err) {
     return response.status(400).json({ error: err, id });
@@ -206,8 +202,7 @@ async function getLayoutsMiddleware(request, response, next) {
   let lays;
 
   try {
-    const {layouts} = await LayoutModel.getLayouts(field, value);
-    lays = lays;
+    const { layouts } = await LayoutModel.getLayouts(field, value);
 
     // Zipper layout and events if any events are present
     // Events are present when this middleware is called from event (private) endpoint
@@ -224,7 +219,7 @@ async function getLayoutsMiddleware(request, response, next) {
       request.layouts = layouts;
     }
 
-    next();
+    return next();
   } catch(err) {
     return response.status(400).json({
       where: 'initial layoutmodel getLayouts',
