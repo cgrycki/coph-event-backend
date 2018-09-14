@@ -210,8 +210,12 @@ async function getLayoutsMiddleware(request, response, next) {
 
   try {
     const {layouts} = await LayoutModel.getLayouts(field, value);
-    request.layouts = layouts;
 
+
+    return response.status(400).json({ layouts: layouts });
+    //request.layouts = layouts;
+
+    /*
     errFlag = 'got layouts';
     layouts = result;
 
@@ -223,7 +227,7 @@ async function getLayoutsMiddleware(request, response, next) {
       request.events  = events_with_items;
     }
 
-    next();
+    next();*/
   } catch(err) {
     return response.status(400).json({
       error: err,
