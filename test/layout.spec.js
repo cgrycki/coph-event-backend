@@ -19,7 +19,7 @@ const ex_items = [
 const ex_cpt = 6;
 
 const publicLayout = { id: 'TESTING TITLE', items: ex_items, chairs_per_table: ex_cpt};
-const privateLayout = { package_id: 123, user_email: 'test@gmail.com', items: ex_items, chairs_per_table: ex_cpt};
+const privateLayout = { package_id: 123, id: '123', user_email: 'test@gmail.com', items: ex_items, chairs_per_table: ex_cpt};
 
 
 
