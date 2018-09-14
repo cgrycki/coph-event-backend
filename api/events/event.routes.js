@@ -66,11 +66,7 @@ router.get('/:package_id',
   getDynamoEventMiddleware,
   getWorkflowPermissionsMiddleware,
   getLayoutMiddleware,
-  (req, res) => res.status(200).json({
-    event      : req.event,
-    permissions: req.permissions,
-    layout     : req.layout
-  }));
+  (req, res) => res.status(200).json(req.events[0]));
 
 
 // DELETE package_id -- Delete a event in Workflow and DynamoDB
