@@ -203,8 +203,11 @@ async function getLayoutsMiddleware(request, response, next) {
   const field = path_to_field[request.path];
   const value = path_to_value[request.path];
 
+  let lays;
+
   try {
     const {layouts} = await LayoutModel.getLayouts(field, value);
+    lays = lays;
 
     // Zipper layout and events if any events are present
     // Events are present when this middleware is called from event (private) endpoint
@@ -213,7 +216,7 @@ async function getLayoutsMiddleware(request, response, next) {
         const events_with_items = zipperEventsAndLayouts(request.events, layouts);
         request.events  = events_with_items;
       } catch (zipErr) {
-        return response.status(400).json({ err: zipErr, layous, events: request.events });
+        return response.status(400).json({ err: zipErr, layouts, events: request.events, lays });
       }
     }
     // Events aren't present when calling for public events => No need to zip
@@ -224,8 +227,11 @@ async function getLayoutsMiddleware(request, response, next) {
     next();
   } catch(err) {
     return response.status(400).json({
+      where: 'initial layoutmodel getLayouts',
+      lays,
       error: err,
-      path: request.path
+      path: request.path,
+      events: request.events
     });
   }
 }
