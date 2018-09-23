@@ -1,9 +1,10 @@
 /**
  * Authentication Utils
- * @module AuthUtils
+ * @module auth/AuthUtils
+ * @requires express-validator
  */
 
-/** Dependencies -------------------------------------------------------------*/
+/* Dependencies -------------------------------------------------------------*/
 const { check } = require('express-validator/check');
 const hawkids   = require('../../config/hawkids');
 const {
@@ -15,24 +16,34 @@ const {
 } = require('./auth.app');
 
 
-/** Parameters ---------------------------------------------------------------*/
+// Parameters ---------------------------------------------------------------*/
+/**
+ * Validates an authentication code exists and is Alphanumeric
+ * @type {object}
+ * @const
+ * @alias module:auth/AuthUtils.validParamCode
+ */
 const validParamCode = check('code').exists().isAlphanumeric();
 
 /**
  * Quick helper function to test if a HawkID is in admin list
+ * @function
+ * @alias module:auth/AuthUtils.isAdmin
  * @param {string} hawkid HawkID of a user making a HTTP request.
  * @returns {boolean} isAdmin Weither or not the user is an admin.
  */
 const isAdmin = hawkid => hawkids.has(hawkid);
 
 
-/* Middlewares --------------------------------------------------------------*/
+// Middlewares --------------------------------------------------------------*/
 
 /**
  * Completes the authentication handshake with U. Iowa servers.
+ * @function
  * @param {object} request - Workflow callback HTTP request after successful user login. 
  * @param {object} response - HTTP response to return.
- * @param {function} next - Next function in our middleware stack. 
+ * @param {function} next - Next function in our middleware stack.
+ * @returns {object} 
  */
 async function authUserCodeMiddleware(request, response, next) {
   const code = request.query.code;
@@ -68,9 +79,11 @@ async function authUserCodeMiddleware(request, response, next) {
 
 /**
  * Checks a request to ensure it is authenticated.
+ * @function
  * @param {object} request - HTTP request from our frontend website.
  * @param {object} response - HTTP response to return to frontend.
- * @param {Function} next - Next function in our middleware stack.
+ * @param {object} next - Next function in our middleware stack.
+ * @returns {object}
  */
 async function checkSessionExistsMiddleware(request, response, next) {
   let sess = request.session;
@@ -111,9 +124,11 @@ async function checkSessionExistsMiddleware(request, response, next) {
 
 /**
  * Middleware function to retrieve a request's user information (OAuth2 token + IP Address).
+ * @function
  * @param {object} request - HTTP request originating from our frontend website.
  * @param {object} response - HTTP response to return to frontend.
- * @param {Function} next - Next function in our middleware stack.
+ * @param {object} next - Next function in our middleware stack.
+ * @returns {object}
  */
 function retrieveSessionInfoMiddleware(request, response, next) {
   // Localhost gets forwarded
@@ -154,9 +169,11 @@ function retrieveSessionInfoMiddleware(request, response, next) {
 
 /**
  * Destroys a user session and unsets our identification cookie.
+ * @function
  * @param {object} request - HTTP request originating from our frontend website.
  * @param {object} response - HTTP response to send to frontend.
- * @param {Function} next - Next function in our middleware stack.
+ * @param {object} next - Next function in our middleware stack.
+ * @returns {object}
  */
 function clearTokensFromSessionMiddleware(request, response, next) {
   unsetUserAuthToken(request, response);
@@ -166,9 +183,11 @@ function clearTokensFromSessionMiddleware(request, response, next) {
 
 /**
  * Looks up if a user's hawkID is in a set of Administrator hawkIDs. This function is the last middleware function called in our /auth/validate endpoint. As such, it expects the request to be authenticated and values present.
- * @param {Object} request Incoming HTTP request.
+ * @function
+ * @param {object} request Incoming HTTP request.
  * @params [request.hawkid] {string} HawkID taken from the user's DynamoDB backed session.
- * @param {Object} response Outgoing HTTP response to client.
+ * @param {object} response Outgoing HTTP response to client.
+ * @returns {object}
  */
 function getUserAdminStatus(request, response, next) {
   try {

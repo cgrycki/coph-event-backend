@@ -1,8 +1,11 @@
 /**
  * Layout DynamoDB Model
- * @module LayoutModel
+ * @module layouts/LayoutModel
+ * @requires dynamodb
+ * @requires joi
  */
-/* DEPENDENCIES -------------------------------------------------------------*/
+
+// DEPENDENCIES -------------------------------------------------------------*/
 var dynamo            = require('dynamodb');
 dynamo.AWS.config.update({ region: process.env.AWS_DEFAULT_REGION });
 const { layoutSchema } = require('./layout.schema');
@@ -12,7 +15,13 @@ const { createTableName } = require('../utils/index');
 const table_name          = 'layouts';
 
 
-/* MODEL --------------------------------------------------------------------*/
+// MODEL --------------------------------------------------------------------*/
+/**
+ * Model defining furniture layouts table in DynamoDB
+ * @type {object}
+ * @const
+ * @alias module:layouts/LayoutModel
+ */
 const LayoutModel = dynamo.define('Layout', {
   // Primary Key
   hashKey: 'id', //package_id

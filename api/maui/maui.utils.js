@@ -1,7 +1,6 @@
 /**
  * MAUI Utility Functions
- * @module maui/Utils
- * @alias maui/Utils
+ * @module maui/MauiUtils
  */
 
 /* Dependencies -------------------------------------------------------------*/
@@ -55,6 +54,8 @@ const validEndDate = check('end_date')
 /* Utilities ----------------------------------------------------------------*/
 /**
  * Parses request params and calls MAUI class for a schedule.
+ * @function
+ * @async
  * @param {object} request Incoming HTTP Request
  * @param [request.room_number] {string} Room number to search
  * @param {object} response Outgoing HTTP Response
@@ -80,6 +81,8 @@ async function getRoomScheduleMiddleware(request, response, next) {
 
 /**
  * Middleware mapping Express HTTP requests to MAUI REST call for room(s) schedules. Function assumes parameters and room_number have been validated by prior middlewares. 
+ * @function
+ * @async
  * @param {Object} request Incoming HTTP request object
  * @param {Object} response Outgoing HTTP response
  * @param {Object} next Next function in route. (callback is after this function)
@@ -107,6 +110,8 @@ async function newGetRoomSchedulesMiddleware(request, response, next) {
 
 /**
  * Takes a string and searches course titles via the MAUI REST class.
+ * @function
+ * @async
  * @param {object} request Incoming HTTP Request
  * @param {object} response Outgoing HTTP Response
  * @param {object} next Next middleware function to call.

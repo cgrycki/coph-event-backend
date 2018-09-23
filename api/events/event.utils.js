@@ -2,10 +2,12 @@
  * Event Utilities: middleware functions mapping HTTP requests to our REST 
  * classes and DynamoDB models. Includes validation and error catching.
  * @module events/EventUtils
+ * @requires joi
+ * @requires dynamodb
  */
 
 
-/* Dependencies -------------------------------------------------------------*/
+// Dependencies -------------------------------------------------------------*/
 const { 
   extractWorkflowInfo,
   removeEmptyKeys 
@@ -22,14 +24,14 @@ const EventSchema = Joi.object().keys({
 });
 
 
-/* GET Functions ------------------------------------------------------------*/
+// GET Functions ------------------------------------------------------------*/
 /**
  * Asynchronously calls DynamoDB `events` table. Handles extracting parameters from request and responding with respect to database result.
- * @module getDynamoEventMiddleware
  * @function
- * @param {Object} request HTTP Request
- * @param {Object} response HTTP Response
- * @param {Object} next Next function in route
+ * @param {object} request HTTP Request
+ * @param {object} response HTTP Response
+ * @param {object} next Next function in route
+ * @returns {object}
  */
 async function getDynamoEventMiddleware(request, response, next) {
   // Gather Package ID and try converting to number before making DynamoDB call.
@@ -52,12 +54,14 @@ async function getDynamoEventMiddleware(request, response, next) {
 
 /**
  * Attaches a filtered list of event objects to request. Infers DynamoDB index and value to use for filter from request. 
- * @param {Object} request HTTP request from frontend.
+ * @function
+ * @param {object} request HTTP request from frontend.
  * @param [request.path] {string} - Route endpoint request is hitting
  * @param [request.hawkid] {string} - HawkID from user session.
  * @param [request.params] {(string|undefined)} - Params *can* have value depending on the endpoint called.
- * @param {Object} response HTTP response
- * @param {Object} next Next Function in server route (final response).
+ * @param {object} response HTTP response
+ * @param {object} next Next Function in server route (final response).
+ * @returns {object}
  */
 async function getDynamoEventsMiddleware(request, response, next) {
   // Infer field from request path: we have different endpoints calling this 
@@ -95,13 +99,14 @@ async function getDynamoEventsMiddleware(request, response, next) {
 
 
 
-/* POST + PATCH Functions ---------------------------------------------------*/
+// POST + PATCH Functions ---------------------------------------------------*/
 /**
  * Validates the potential Event information in a POST request.  
- * @param {Object} request HTTP request containing form data.
- * @param [request.body.form] {Object} - Object containing form fields from frontend.
- * @param {Object} response HTTP response
- * @param {Object} next Next function in middleware stack.
+ * @param {object} request HTTP request containing form data.
+ * @param [request.body.form] {object} - Object containing form fields from frontend.
+ * @param {object} response HTTP response
+ * @param {object} next Next function in middleware stack.
+ * @returns {object}
  */
 function validateEvent(request, response, next) {
   // Gather form data from body json object
@@ -122,11 +127,12 @@ function validateEvent(request, response, next) {
  * 
  * @async
  * @function
- * @param {Object} request HTTP request from frontend.
- * @param [request.body] {Object} - Form Data as an object, parsed by Multer if POST and BodyParser if PATCH (JSON).
+ * @param {object} request HTTP request from frontend.
+ * @param [request.body] {object} - Form Data as an object, parsed by Multer if POST and BodyParser if PATCH (JSON).
  * param [request.package_id] {Integer} - Package ID for Workflow and Dynamo, taken from either Workflow response (POST) or params (PATCH).
- * @param {Object} response HTTP response.
- * @param {Object} next Next function in middleware stack.
+ * @param {object} response HTTP response.
+ * @param {object} next Next function in middleware stack.
+ * @returns {object}
  */
 async function postDynamoEventMiddleware(request, response, next) {
   // Assumes postWorkflowEventMiddleware has been called before this to attach the package_id
@@ -148,7 +154,14 @@ async function postDynamoEventMiddleware(request, response, next) {
 }
 
 
-/** Updates an Event object in our DynamoDB `events` table. */
+/**
+ * Updates an Event object in our DynamoDB `events` table.
+ * @function
+ * @param {object} request Incoming HTTP request
+ * @param {object} request Outgoing HTTP response
+ * @param {object} next Following middleware function
+ * @returns {object}
+ */
 async function patchDynamoEventMiddleware(request, response, next) {
   const evt    = { ...request.body.form };
 
@@ -166,6 +179,12 @@ async function patchDynamoEventMiddleware(request, response, next) {
 }
 
 
+/**
+ * Callback updating DynamoDB data according to Workflow data.
+ * @param {object} request Incoming HTTP request from Workflow
+ * @param {object} response Outgoing HTTP response
+ * @returns {object}
+ */
 async function processWorkflowCallback(request, response) {
   let { packageId: package_id, state } = request.body;
   let result;
@@ -192,7 +211,14 @@ async function processWorkflowCallback(request, response) {
 }
 
 
-/* DELETE Functions ---------------------------------------------------------*/
+// DELETE Functions ---------------------------------------------------------*/
+/**
+ * Removes an event from DynamoDB.
+ * @param {object} request Incoming HTTP request
+ * @param {object} response Outgoing HTTP response
+ * @param {object} next Following function to call
+ * @returns {object}
+ */
 async function deleteDynamoEventMiddleware(request, response, next) {
   // Get hashKey of dynamo object
   const { package_id } = request.params;

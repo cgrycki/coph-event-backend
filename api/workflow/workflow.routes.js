@@ -1,30 +1,42 @@
 /**
- * [FROM WORKFLOW](https://workflow.uiowa.edu/help/article/37/6)
- *  User can sign package:
- *      {form_approver_url}?form_id={form_id}&package_id={package_id}&signature_id={signature_id}
- *  User Can't sign package:
- *      {form_approver_url}?form_id={form_id}&package_id={package_id}
- *  Example:
- *      https://hristest.its.uiowa.edu/absence-request/inbox?form_id=1&package_id=10007500&signature_id=124870
+ * ExpressJS Route for mounting Workflow specific endpoints.
+ * @module workflow/router
+ * @requires express
  */
 
-/* Router dependencies ------------------------------------------------------*/
+/**
+ * @type {object}
+ * @const
+ * @alias module:workflow/router
+ */
 const router                      = require('express').Router();
 const { getInboxRedirect }        = require('./workflow.utils');
 const { processWorkflowCallback } = require('../events/event.utils');
 
 
 
-/* RESTful functions --------------------------------------------------------*/
-// POST /callback -- Process Workflow package change
+// RESTful functions --------------------------------------------------------*/
+/**
+ * Updates DynamoDB event entry with current Workflow status
+ * @function
+ * @name GET/callback
+ * @param {object} req Incoming HTTP Request
+ * @returns {object}
+ */
 router.post('/callback', (req, res) => processWorkflowCallback(req, res));
 router.patch('/callback', (req, res) => processWorkflowCallback(req, res));
 router.put('/callback', (req, res) => processWorkflowCallback(req, res));
 router.get('/callback', (req, res) => processWorkflowCallback(req, res));
 
 
-
-// GET: forward workflow inbox redirect to frontend
+/**
+ * Redirects a Workflow inbox request to our frontend
+ * @function
+ * @name GET/inbox
+ * @param {object} req Incoming HTTP Request
+ * @param {object} res Outgoing HTTP response
+ * @returns {object}
+ */
 router.get('/inbox', (req, res) => {
   // Grab query params from workflow call
   const package_id   = req.query.packageId;
@@ -36,7 +48,6 @@ router.get('/inbox', (req, res) => {
   // Redirect the response to our frontend
   res.status(200).redirect(event_uri);
 });
-
 
 
 module.exports = router;

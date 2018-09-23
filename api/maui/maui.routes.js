@@ -1,6 +1,6 @@
 /**
  * MAUI ExpressJS Route. Responsible for returning rooms, schedules, and courses from our connected services.
- * @module maui/Router
+ * @module maui/MauiRouter
  */
 
 // Dependencies -------------------------------------------------------------*/
@@ -8,7 +8,7 @@
  * Express JS Router for mounting class and room related functions.
  * @type {object}
  * @const
- * @alias module:maui/Router
+ * @alias module:maui/MauiRouter
  */
 const router              = require('express').Router();
 const { validateParams }  = require('../utils');
@@ -35,8 +35,6 @@ router.param('end_date',     validEndDate);
 /**
  * Returns CoPH rooms as a list of objects.
  * @function
- * @name GET/rooms
- * @alias module:maui/Router.GET/rooms
  * @param {object} req Incoming HTTP Request
  * @param {object} res Outgoing HTTP Response
  * @returns {object[]} RESTful response containing rooms

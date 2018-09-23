@@ -65,6 +65,7 @@ const privateLayoutSchema = Joi.object().keys({
  * Schema for DynamoDB model
  * @type {object}
  * @const
+ * @alias module:layouts/LayoutSchema
  */
 const layoutSchema = Joi.object().keys({
   id              : Joi.string().required(),

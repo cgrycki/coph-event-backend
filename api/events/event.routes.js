@@ -55,7 +55,6 @@ router.use(retrieveSessionInfoMiddleware);
  * Creates an new entry in Event system.
  * @function
  * @name POST
- * @alias module:events/EventRouter.POST
  * @param {object} req Incoming HTTP Request
  * @param [req.body.info] {object} Object containing field information filled by user.
  * @param [req.body.layout] {object} Object containing user furniture layout info
