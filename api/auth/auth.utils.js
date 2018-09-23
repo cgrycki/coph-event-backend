@@ -1,6 +1,6 @@
 /**
  * Authentication Utils
- * @module auth/AuthUtils
+ * @module auth/User
  * @requires express-validator
  */
 

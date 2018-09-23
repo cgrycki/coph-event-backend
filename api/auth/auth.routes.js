@@ -1,9 +1,15 @@
 /**
  * Authentication ExpressJS Route -- RESTful endpoints
- * @module AuthRoute
+ * @module auth/authroute
+ * @requires express
  */
 
-/* Dependencies -------------------------------------------------------------*/
+// Dependencies -------------------------------------------------------------*/
+/**
+ * @type {object}
+ * @const
+ * @alias module:auth/authroute
+ */
 const router      = require('express').Router();
 const { session } = require('./auth.session');
 const {
@@ -16,25 +22,43 @@ const {
 }                = require('./auth.utils');
 
 
-/* Parameters + Sessions ----------------------------------------------------*/
+// Parameters + Sessions ----------------------------------------------------*/
 router.use(session);
 router.param('code', validParamCode);
 
 
-/* RESTful Endpoints --------------------------------------------------------*/
-// GET /auth/:code -- Authenticates login from Campus Login tools 
+// RESTful Endpoints --------------------------------------------------------*/
+/**
+ * Authenticates login from Campus Login tools
+ * @function
+ * @name GET/:code
+ * @param {object} req Incoming HTTP Request
+ * @returns {object}
+ */
 router.get('/',
   authUserCodeMiddleware, 
   (req, res) => res.status(200).redirect(`${process.env.FRONTEND_URI}/dashboard`));
 
 
-// GET /auth/logout -- Ends a user's session and redirects them to the login URL.
+/**
+ * Ends a user's session and redirects them to the login URL.
+ * @function
+ * @name GET/logout
+ * @param {object} req Incoming HTTP Request
+ * @returns {object}
+ */
 router.get('/logout', 
   clearTokensFromSessionMiddleware,
   (req, res) => res.status(200).redirect(process.env.FRONTEND_URI));
 
 
-// GET /auth/validate -- Returns a boolean indicating if the user is logged in
+/**
+ * Returns a boolean indicating if the user is logged in
+ * @function
+ * @name GET/validate
+ * @param {object} req Incoming HTTP Request
+ * @returns {boolean}
+ */
 router.get('/validate', 
   checkSessionExistsMiddleware, retrieveSessionInfoMiddleware, getUserAdminStatus,
   (req, res) => res.status(200).json({ 
@@ -44,5 +68,5 @@ router.get('/validate',
   }));
 
 
-/* Exports ------------------------------------------------------------------*/
+// Exports ------------------------------------------------------------------*/
 module.exports = router;
