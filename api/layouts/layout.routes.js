@@ -1,3 +1,8 @@
+/**
+ * Layout ExpressJS Route
+ * @module LayoutRoute
+ */
+
 /* Router dependencies ------------------------------------------------------*/
 const router      = require('express/lib/router')();
 //const { session } = require('../auth/auth.session');

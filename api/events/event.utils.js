@@ -1,6 +1,7 @@
 /**
  * Event Utilities: middleware functions mapping HTTP requests to our REST 
  * classes and DynamoDB models. Includes validation and error catching.
+ * @module events/EventUtils
  */
 
 
@@ -121,7 +122,6 @@ function validateEvent(request, response, next) {
  * 
  * @async
  * @function
- * @module postDynamoEventMiddleware
  * @param {Object} request HTTP request from frontend.
  * @param [request.body] {Object} - Form Data as an object, parsed by Multer if POST and BodyParser if PATCH (JSON).
  * param [request.package_id] {Integer} - Package ID for Workflow and Dynamo, taken from either Workflow response (POST) or params (PATCH).

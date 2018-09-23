@@ -1,3 +1,7 @@
+/**
+ * Layout DynamoDB Model
+ * @module LayoutModel
+ */
 /* DEPENDENCIES -------------------------------------------------------------*/
 var dynamo            = require('dynamodb');
 dynamo.AWS.config.update({ region: process.env.AWS_DEFAULT_REGION });

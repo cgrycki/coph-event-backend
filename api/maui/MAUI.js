@@ -62,7 +62,7 @@ MAUI.prototype.request = async function(options) {
  * @param {string} roomNumber - Room key matching Astra records.
  * @param {string} start - Start date formatted as YYYY-MM-DD.
  * @param {string} end - End date formatted as YYYY-MM-DD.
- * @returns {(list[object]|object)} data - List or error.
+ * @returns {(object[]|object)} data - List or error.
  */
 MAUI.prototype.getRoomSchedule = async function(roomNumber, start, end) {
   // Create the room schedule endpoint
@@ -134,7 +134,7 @@ MAUI.prototype.parseEvent = function(evt) {
 
 /**
  * Maps a list of rooms and returns all of their schedules from [start-end]
- * @param {array[string]} rooms List of Room IDs to look up events for.
+ * @param {string[]} rooms List of Room IDs to look up events for.
  * @param {string} start Starting date of query. Formatted as 'YYYY-MM-DD'.
  * @param {string} end Ending date of query (inclusive), same format as start.
  */

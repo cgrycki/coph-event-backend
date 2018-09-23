@@ -1,5 +1,6 @@
 /**
- * Authentication middleware.
+ * Authentication Utils
+ * @module AuthUtils
  */
 
 /** Dependencies -------------------------------------------------------------*/

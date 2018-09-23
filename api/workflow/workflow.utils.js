@@ -1,5 +1,5 @@
 /** Express Middleware functions to interact with the University of Iowa Workflow servers.
- * @module workflow.utils
+ * @module WorkflowUtils
  */
 
 const FRONTEND_URI          = process.env.FRONTEND_URI;

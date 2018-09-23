@@ -1,11 +1,19 @@
-/** Layout schema for DynamoDB */
+/**
+ * Layout schema for DynamoDB
+ * @module layouts/LayoutSchema
+ * @requires joi
+ */
 // Dependencies
 const Joi             = require('joi');
 const furniture_types = ['chair', 'circle', 'cocktail', 'rect', 'display', 'trash'];
 
 
 
-/** Schema for a single furniture item object, all fields required. */
+/**
+ * Schema for a single furniture item object, all fields required.
+ * @type {object}
+ * @const
+ */
 const furnitureItemSchema = Joi.object().keys({
   x   : Joi.number().min(0).max(1920).required(),
   y   : Joi.number().min(0).max(1500).required(),
@@ -15,11 +23,19 @@ const furnitureItemSchema = Joi.object().keys({
 });
 
 
-/** Schema for furniture items array, empty or filled with furniture items AND unique IDs. */
+/**
+ * Schema for furniture items array, empty or filled with furniture items AND unique IDs.
+ * @type {object}
+ * @const
+ */
 const furnitureItemsSchema = Joi.array().required().min(0).items(furnitureItemSchema).unique('id');
 
 
-/** Schema for Public layouts */
+/**
+ * Schema for Public layouts
+ * @type {object}
+ * @const
+ */
 const publicLayoutSchema = Joi.object().keys({
   id   : Joi.string().required(),
   type : Joi.string().optional().default('public'),
@@ -28,7 +44,11 @@ const publicLayoutSchema = Joi.object().keys({
 });
 
 
-/** Schema for Private layouts */
+/**
+ * Schema for Private layouts
+ * @type {object}
+ * @const
+ */
 const privateLayoutSchema = Joi.object().keys({
   id: Joi.string().default(function(context) {
     return context.package_id.toString();
@@ -41,7 +61,11 @@ const privateLayoutSchema = Joi.object().keys({
 });
 
 
-/** Schema for DynamoDB model */
+/**
+ * Schema for DynamoDB model
+ * @type {object}
+ * @const
+ */
 const layoutSchema = Joi.object().keys({
   id              : Joi.string().required(),
   type            : Joi.string().required().valid(['public', 'private']),
@@ -55,6 +79,7 @@ const layoutSchema = Joi.object().keys({
 
 /**
  * Validates a layout, assigning layout type and casting ID if necc.
+ * @function
  * @param {object} layout Layout object to validate against.
  * @param [layout.id] {string} Hash Key of object, optional.
  * @param [layout.package_id] {number} Package ID of layout, if created for an event.

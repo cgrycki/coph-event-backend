@@ -1,5 +1,6 @@
 /**
- * Authentication API, RESTful endpoints.
+ * Authentication ExpressJS Route -- RESTful endpoints
+ * @module AuthRoute
  */
 
 /* Dependencies -------------------------------------------------------------*/

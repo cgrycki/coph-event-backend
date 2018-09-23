@@ -1,5 +1,6 @@
 /**
- * Event DynamoDB model
+ * Event DynamoDB Model
+ * @module events/EventModel
  */
 /* DEPENDENCIES -------------------------------------------------------------*/
 var dynamo            = require('dynamodb');
@@ -15,6 +16,13 @@ const table_name          = 'events';
 
 
 /* MODEL --------------------------------------------------------------------*/
+/**
+ * Event DynamoDB Model
+ * @type {object}
+ * @const
+ * @alias module:events/EventModel
+ * @name EventModel
+ */
 const EventModel = dynamo.define('Event', {
   // Primary keys
   hashKey   : 'package_id',

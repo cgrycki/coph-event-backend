@@ -1,5 +1,6 @@
 /**
  * Authorization via DynamoDB Sessions. Persist user data to the sessions
+ * @module SessionAuth
  */
 
 /* Dependencies -------------------------------------------------------------*/
