@@ -1,19 +1,28 @@
 /**
  * Layout Utilities: middleware functions mapping HTTP requests to our REST 
  * classes and DynamoDB models. Includes validation and error catching.
+ * @module layouts/LayoutUtils
  */
 
-
-/* Dependencies -------------------------------------------------------------*/
+// Dependencies -------------------------------------------------------------*/
 const LayoutModel              = require('./layout.model');
 const {layoutValidation}       = require('./layout.schema');
 const {zipperEventsAndLayouts} = require('../utils');
 
-// Stub layout
+/**
+ * Stub layout for empty/invalid layouts
+ * @type {object}
+ * @const
+ * @alias module:layouts/LayoutUtils.stub
+ */
 const stub = { items: [], chairs_per_table: 6 };
 
 
-/** Validates a layout object */
+/**
+ * Validates a layout object, as either public or private.
+ * @function
+ * @returns {object}
+ */
 function validateLayout(request, response, next) {
   // Before we go any further, check if layout even has items
   if ((!request.body.hasOwnProperty('layout')) ||
@@ -46,7 +55,11 @@ function validateLayout(request, response, next) {
 }
 
 
-/** Creates a new layout in DynamoDB `layouts` table. */
+/**
+ * Creates a new layout in DynamoDB `layouts` table.
+ * @function
+ * @returns {object}
+ */
 async function postLayoutMiddleware(request, response, next) {
   // Attach stub for events without a layout
   if (!request.hasOwnProperty('validLayout')) {
@@ -71,15 +84,8 @@ async function postLayoutMiddleware(request, response, next) {
 
 /**
  * Updates a layout object in DynamoDB table. 
- * 
- * Cases:
-    Prior event HAD a layout (1 >= items.length)
-      this request has 0 items => DELETE layout
-      this request has 1 >= items => PATCH AND OVERWRITE
-
-    Prior event DIDNT have a layout
-      this request has 0 items => do nothing, `next()`
-      this request has 1 >= items => POST
+ * @function
+ * @returns {object}
  */
 async function patchLayoutMiddleware(request, response, next) {
   // Get id of event from request, don't coerce to number because layout hashkey
@@ -147,7 +153,11 @@ async function patchLayoutMiddleware(request, response, next) {
 }
 
 
-/** Queries DyanmoDB `layouts` table for a layout object. */
+/**
+ * Queries DyanmoDB `layouts` table for a layout object.
+ * @function
+ * @returns {object}
+ */
 async function getLayoutMiddleware(request, response, next) {
   // Middleware could be called from /layouts OR /events
   const id = request.params.id || request.params.package_id;
@@ -167,7 +177,11 @@ async function getLayoutMiddleware(request, response, next) {
 }
 
 
-/** Deletes a layout object with hashKey ${package_id} from DynamoDB. */
+/**
+ * Deletes a layout object with hashKey `${package_id}` from DynamoDB.
+ * @function
+ * @returns {object}
+ */
 async function deleteLayoutMiddleware(request, response, next) {
   // Middleware could be called from /layouts OR /events
   const id = request.params.id || request.params.package_id;
@@ -181,7 +195,11 @@ async function deleteLayoutMiddleware(request, response, next) {
 }
 
 
-/** Queries layouts table for either user's or public layouts. */
+/**
+ * Queries layouts table for either user's or public layouts.
+ * @function
+ * @returns {object}
+ */
 async function getLayoutsMiddleware(request, response, next) {
   // Infer index attributes from request path
   const path_to_field = {

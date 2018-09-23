@@ -1,0 +1,241 @@
+# College of Public Health Event Application: Backend
+
+Backend API connecting U. Iowa Authentication, U. Iowa Workflow API, U. Iowa MAUI API, and Dyanmo Databases.
+
+## Index
+
+1. [Getting Started](#getting-started-anchor)
+2. [Overview](#overview-anchor)
+3. [Directory Structure](#dir-anchor)
+4. [API + Features](#api-anchor)
+5. [Links](#links-anchor)
+
+## [Getting Started](#getting-started-anchor)
+
+#### Prerequisites
+
+A working knowledge of Javascript (esp. `Promise`, `async`, and `await`), HTTP and REST, and Amazon Web Services (AWS). You'll need `NodeJS` v8+ and `NPM` to develop the application.
+
+Additionally you'll need repository access from Chris Grycki (or whoever else is maintaining at time of reading). For local development you'll need a `.env` file *specific to your repository*. In other words, you'll need API keys for all the fields in the `sample.env` file. Otherwise you *will* get thrown errors when the DynamoDB models fail to authenticate.
+
+#### Installing
+
+Download the Git repo
+
+```
+git clone https://github.com/cgrycki/coph-event-backend.git
+```
+
+Change directories into the repo you just cloned.
+
+```
+cd coph-event-backend
+```
+
+Install the project's (development) dependencies.
+
+```
+npm install --save --save-dev
+```
+
+Start the application
+
+```
+npm run start
+```
+
+Interacting with the local server once started:
+
+```
+GET    http://localhost:3001/...
+POST   http://localhost:3001/...
+PATCH  http://localhost:3001/...
+DELETE http://localhost:3001/...
+```
+
+#### Populating Databases
+
+Populate rooms Dynamo Database with Astra room data
+
+```
+npm run populate-rooms
+```
+
+Populate layouts Dynamo Database with default examples
+
+```
+npm run populate-layouts
+```
+
+#### Running tests with `Mocha`
+
+Server does not need to be running
+
+```
+npm run test
+```
+
+
+## [Overview](#overview-anchor)
+
+This application is an `express` server hosted on an AWS Lambda function. It uses `claudiajs` to easily package and deploy our ExpressJS application to AWS Lambda. Because Lambda functions are stateless, we use Amazon's `aws-sdk` and `dynamodb` to to store information and user sessions in DynamoDB. The application heavily relies on JS `Promise`'s and `async`/`await` to implement synchronous calls. `simple-oauth2` is used to succinctly handle OAuth2 authentication handshakes.
+
+The API adheres to the following pattern:
+  - **feature**
+    * *schema*: Data format + description. Validates database model information. Made with `npm's Joi`.
+    * *model*: DynamoDB model + methods to interact with DynamoDB. Made with `npm's dyanamodb`.
+    * *class*: Class responsible for RESTful interfaces (e.g. contacting MAUI to get a list of courses). Made with `npm's request-promise`.
+    * *utils*: Parameter validators and ExpressJS middleware functions. These map HTTP requests to the feature's classes + models.
+    * *route*: ExpressJS route which maps HTTP requests to the appropriate middlewares. Made with `npm's express`.
+
+
+## [Directory Structure](#dir-anchor)
+
+```
+cphb-events-backend/
+├── api/                      Server routes, schemas, utilities, and models.
+│   ├── index.js              Exports all routes for server.js
+│   ├── auth/                 Authentication: login/logout, sessions  
+│   ├── events/               Event operations
+│   ├── layouts/              Layout operations
+│   ├── maui/                 Room and course operations
+│   ├── workflow/             Workflow interface operations
+│   └── utils/                Shared functions
+│
+├── bin/                      Scripts
+│   ├── claudia-deploy.sh     Deploy claudiajs from CodePipeline
+│   ├── www                   Start server.js locally
+│   ├── docs/                 Documentation templates
+│   ├── layouts/              Layout examples and database scripts
+│   └── rooms/                MAUI rooms data and database scripts
+│
+├── config/
+│   ├── customCors.js         Cross Origin Resource Sharing configuration
+│   ├── hawkids.js            List of Admin HawkIDs
+│   └── xray.js               Amazon XRay configuration
+│
+├── test/                     Tests run by Mocha
+├── .gitignore                !!Ignores config/hawkids.js from repo
+├── .npmignore                !!Empty file to prevent claudiajs from not deploying .gitignore'd hawkids
+├── package.json
+├── package-lock.json
+├── README.md
+├── sample.env                Sample environment file
+└── server.js                 Entry point to application
+```
+
+
+
+## [API + Features](#api-anchor)
+
+The following is a list of the application's features and their methods. See source code for more detailed annotations.
+
+#### Authentication
+
+{{#module name="auth/Application"}}
+{{>member-index}}
+{{/module}}
+
+{{#module name="auth/User"}}
+{{>member-index}}
+{{/module}}
+
+{{#module name="auth/Session"}}
+{{>member-index}}
+{{/module}}
+
+{{#module name="auth/authroute"}}
+{{>member-index}}
+{{/module}}
+
+#### Events
+
+{{#module name="events/EventSchema"}}
+{{>member-index}}
+{{/module}}
+
+{{#module name="events/EventModel"}}
+{{>member-index}}
+{{/module}}
+
+{{#module name="events/EventUtils"}}
+{{>member-index}}
+{{/module}}
+
+{{#module name="events/EventRouter"}}
+{{>member-index}}
+{{/module}}
+
+#### Layouts
+
+{{#module name="layouts/LayoutSchema"}}
+{{>member-index}}
+{{/module}}
+
+{{#module name="layouts/LayoutModel"}}
+{{>member-index}}
+{{/module}}
+
+{{#module name="layouts/LayoutUtils"}}
+{{>member-index}}
+{{/module}}
+
+{{#module name="layouts/LayoutRoute"}}
+{{>member-index}}
+{{/module}}
+
+#### MAUI + Rooms
+
+{{#module name="maui/MAUI"}}
+{{>member-index}}
+{{/module}}
+
+{{#module name="maui/RoomModel"}}
+{{>member-index}}
+{{/module}}
+
+{{#module name="maui/MauiUtils"}}
+{{>member-index}}
+{{/module}}
+
+{{#module name="maui/MauiRouter"}}
+{{>member-index}}
+{{/module}}
+
+#### Workflow
+
+{{#module name="workflow/Workflow"}}
+{{>member-index}}
+{{/module}}
+
+{{#module name="workflow/workflowutils"}}
+{{>member-index}}
+{{/module}}
+
+{{#module name="workflow/router"}}
+{{>member-index}}
+{{/module}}
+
+
+## [Links](#links-anchor)
+
+- Express
+  * [`express` Documentation](https://expressjs.com/en/api.html)
+  * [Build a RESTful API Using Node and Express 4](https://scotch.io/tutorials/build-a-restful-api-using-node-and-express-4)
+  * [Use ExpressJS to Get URL and POST Parameters](https://scotch.io/tutorials/use-expressjs-to-get-url-and-post-parameters)
+  * [Keeping API Routing Clean Using Express Routers](https://scotch.io/tutorials/keeping-api-routing-clean-using-express-routers)
+  * [CORS in ExpressJS](http://justindavis.co/2015/08/31/CORS-in-Express/)
+- Deployment
+  * [`claudiajs` Documentation](https://claudiajs.com/documentation.html)
+  * [`claudiajs` Tutorials](https://claudiajs.com/tutorials/index.html)
+- Validation
+  * [`Joi` Documentation](https://github.com/hapijs/joi/blob/master/API.md)
+- DynamoDB
+  * [`dynamodb` doucmentation](https://github.com/baseprime/dynamodb)
+- Authentication
+  * [OAuth2 Authentication in Node(microsoft)](https://docs.microsoft.com/en-us/outlook/rest/node-tutorial)
+  * [`simple-oauth2` github](https://github.com/lelylan/simple-oauth2)
+  * [`simple-oauth2` docs](https://lelylan.github.io/simple-oauth2/)
+- Asynchronous Javascript
+  * [Understand promises before you start using async/await](https://medium.com/@bluepnume/learn-about-promises-before-you-start-using-async-await-eb148164a9c8)
+  * [Async functions - making promises friendly](https://developers.google.com/web/fundamentals/primers/async-functions)

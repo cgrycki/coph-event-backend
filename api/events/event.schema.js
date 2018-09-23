@@ -1,23 +1,24 @@
 /**
- * Event Schema for DynamoDB
+ * Event Information Schemas for DynamoDB
+ * @module events/EventSchema
+ * @requires joi
  */
 
 const Joi           = require('joi');
 const options_time  = require('../utils/time.constants');
 
 
-/* BASE --------------------------------------------------------------------*/
+// BASE --------------------------------------------------------------------*/
 const jString = Joi.string();
 const jBool   = Joi.boolean().required();
 const email   = jString.allow("").email();
-const date    = Joi.date().iso().raw().required();
 const dateReg = Joi.string()
   .regex(/^\d{4}\-(0[1-9]|1[012])\-(0[1-9]|[12][0-9]|3[01])$/)
   .required();
 const time    = jString.allow(options_time).required();
 
 
-/* SCHEMA + CASES ------------------------------------------------------------*/
+// SCHEMA + CASES ------------------------------------------------------------*/
 const package_id    = Joi.number().integer().allow(null);
 // Approved is actually a boolean, but we cast it to string because DynamoDB 
 // has weird attribute types for it's indices
@@ -30,6 +31,13 @@ const comments      = jString.allow("").max(3000).required();
 const room_number   = jString.alphanum().max(10).required();
 const num_people    = Joi.number().min(1).max(206).required();
 
+
+/**
+ * MAUI Course Schema
+ * @type {object}
+ * @constant
+ * @alias module:events/EventSchema.courseSchema
+ */
 const course = Joi.object().keys({
   references_course: Joi.boolean().required(),
   referenced_course: jString
@@ -44,7 +52,12 @@ const course = Joi.object().keys({
 });
 
 
-
+/**
+ * MFK Accounting Schema
+ * @type {object}
+ * @constant
+ * @alias module:events/EventSchema.setup_mfk
+ */
 const setup_mfk = Joi.object().keys({
   setup_required: jBool,
   setup_mfk: Joi.object()
@@ -80,7 +93,12 @@ const setup_mfk = Joi.object().keys({
 
 
 
-
+/**
+ * Event Schema for DynamoDB Model
+ * @type {object}
+ * @const
+ * @alias module:events/EventSchema.ModelSchema
+ */
 const ModelSchema = {
   // Workflow attributes
   // hashKey 'package_id' Added in the DynamoDB definition, so that we can

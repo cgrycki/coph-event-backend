@@ -1,12 +1,16 @@
 /**
  * Workflow Helper class.
+ * @module workflow/Workflow
+ * @requires request-promise
  */
 
 const rp                  = require('request-promise');
 const querystring         = require('querystring');
 const { getAppAuthToken } = require('../auth/auth.app');
 
-
+/**
+ * @alias module:workflow/Workflow
+ */
 class Workflow {
   /**
    * Constructs a new instance of the helper class, configured with environment variables.
@@ -28,6 +32,7 @@ class Workflow {
  * reading Application session information OR by calling Workflow and
  * setting the token information to a session.
  * 
+ * @function
  * @async
  * @returns {string} token - Authentication token.
  */
@@ -86,13 +91,13 @@ Workflow.prototype.constructPermissionsURI = function(pidOrPids) {
 
 /**
  * Executes an asynchronous Promise to the Workflow API.
+ * @function
+ * @async
  * @param {object} options - Request options: uri, method, headers, body
  * @param {function} callback - Optional function to use after request completes. 
  * @returns {Promise}
  * @fufill {object} Successful response from Workflow REST call.
  * @reject {object} Error message and stack.
- * 
- * @async
  */
 Workflow.prototype.request = async function(options) {
   // Create a mutable pointer to hold REST response or error, respectively.

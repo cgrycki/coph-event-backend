@@ -1,4 +1,15 @@
-/* Router dependencies ------------------------------------------------------*/
+/**
+ * Express Router to mount Event related functions.
+ * @module events/EventRouter
+ * @requires express
+ */
+
+// Router dependencies ------------------------------------------------------*/
+/**
+ * @type {object}
+ * @const
+ * @alias module:events/EventRouter
+ */
 const router      = require('express').Router();
 const { session } = require('../auth/auth.session');
 
@@ -32,14 +43,24 @@ const {
 }                               = require('../layouts/layout.utils');
 
 
-/* Parameters + Sessions ----------------------------------------------------*/
+// Parameters + Sessions ----------------------------------------------------*/
 router.use(session);
 router.use(checkSessionExistsMiddleware);
 router.use(retrieveSessionInfoMiddleware);
 
 
-/* Routes -------------------------------------------------------------------*/
-// POST -- Create event in workflow, dynamoDB, and (TODO) Office365
+// Routes -------------------------------------------------------------------*/
+
+/**
+ * Creates an new entry in Event system.
+ * @function
+ * @name POST
+ * @param {object} req Incoming HTTP Request
+ * @param [req.body.info] {object} Object containing field information filled by user.
+ * @param [req.body.layout] {object} Object containing user furniture layout info
+ * @param {object} res Outgoing HTTP response
+ * @returns {object} RESTful response - Object with DynamoDB + Workflow responses
+ */
 router.post('/',
   validateEvent,
   postWorkflowEventMiddleware,
@@ -53,7 +74,16 @@ router.post('/',
   }));
 
 
-// GET /my -- Get events filtered by hawkid
+/**
+ * Returns a list of events created by requesting user's hawkid.
+ * @function
+ * @name GET/my
+ * @alias module:events/EventRouter.GET/my
+ * @param {object} req Incoming HTTP request
+ * @param [req.session] {object} Authenticated Session cookie
+ * @param {object} res Outgoing HTTP Response
+ * @returns {object[]}
+ */
 router.get('/my',
   getDynamoEventsMiddleware,
   getWorkflowPermissionsMiddleware,
@@ -61,7 +91,17 @@ router.get('/my',
   (req, res) => res.status(200).json(req.events));
 
 
-// GET package_id -- Get specific package 
+/**
+ * Returns a specfic package's event information, furniture, and user Workflow permissions
+ * @function
+ * @name GET/:package_id
+ * @alias module:events/EventRouter.GET/:package_id
+ * @param {object} req Incoming HTTP request
+ * @param [req.session] {object} Authenticated Session cookie
+ * @param [req.package_id] {number} Package ID of event
+ * @param {object} res Outgoing HTTP Response
+ * @returns {object}
+ */
 router.get('/:package_id',
   getDynamoEventMiddleware,
   getWorkflowPermissionsMiddleware,
@@ -69,8 +109,17 @@ router.get('/:package_id',
   (req, res) => res.status(200).json(req.events[0]));
 
 
-// DELETE package_id -- Delete a event in Workflow and DynamoDB
-// loggedIn, tokenValid, eventExists, hasOwnership, deleteDynamoDB, deleteOffice365, return
+/**
+ * Deletes a specfic package's event information, furniture, and Workflow entry
+ * @function
+ * @name DELETE/:package_id
+ * @alias module:events/EventRouter.DELETE/:package_id
+ * @param {object} req Incoming HTTP request
+ * @param [req.session] {object} Authenticated Session cookie
+ * @param [req.package_id] {number} Package ID of event
+ * @param {object} res Outgoing HTTP Response
+ * @returns {string}
+ */
 router.delete('/:package_id',
   deleteWorkflowEventMiddleware,
   deleteDynamoEventMiddleware,
@@ -78,7 +127,17 @@ router.delete('/:package_id',
   (req, res) => res.status(200).json({ package_id: req.params.package_id }));
 
 
-// PATCH/:package_id -- Update a given event
+/**
+ * Updates a specfic package's event information and layout information.
+ * @function
+ * @name PATCH/:package_id
+ * @alias module:events/EventRouter.PATCH/:package_id
+ * @param {object} req Incoming HTTP Request
+ * @param [req.body.info] {object} Object containing field information filled by user.
+ * @param [req.body.layout] {object} Object containing user furniture layout info
+ * @param {object} res Outgoing HTTP Response
+ * @returns {object}
+ */
 router.patch('/:package_id',
   validateEvent,
   getDynamoEventMiddleware,
