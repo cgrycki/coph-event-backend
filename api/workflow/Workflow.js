@@ -1,15 +1,20 @@
 /**
  * Workflow Helper class.
+ * @module workflow/Workflow
+ * @requires request-promise
  */
 
 const rp                  = require('request-promise');
 const querystring         = require('querystring');
 const { getAppAuthToken } = require('../auth/auth.app');
 
-
+/**
+ * @alias module:workflow/Workflow
+ */
 class Workflow {
   /**
    * Constructs a new instance of the helper class, configured with environment variables.
+   * @class
    */
   constructor() {
     this.form_id       = process.env.FORM_ID;
@@ -27,6 +32,7 @@ class Workflow {
  * reading Application session information OR by calling Workflow and
  * setting the token information to a session.
  * 
+ * @function
  * @async
  * @returns {string} token - Authentication token.
  */
@@ -66,7 +72,7 @@ Workflow.prototype.constructURI = function(tools=false) {
 
 /**
  * Returns a URI query for package ID(s).
- * @param {array[number]}
+ * @param {number[]}
  * @returns {string} queryString String to tack onto the Workflow permissions URI.
  * 
  * @example
@@ -85,9 +91,13 @@ Workflow.prototype.constructPermissionsURI = function(pidOrPids) {
 
 /**
  * Executes an asynchronous Promise to the Workflow API.
+ * @function
+ * @async
  * @param {object} options - Request options: uri, method, headers, body
  * @param {function} callback - Optional function to use after request completes. 
- * @returns {object} response - A successful response or error.
+ * @returns {Promise}
+ * @fufill {object} Successful response from Workflow REST call.
+ * @reject {object} Error message and stack.
  */
 Workflow.prototype.request = async function(options) {
   // Create a mutable pointer to hold REST response or error, respectively.
@@ -109,6 +119,8 @@ Workflow.prototype.request = async function(options) {
  * @param {string} user_token User's OAuth token taken from request's session
  * @param {string} ip_address Request's originating IP address.
  * @returns {object} headers Object with content types and OAuth tokens.
+ * 
+ * @async
  * 
  * @example
  * 
@@ -141,6 +153,8 @@ Workflow.prototype.headers = async function(user_token, ip_address) {
  * @param {string} ip_address - Originating IP address taken from request.
  * @param {object} data - Package information.
  * @returns {object} result - RESTful Promise result.
+ * 
+ * @async
  * 
  * @example
  * 
@@ -213,6 +227,9 @@ Workflow.prototype.postPackage = async function(user_token, ip_address, data) {
  * @param {string} user_token OAuth token taken from session store.
  * @param {string} ip_address IP address of originating request.
  * @param {Object} data Extracted information from user Event update.
+ * @returns {Object} Response from Workflow.
+ * 
+ * @async
  * 
  * @example
  * 
@@ -232,6 +249,7 @@ Workflow.prototype.postPackage = async function(user_token, ip_address, data) {
  * }
  * 
  * RESPONSE: Reflects body if successful
+ * ```
  */
 Workflow.prototype.updatePackage = async function(user_token, ip_address, package_id, data) {
   // Create a body for the update
@@ -266,17 +284,20 @@ Workflow.prototype.updatePackage = async function(user_token, ip_address, packag
  * @param {integer} package_id - Package ID
  * @param {string} voidReason - One of { "DUPLICATE_TRANSACTION", "INCORRECT_FORM", "TRANSACTION_CANCELLED", "TRANSACTION_DENIED" }
  * @returns {object} result - Response object from Workflow if successful or error.
+ * 
+ * @async
  */
 Workflow.prototype.voidPackage = async function(user_token, ip_address, package_id, voidReason) {
   const options = {
     method : 'PUT',
     uri    : `${this.constructURI(tools=true)}/${package_id}`,
     headers: await this.headers(user_token, ip_address),
-    body   : JSON.stringify({
+    json   : true,
+    body   : {
       id        : package_id,
       state     : 'VOID',
       voidReason: voidReason
-    })
+    }
   };
 
   const result = await this.request(options);
@@ -403,8 +424,41 @@ Workflow.prototype.getPermissions = async function(user_token, ip_address, packa
 }
 
 
-// Validate callback
-Workflow.prototype.validateCallback = async function(callback) {
+// Unfreeze routing after callback
+// DELETE https://apps.its.uiowa.edu/workflow/{env}/api/developer/forms/{form_id}/packages/{package_id}/notification_locks/{lock_id}
+
+
+
+/**
+ * @todo
+ * Validate callback
+ * 
+ * 
+ * @example
+ * 
+ * Sample Callback: 
+ * ```
+ * {
+ *   "@class" : "developer",
+ *   "formId" : 100,
+ *   "packageId" : 1285,
+ *   "state" : "COMPLETE",
+ *   "createdAt" : "2016-02-24T17:04:48",
+ *   "stop" : null,
+ *   "lockId" : 123456,
+ *   "entry" : {
+ *     "field_1_naturalKey" : "field_1_value",
+ *     "field_2_naturalKey" : "field_2_value",
+ *     "field_3_naturalKey" : "field_3_value",
+ *     "field_4_naturalKey" : "field_4_value",
+ *     "field_5_naturalKey" : "field_5_value"
+ *   }
+ * }```
+ */
+Workflow.prototype.validateCallback = async function(access_token) {
+
+  
+
   return null;
 }
 

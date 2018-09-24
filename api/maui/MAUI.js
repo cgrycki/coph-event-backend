@@ -1,3 +1,8 @@
+/**
+ * MAUI REST class
+ * @module maui/MAUI
+ */
+
 const rp                    = require('request-promise');     // For REST calls
 const { getFormattedDate,
   getFormattedDateTime }    = require('../utils/date.utils'); // For dates
@@ -7,6 +12,7 @@ const querystring           = require('querystring');         // For creating qu
 /**
  * MAUI Restful function class
  * Taken from [Maui Documentation](https://api.maui.uiowa.edu/maui/pub/webservices/documentation.page)
+ * @alias module:maui/MAUI
  */
 class MAUI {
   constructor() {
@@ -17,6 +23,7 @@ class MAUI {
 
 /**
  * Creates headers for interacting with the MAUI API.
+ * @function
  * @returns {object} header - Headers with accent and content type.
  */
 MAUI.prototype.headers = function() {
@@ -31,6 +38,7 @@ MAUI.prototype.headers = function() {
 
 /**
  * Creates a query string from an object
+ * @function
  * @param {Object} params - Object containing query parameters: {field: value} OR {field: [value1, value2]}
  * @returns {string} query - String formatted as 'field=value' OR 'field=value1&field=value2'
  */
@@ -42,6 +50,7 @@ MAUI.prototype.constructQuery = function(params) {
 
 /**
  * Makes an asynchronous request to MAUI.
+ * @function
  * @param {object} options - Request Promise options for REST call.
  * @returns {object} response - Request response object.
  */
@@ -62,7 +71,7 @@ MAUI.prototype.request = async function(options) {
  * @param {string} roomNumber - Room key matching Astra records.
  * @param {string} start - Start date formatted as YYYY-MM-DD.
  * @param {string} end - End date formatted as YYYY-MM-DD.
- * @returns {(list[object]|object)} data - List or error.
+ * @returns {(object[]|object)} data - List or error.
  */
 MAUI.prototype.getRoomSchedule = async function(roomNumber, start, end) {
   // Create the room schedule endpoint
@@ -102,6 +111,7 @@ MAUI.prototype.getSessionID = async function(date) {
  * @param {string} roomNumber Room ID from ASTRA
  * @param {string} start Starting date of query. Formatted as 'YYYY-MM-DD'.
  * @param {string} end Ending date of query. Same format as start.
+ * @returns {Promise}
  */
 MAUI.prototype.getRoomPromise = async function(roomNumber, start, end) {
   const options = {
@@ -150,9 +160,10 @@ MAUI.prototype.parseEvent = function(evt) {
 
 /**
  * Maps a list of rooms and returns all of their schedules from [start-end]
- * @param {array[string]} rooms List of Room IDs to look up events for.
+ * @param {string[]} rooms List of Room IDs to look up events for.
  * @param {string} start Starting date of query. Formatted as 'YYYY-MM-DD'.
  * @param {string} end Ending date of query (inclusive), same format as start.
+ * @returns {object[]}
  */
 MAUI.prototype.getSchedules = async function(rooms, start, end) {
   // Map the list of roomNumbers as string to a RESTful Promise
@@ -198,7 +209,10 @@ MAUI.prototype.getSessionID = async function(date) {
 
 /**
  * Returns a list of courses matching param `courseText`.
+ * @function
+ * @async
  * @param {string} courseText - Text to search course title and text.
+ * @returns {object[]}
  */
 MAUI.prototype.getCourses = async function(courseText) {
   // We need a sessionID to make a search. Default to current date+session
@@ -230,8 +244,11 @@ MAUI.prototype.getCourses = async function(courseText) {
 
 /**
  * Filters and parses a course search result
+ * @function
+ * @param {object[]} courses List of course objects returned from MAUI
+ * @returns {object[]} Parsed course list
  */
-MAUI.prototype.parseCourses = function(courses, session) {
+MAUI.prototype.parseCourses = function(courses) {
   // Sanity check for REST result
   if ((courses.error) || (!courses.hasPayload) ||(courses.payload.length === 0)) return [];
 

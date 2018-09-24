@@ -6,6 +6,8 @@
   "scripts": {
     "start": "nodemon ./bin/www",
     "populate-rooms": "node -r dotenv/config bin/rooms/populate-database.js",
+    "populate-layouts": "node -r dotenv/config bin/layouts/populate-layouts-database.js",
+    "docs": "jsdoc2md --example-lang js  --template bin/docs/template.hbs --files api/*/*.js > README.md",
     "test": "clear && mocha",
     "predeploy": "claudia generate-serverless-express-proxy --express-module server",
     "deploy": "npm run predeploy && exec bin/claudia-deploy.sh",

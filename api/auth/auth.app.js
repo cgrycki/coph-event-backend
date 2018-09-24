@@ -1,8 +1,10 @@
 /**
  * Application Authentication
+ * @module auth/Application
+ * @requires simple-oauth2
  */
 
-/* Dependencies -------------------------------------------------------------*/
+// Dependencies -------------------------------------------------------------*/
 const oauth2       = require('simple-oauth2');
 const { store }    = require('./auth.session');
 const SID          = 'APPLICATIONTOKEN';
@@ -10,7 +12,13 @@ const ONE_HOUR     = 3600000;
 const FIVE_MINUTES = 300000;
 
 
-/* Credentials + Private Functions ------------------------------------------*/
+// Credentials + Private Functions ------------------------------------------*/
+/**
+ * Application Credentials
+ * @type {object}
+ * @const
+ * @alias module:auth/app.oauth_uioda
+ */
 const oauth_uiowa = oauth2.create({
   client: {
     id    : process.env.UIOWA_ACCESS_KEY_ID,

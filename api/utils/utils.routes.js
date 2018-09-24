@@ -1,6 +1,6 @@
 /**
- * Utility routes
- * For operating on API endpoints.
+ * Utility Route -- For operating on API endpoints.
+ * @module UtilRoute
  */
 
 /* Router dependencies ------------------------------------------------------*/

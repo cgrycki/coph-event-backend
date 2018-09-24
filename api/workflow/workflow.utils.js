@@ -1,19 +1,21 @@
-/** Express Middleware functions to interact with the University of Iowa Workflow servers.
- * @module workflow.utils
+/**
+ * Express Middleware functions to interact with the University of Iowa Workflow servers.
+ * @module workflow/workflowutils
  */
 
 const FRONTEND_URI          = process.env.FRONTEND_URI;
 const Workflow              = require('./Workflow');
 const {
   extractWorkflowInfo,
-  shouldUpdateEvent
+  shouldUpdateEvent,
+  zipperEventsAndPermissions
 }                           = require('../utils/');
 
 
 /**
  * Creates a frontend redirect URL from Workflow inbox to frontend for a given package
- * @param {Number} package_id Number denoting Workflow package
- * @param {Number} signature_id Optional number denoting the admin reviewing
+ * @param {number} package_id Number denoting Workflow package
+ * @param {number} signature_id Optional number denoting the admin reviewing
  * @returns {string} base_uri URI pointing to our frontend single event page
  */
 const getInboxRedirect = (package_id, signature_id=undefined) => {
@@ -26,12 +28,14 @@ const getInboxRedirect = (package_id, signature_id=undefined) => {
 
 /**
  * Fetches a JSON object describing User's allowed actions and permissions.
- * @param request {Object} - `request` - HTTP request object containing user information.
+ * @async
+ * @param request {object} request HTTP request object containing user information.
  * @param [request.uiowa_access_token] {string} - OAuth token taken from request session.
  * @param [request.user_ip_address] {string} - Originating IP Address of request.
  * @param [request.params.package_id] {Integer} - Package ID taken from /events/:package_id endpoint.
- * @param {Object} response - HTTP response object.
- * @param {Object} next - Next function in middleware stack.
+ * @param {object} response - HTTP response object.
+ * @param {object} next - Next function in middleware stack.
+ * @returns {object}
  */
 async function getWorkflowPermissionsMiddleware(request, response, next) {
   // From prior middleware
@@ -41,62 +45,39 @@ async function getWorkflowPermissionsMiddleware(request, response, next) {
 
   // Check if user has no events before calling workflow
   if (pid.length === 0) return next();
-  const permissions = await Workflow.getPermissions(auth_token, ip_addr, pid);
-  
-  // Check for errors in REST call
-  if (permissions.error) return response.status(400).json(permissions);
-  
-  // Permissions should be a list regardless of how many packageIDs we passed
-  // So if we only passed one (from getDynamoEvent) we'll only have one permission object
-  if (permissions.length === 1) request.permissions = {
-      canEdit         : permissions[0].canEdit,
-      canInitiatorVoid: permissions[0].canInitiatorVoid,
-      canVoid         : permissions[0].canVoid,
-      canVoidAfter    : permissions[0].canVoidAfter,
-      canSign         : permissions[0].canSign,
-      signatureId     : permissions[0].signatureId
-    };
-  // Otherwise this was called by getDynamoEvent*S*, and we have a list of permissions
-  // So map the permissions back onto the events and modify the request
-  else if (permissions.length > 1) {
-    const evts = request.evts;
-    const evts_with_permissions = evts.map((evt, i) => ({
-      evt: evt, 
-      permissions: {
-        canEdit         : permissions[i].canEdit,
-        canInitiatorVoid: permissions[i].canInitiatorVoid,
-        canVoid         : permissions[i].canVoid,
-        canVoidAfter    : permissions[i].canVoidAfter,
-        canSign         : permissions[i].canSign,
-        signatureId     : permissions[i].signatureId
-      }
-    }));
 
-    request.evts = evts_with_permissions;
-  };
+  try {
+    const list_of_permissions = await Workflow.getPermissions(auth_token, ip_addr, pid);
+    
+    // Check for errors in REST call
+    if (list_of_permissions.error) return response.status(400).json(list_of_permissions);
+    
+    // Permissions should be a list regardless of how many packageIDs we passed
+    const events_with_permissions = zipperEventsAndPermissions(request.events, list_of_permissions);
+    request.events = events_with_permissions;
 
-  return next();
+    return next();
+  } catch (permissionErr) {
+    return response.status(400).json({ error: permissionErr, events: request.events });
+  }
 };
 
 
 /**
  * Posts a new Workflow package via a Promise. Extracts Auth token and IP address from prior middlewares.
- * @param request {Object} - HTTP request from frontend.
+ * @async
+ * @param request {object} request  HTTP request from frontend.
  * @params [request.uiowa_access_token] {string} OAuth token from user's authenticated session.
  * @params [request.user_ip_address] {string} IP Address of request origin.
- * @params [request.body] {Object} Parsed form data for submission.
- * @param {Object} response HTTP response
- * @param {Object} next Next functiont to be called in event route.
+ * @params [request.body] {object} Parsed form data for submission.
+ * @param {object} response HTTP response
+ * @param {object} next Next functiont to be called in event route.
+ * @returns {object}
  */
 async function postWorkflowEventMiddleware(request, response, next) {
-  // Assumes multer, checkSession, retrieveSession, validateEvent called
-
   // Gather params and wait for REST Promise to resolve
   const { uiowa_access_token, user_ip_address, workflow_data } = request;
-  const result = await Workflow.postPackage(
-    uiowa_access_token, 
-    user_ip_address,
-    workflow_data);
+  const result = await Workflow.postPackage(uiowa_access_token, user_ip_address, workflow_data);
 
   // Either return the error or attach data to the request and pass along
   if (result.error) return response.status(400).json({
@@ -104,7 +85,16 @@ async function postWorkflowEventMiddleware(request, response, next) {
     workflow_data: workflow_data
   });
   else {
-    request.workflow_response = result;
+    const permissions = {
+      canEdit         : result.actions.canEdit,
+      canInitiatorVoid: result.actions.canInitiatorVoid,
+      canVoid         : result.actions.canVoid,
+      canVoidAfter    : result.actions.canVoidAfter,
+      canSign         : result.actions.canSign,
+      signatureId     : result.actions.signatureId
+    };
+
+    request.permissions       = permissions;
     request.package_id        = result.actions.packageId;
     return next();
   };
@@ -113,12 +103,10 @@ async function postWorkflowEventMiddleware(request, response, next) {
 
 /**
  * Deletes an event from workflow, and passes along the package_id to delete in Dynamo.
- * @module deleteWorkflowEventMiddleware
- * @function
- * @async
- * @param {Object} request Incoming HTTP request from frontend.
- * @param {Object} response Outgoing HTTP response object.
- * @param {Object} next Next function in middleware stack (deleteDynamoEvent).
+ * @param {object} request Incoming HTTP request from frontend.
+ * @param {object} response Outgoing HTTP response object.
+ * @param {object} next Next function in middleware stack (deleteDynamoEvent).
+ * @returns {object}
  */
 async function deleteWorkflowEventMiddleware(request, response, next) {
   // Gather params from prior middleware for calling RESTful Workflow endpoint.
@@ -139,9 +127,10 @@ async function deleteWorkflowEventMiddleware(request, response, next) {
 
 /**
  * Middleware conditionally updating Workflow event if data has changed since last POST/update. Otherwise it passes along to the next Middleware
- * @param {Object} request Incoming HTTP Request from frontend.
- * @param {Object} response Outgoing HTTP response.
- * @param {Object} next Next function in Middleware stack. In this case it's usually patchDynamoMiddleware.
+ * @param {object} request Incoming HTTP Request from frontend.
+ * @param {object} response Outgoing HTTP response.
+ * @param {object} next Next function in Middleware stack. In this case it's usually patchDynamoMiddleware.
+ * @returns {object}
  */
 async function patchWorkflowEventMiddleware(request, response, next) {
   // Middleware assumes checkSession, retrieveSession, and event validation 
@@ -152,31 +141,34 @@ async function patchWorkflowEventMiddleware(request, response, next) {
     params            : { package_id },
     uiowa_access_token: auth_token,
     user_ip_address   : ip,
-    evt               : dynamo_data,
+    events            : dynamo_data,
     workflow_data
   } = request;
 
 
   // Get only the portion of data Workflow cares about and test inequality.
   // NOTE: Our DynamoDB model holds it data internally in a 'attrs' object. 
-  const slim_dynamo_data     = extractWorkflowInfo(dynamo_data.attrs);
+  const slim_dynamo_data     = extractWorkflowInfo(dynamo_data[0].attrs);
   const shouldUpdateWorkflow = shouldUpdateEvent(slim_dynamo_data, workflow_data);
-  
+
+  return response.status(200).json({
+    slim_dynamo_data    : slim_dynamo_data,
+    dynamo_data         : dynamo_data,
+    workflow_data       : workflow_data,
+    shouldUpdateWorkflow: shouldUpdateWorkflow,
+    package_id          : package_id,
+    wf_env              : process.env.WF_ENV
+  });
+  /*
   // Should we update workflow or just Dynamo?
   if (shouldUpdateWorkflow) {
     const result = await Workflow.updatePackage(auth_token, ip, package_id, workflow_data);
 
-
-    //return response.status(400).json({ result, workflow_data, dynamo_data });
-
     // Should we continue with the request or was there an error while updating?
     if (result.error) return response.status(400).json(result);
-    else {
-      response.workflow_response = result;
-      return next();
-    };
+    else response.workflow_response = result;
   }
-  else return next();
+  next();*/
 }
 
 

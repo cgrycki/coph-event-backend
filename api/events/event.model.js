@@ -1,5 +1,6 @@
 /**
- * Event DynamoDB model
+ * Event DynamoDB Model
+ * @module events/EventModel
  */
 /* DEPENDENCIES -------------------------------------------------------------*/
 var dynamo            = require('dynamodb');
@@ -15,6 +16,13 @@ const table_name          = 'events';
 
 
 /* MODEL --------------------------------------------------------------------*/
+/**
+ * Event DynamoDB Model
+ * @type {object}
+ * @const
+ * @alias module:events/EventModel
+ * @name EventModel
+ */
 const EventModel = dynamo.define('Event', {
   // Primary keys
   hashKey   : 'package_id',
@@ -90,9 +98,9 @@ EventModel.getEvents = function(field, value) {
         });
         else {
           // Extract the info we need for future middlewares
-          const evts        = data.Items;
-          const package_ids = evts.map(evt => evt.get('package_id'));
-          resolve({ evts, package_ids });
+          const events        = data.Items;
+          const package_ids = events.map(evt => evt.get('package_id'));
+          resolve({ events, package_ids });
         }
       });
   });
@@ -137,7 +145,23 @@ EventModel.deleteEvent = function(package_id) {
 }
 
 
-EventModel.patchEvent = function(evt) {}
+/**
+ * Updates an event object in our DynamoDB `events` table.
+ * @param {Object} evt Object with Package ID and attributes to update
+ * @returns {Promise} 
+ */
+EventModel.patchEvent = function(evt) {
+  return new Promise(function(resolve, reject) {
+    EventModel.update(evt, function(err, data) {
+      if (err) return resolve({
+        error  : true,
+        message: err.message,
+        stack  : err.stack
+      });
+      else resolve(data);
+    })
+  });
+}
 
 
 module.exports = EventModel;

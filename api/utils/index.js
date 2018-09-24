@@ -3,6 +3,10 @@
  */
 /* Dependencies -------------------------------------------------------------*/
 const { validationResult } = require('express-validator/check');
+const stubLayout = {
+  items           : [],
+  chairs_per_table: 6
+};
 
 
 /* Utilities ----------------------------------------------------------------*/
@@ -95,11 +99,86 @@ const shouldUpdateEvent = (old_data, new_data) => {
 };
 
 
+/**
+ * Removes keys with empty string values from an object. Useful for posting to DynamoDB.
+ * @param {object} obj Object to remove empty values from
+ */
+const removeEmptyKeys = obj => {
+  Object.keys(obj).forEach(key => (obj[key] === '') && delete obj[key]);
+}
+
+
+/**
+ * Combines events and their permissions from Workflow.
+ * @param {object[]} events List of event's information returned from DynamoDB
+ * @param {object[]} permissions List of permissions returned from Workflow.
+ * @returns {object[]} Array of nested object.
+ */
+function zipperEventsAndPermissions(events, permissions) {
+  const events_with_permissions = events.map((evt, idx) => ({
+    event: evt,
+    permissions: {
+      canEdit         : permissions[idx].canEdit,
+      canInitiatorVoid: permissions[idx].canInitiatorVoid,
+      canVoid         : permissions[idx].canVoid,
+      canVoidAfter    : permissions[idx].canVoidAfter,
+      canSign         : permissions[idx].canSign,
+      signatureId     : permissions[idx].signatureId
+    }
+  }));
+
+  return events_with_permissions;
+}
+
+
+/**
+ * Zips events to their respective layouts. If no layout exists for an event,
+ * an empty array will be assigned to it's items.
+ * @param {object[]} events List of events returned by DynamoDB.
+ * @param {object[]} layouts List of layouts returned by DynamoDB.
+ * @returns {events} Events array with an `items` list assigned to each event obj.
+ */
+function zipperEventsAndLayouts(events, layouts) {
+  // Case: no events and thus no layouts to assign
+  if (!events || events.length === 0) return [];
+
+  // Case: All layouts have an event, but not all events have a layout.
+  if (!layouts || layouts.length > events.length) throw new Error('Invalid number of layouts');
+
+  // Create a lookup table for layouts based on their package_ids
+  const layoutLookup = layouts.reduce((lookupObj, layout) => {
+    // Layout it a DynamoDB model object
+    lookupObj[layout.get('package_id')] = {
+      items           : layout.get('items'),
+      chairs_per_table: layout.get('chairs_per_table')
+    };
+    return lookupObj;
+  }, {});
+
+  // Iterate through the events, and check if the event's ID is in the lookup.
+  let events_with_items = events.map(evt => {
+    // Event is a DynamoDB model object
+    const event_pid = evt.event.get('package_id');
+    let layout = layoutLookup.hasOwnProperty(event_pid) ? layoutLookup[event_pid] : stubLayout;
+    return {
+      event      : evt.event,
+      permissions: evt.permissions,
+      layout
+    };
+  });
+  
+  return events_with_items;
+}
+
+
 
 module.exports = {
   errorFormatter,
   validateParams,
   createTableName,
   extractWorkflowInfo,
-  shouldUpdateEvent
+  shouldUpdateEvent,
+  removeEmptyKeys,
+  zipperEventsAndPermissions,
+  zipperEventsAndLayouts
 };

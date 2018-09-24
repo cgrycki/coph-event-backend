@@ -4,11 +4,7 @@
  * what the user wants revolves around doing it *somewhere*. 
  * The object is currently a near clone of the MAUI API with 
  * floors added. 
- * 
- * To Do:
- *  - Slim down attributes! 
- * Assign semantic meaning to departments
- * Align rooms reservable status with kelly
+ * @module maui/RoomModel
  */
 
 /* DEPENDENCIES -------------------------------------------------------------*/
@@ -25,6 +21,12 @@ const table               = 'rooms';
 
 
 /* MODEL --------------------------------------------------------------------*/
+/**
+ * Room Model for DynamoDB
+ * @type {object}
+ * @const
+ * @alias module:maui/RoomModel
+ */
 var Room = dynamo.define('Room', {
   tableName: createTableName(table),
   hashKey: 'roomNumber',
@@ -59,13 +61,19 @@ Room.getRooms = function(request, response) {
   Room
     .scan()
     .where('reservable').equals(true)
-    .attributes(['roomNumber', 'floor', 'rmType', 'roomName', 'maxOccupancy'])
+    .attributes(['roomNumber', 'floor', 'rmType', 'roomName', 'maxOccupancy', 'featureList'])
     .exec((err, data) => {
       if (err) response.status(404).json(err);
       else response.status(200).json(data.Items);
     });
 }
 
+/**
+ * Returns a single room from DynamoDB
+ * @param {object} request Incoming HTTP Request
+ * @param [request.roomNumber] {string} Param indicating room to return
+ * @param {object} response Outgoing HTTP Response
+ */
 Room.getRoom = function(request, response) {
   // Gather params from request. Verified by the middleware previous.
   let roomNumber = request.params.roomNumber;

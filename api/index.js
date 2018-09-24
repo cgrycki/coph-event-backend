@@ -9,6 +9,7 @@ const url           = require('url');
 // Our routes
 router.use('/auth',       require('./auth/auth.routes'));
 router.use('/events',     require('./events/event.routes'));
+router.use('/layouts',    require('./layouts/layout.routes'));
 router.use('/maui',       require('./maui/maui.routes'));
 router.use('/workflow',   require('./workflow/workflow.routes'));
 router.use('/utils',      require('./utils/utils.routes'));
