@@ -37,8 +37,10 @@ function validateLayout(request, response, next) {
   
   // Check if request came from user (private layout) to assign type
   if (!request.body.layout.id) {
-    layout_info.package_id = request.dynamo_data.get('package_id');
-    layout_info.id         = layout_info.package_id.toString();
+    // POST and PATCH
+    const pid = (request.method === 'POST') ? request.package_id : request.params.package_id;
+    layout_info.package_id = +pid;
+    layout_info.id         = pid.toString();
     layout_info.user_email = `${request.hawkid}@uiowa.edu`;
   } else {
     layout_info.id    = request.body.layout.id;
@@ -141,6 +143,8 @@ async function patchLayoutMiddleware(request, response, next) {
         message: 'Something went wrong in your conditional expressions'
       });
     };
+
+
 
     next();
   } catch(err) {

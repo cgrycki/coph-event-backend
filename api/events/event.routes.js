@@ -68,7 +68,7 @@ router.post('/',
   validateLayout,
   postLayoutMiddleware,
   (req, res) => res.status(201).json({ 
-    event      : req.dynamo_data,
+    event      : req.events[0],
     permissions: req.permissions,
     layout     : req.layout
   }));
@@ -147,7 +147,11 @@ router.patch('/:package_id',
   validateLayout,
   //getLayoutMiddleware,
   patchLayoutMiddleware,
-  (req, res) => res.status(200).json(req.events[0]));
+  (req, res) => res.status(200).json({
+    event      : req.events[0].event,
+    permissions: req.events[0].permissions,
+    layout     : req.layout
+  }));
 
 
 module.exports = router;

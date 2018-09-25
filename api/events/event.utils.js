@@ -148,7 +148,8 @@ async function postDynamoEventMiddleware(request, response, next) {
   // If there was an error return, otherwise pass on the information
   if (result.error) return response.status(400).json({error: result, data: evt, workflow_data: request.workflow_data});
   else {
-    request.dynamo_data = result;
+    // Next middleware (validateLayout) 
+    request.events = [result];
     return next();
   };
 }
