@@ -140,7 +140,7 @@ router.delete('/:package_id',
  */
 router.patch('/:package_id',
   validateEvent,
-  getDynamoEventMiddleware,
+  //getDynamoEventMiddleware,
   //patchWorkflowEventMiddleware,
   patchDynamoEventMiddleware,
   getWorkflowPermissionsMiddleware,

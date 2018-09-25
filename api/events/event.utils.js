@@ -173,7 +173,8 @@ async function patchDynamoEventMiddleware(request, response, next) {
   // If there was an error return, otherwise pass on the information
   if (result.error) return response.status(400).json(result);
   else {
-    request.events = result;
+    // Next middleware (Workflow permissions) expects an array of event objects
+    request.events = [result];
     return next();
   };
 }
