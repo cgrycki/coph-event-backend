@@ -93,14 +93,14 @@ async function patchLayoutMiddleware(request, response, next) {
 
   // Get current request's layout information from layout validation
   const currentlayout = request.validLayout;
-
-  // Get current request's call to the layout table to see if this event 
-  // had a layout. GET layout returns an empty array if not found 
-  const oldLayout = request.layout.items;
   
   // Keep a variable for the database operations
   let result;
   try {
+
+    // Get current request's call to the layout table to see if this event 
+    // had a layout. GET layout returns an empty array if not found
+    const oldLayout = await LayoutModel.getLayout(package_id);
 
     // CASE 0: neither iteration of this event had furniture items => PASS
     if (currentlayout === undefined && oldLayout.length === 0) {
