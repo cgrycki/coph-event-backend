@@ -145,7 +145,6 @@ router.patch('/:package_id',
   patchDynamoEventMiddleware,
   getWorkflowPermissionsMiddleware,
   validateLayout,
-  //getLayoutMiddleware,
   patchLayoutMiddleware,
   (req, res) => res.status(200).json({
     event      : req.events[0].event,
