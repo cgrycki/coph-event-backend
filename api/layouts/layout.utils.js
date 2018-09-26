@@ -158,11 +158,11 @@ async function patchLayoutMiddleware(request, response, next) {
 
 
 /**
- * Queries DyanmoDB `layouts` table for a layout object.
+ * Queries DyanmoDB `layouts` table for a layout object and zips with events in request.
  * @function
  * @returns {object}
  */
-async function getLayoutMiddleware(request, response, next) {
+async function getEventLayoutMiddleware(request, response, next) {
   // Middleware could be called from /layouts OR /events
   const id = request.params.id || request.params.package_id;
   
@@ -179,6 +179,26 @@ async function getLayoutMiddleware(request, response, next) {
     return response.status(400).json({ error: err, id });
   }
 }
+
+
+/**
+ * Queries DynamoDB table for a layout
+ * @function
+ * @returns {object}
+ */
+async function getLayoutMiddleware(request, response, next) {
+  const id = request.params.id;
+
+  try {
+    const result  = await LayoutModel.getLayout(id);
+    request.layout = result;
+    return next();
+  } catch(err) {
+    return response.status(400).json({ error: err, id });
+  }
+}
+
+
 
 
 /**
@@ -256,6 +276,7 @@ async function getLayoutsMiddleware(request, response, next) {
 
 module.exports = {
   validateLayout,
+  getEventLayoutMiddleware,
   getLayoutMiddleware,
   getLayoutsMiddleware,
   postLayoutMiddleware,

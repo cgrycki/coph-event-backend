@@ -237,7 +237,7 @@ The following is a list of the application's features and their methods. See sou
         * [~validateLayout()](#module_layouts/LayoutUtils..validateLayout) ⇒ <code>object</code>
         * [~postLayoutMiddleware()](#module_layouts/LayoutUtils..postLayoutMiddleware) ⇒ <code>object</code>
         * [~patchLayoutMiddleware()](#module_layouts/LayoutUtils..patchLayoutMiddleware) ⇒ <code>object</code>
-        * [~getLayoutMiddleware()](#module_layouts/LayoutUtils..getLayoutMiddleware) ⇒ <code>object</code>
+        * [~getEventLayoutMiddleware()](#module_layouts/LayoutUtils..getEventLayoutMiddleware) ⇒ <code>object</code>
         * [~deleteLayoutMiddleware()](#module_layouts/LayoutUtils..deleteLayoutMiddleware) ⇒ <code>object</code>
         * [~getLayoutsMiddleware()](#module_layouts/LayoutUtils..getLayoutsMiddleware) ⇒ <code>object</code>
 

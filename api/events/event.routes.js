@@ -35,7 +35,7 @@ const {
 }                               = require('../workflow/workflow.utils');
 const {
   validateLayout,
-  getLayoutMiddleware,
+  getEventLayoutMiddleware,
   getLayoutsMiddleware,
   postLayoutMiddleware,
   patchLayoutMiddleware,
@@ -105,7 +105,7 @@ router.get('/my',
 router.get('/:package_id',
   getDynamoEventMiddleware,
   getWorkflowPermissionsMiddleware,
-  getLayoutMiddleware,
+  getEventLayoutMiddleware,
   (req, res) => res.status(200).json(req.events[0]));
 
 

@@ -12,15 +12,9 @@
  * @alias module:layouts/LayoutRoute
  */
 const router      = require('express/lib/router')();
-//const { session } = require('../auth/auth.session');
 
 
 // Middlewares  -------------------------------------------------------------*/
-const { 
-  checkSessionExistsMiddleware, 
-  retrieveSessionInfoMiddleware 
-}  = require('../auth/auth.utils');
-
 const { 
   validateLayout,
   postLayoutMiddleware,
@@ -31,13 +25,7 @@ const {
 } = require('./layout.utils');
 
 
-// Parameters + Sessions ----------------------------------------------------*/
-//router.use(session);
-//router.use(checkSessionExistsMiddleware);
-//router.use(retrieveSessionInfoMiddleware);
-
-
-/ Routes -------------------------------------------------------------------*/
+// Routes -------------------------------------------------------------------*/
 /**
  * Creates a new layout in DynamoDB
  * @function
@@ -60,7 +48,7 @@ router.post('/',
  * @returns {object}
  */
 router.get('/:id',
-  getLayoutMiddleware, 
+  getLayoutMiddleware,
   (req, res) => res.status(200).json(req.layout));
 
 
