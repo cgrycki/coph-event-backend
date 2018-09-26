@@ -60,8 +60,8 @@ class Sharepoint {
     return this.getPromise(options);
   }
 
-  static deleteSharepointItem(info) {
-    const flowBody = { package_id: info.package_id };
+  static deleteSharepointItem(package_id) {
+    const flowBody = { package_id };
     const options = {
       method: 'patch',
       uri: this.getURI('delete'),
@@ -70,6 +70,31 @@ class Sharepoint {
     };
 
     return this.getPromise(options);
+  }
+
+  static async sharepointMiddleware(request, response, next) {
+    let result;
+    const { method } = request;
+    
+    try {
+      switch (method) {
+        case 'POST':
+          result = await this.createSharepointItem(request.body.info);
+          break;
+        case 'PATCH':
+          result = await this.updateSharepointItem(request.body.info);
+          break;
+        case 'DELETE':
+          result = await this.deleteSharepointItem(request.params.package_id);
+          break;
+        default:
+          return response.status(400).json({ error: true, message: 'Method not recognized'});
+      }
+
+      return next();
+    } catch(err) {
+      return response.status(400).json({ error: err });
+    }
   }
 }
 
