@@ -17,8 +17,21 @@ const getFormattedDateTime = (date=new Date(), time="4:50PM") => {
   return formattedDateTime;
 }
 
+const getSharepointFormat = (date, time) => {
+  const dateTime = `${date} ${time}`;
+  const inFormat = 'YYYY-MM-DD h:mm A';
+  const outFormat= 'M/D/YYYY h:mm A';
+
+  const test = moment(dateTime, inFormat).local();
+
+  const sharepointFormatted = moment.utc(test).format();
+  return sharepointFormatted
+}
+
+
 
 module.exports = {
   getFormattedDate,
-  getFormattedDateTime
+  getFormattedDateTime,
+  getSharepointFormat
 };

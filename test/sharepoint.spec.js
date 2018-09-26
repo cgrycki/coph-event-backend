@@ -7,9 +7,9 @@ const Sharepoint = require('../api/utils/Sharepoint');
 
 
 const testPackageCreate = {
-  date: '2018/01/01',
-  start_time: '08:00AM',
-  end_time: '09:00AM',
+  date: '2018-01-01',
+  start_time: '8:00 AM',
+  end_time: '9:00 AM',
   event_name: 'Testing Item Create -- from ExpressJS',
   url: 'https://www.google.com',
   package_id: 121
@@ -43,7 +43,7 @@ describe('Sharepoint', function() {
     await Sharepoint.createSharepointItem(testPackageToDelete);
 
     // Try deleting the list item
-    let res = await Sharepoint.deleteSharepointItem(testPackageDelete);
+    let res = await Sharepoint.deleteSharepointItem(testPackageDelete.package_id);
     assert.equal(res, undefined);
   })
 })

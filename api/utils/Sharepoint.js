@@ -3,31 +3,29 @@
 * @module utils/Sharepoint
 */
 const rp = require('request-promise');
+const { getSharepointFormat } = require('../utils/date.utils');
 
 
 class Sharepoint {
   static getListItem(info) {
     // Extract information for a Sharepoint List Item
-    let flowObj = {};
-    const fields = ['date', 'package_id', 'start_time', 'end_time', 'event_name'];
-    fields.forEach(f => { flowObj[f] = info[f]; });
+    const flowBody = {
+      date      : info.date,
+      start_time: getSharepointFormat(info.date, info.start_time),
+      end_time  : getSharepointFormat(info.date, info.end_time),
+      event_name: info.event_name,
+      package_id: info.package_id,
+      url       : `https://dev.cphb-events.public-health.uiowa.edu/cphit/${info.package_id}`
+    }
 
-    
-
-
-
-
-    // Add the URL
-    flowObj.url = `https://dev.cphb-events.public-health.uiowa.edu/cphit/${info.package_id}`;
-
-    return flowObj;
+    return flowBody;
   }
 
   static getURI(method) {
     const methodMap = {
-      post: 'https://prod-67.westus.logic.azure.com/workflows/a9403447aa524de6b5ab57f657229ed1/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=O54rfGDKsuHMOsVORS1z1GIS3qGlspk3_b8VRUWIrrU',
-      patch: 'https://prod-59.westus.logic.azure.com/workflows/3167805039744e8e96488ebaffe71c2a/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=QP7DSuv2It-ZN43_tZwsnzwcqD1WdlVNJwW6vuy-VJM',
-      delete: 'https://prod-17.westus.logic.azure.com/workflows/2a54cc0ad7874a19a568accc1f62cdbf/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=hEaHxuAk-iR6x5unAYZmC1ySQWvjXc2MMfYNHwDBMOY'
+      post: 'https://prod-82.westus.logic.azure.com:443/workflows/44fffe50a0a944438fd8b4affc57e2b9/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=nKZ86C_0Xq7Ito5MJYWgQHnV43img-6UHdFdRDvsMZA',
+      patch: 'https://prod-51.westus.logic.azure.com:443/workflows/ecc2d11308e446caadb5221276def81f/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=zI7OYQ-WRxYBY9xilUsiFjv4ZIbjbfe7VdSx5vT-xjk',
+      delete: 'https://prod-10.westus.logic.azure.com:443/workflows/04d626696e7a489a9ffa451da7889312/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=bZ7vy3-DIG7GBYWW8Qv-jLkki8mMi7LeyWJlAG_HQDE'
     };
     return methodMap[method];
   }
