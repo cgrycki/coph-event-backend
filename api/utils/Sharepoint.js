@@ -7,8 +7,10 @@ const { getSharepointFormat } = require('../utils/date.utils');
 
 
 class Sharepoint {
-  static getListItem(info) {
+  static getListItem(dynamoObj) {
     // Extract information for a Sharepoint List Item
+    const info = dynamoObj.get();
+
     const flowBody = {
       date      : info.date,
       start_time: getSharepointFormat(info.date, info.start_time),
@@ -75,15 +77,15 @@ class Sharepoint {
 
   static async sharepointMiddleware(request, response, next) {
     let result;
-    const { method } = request;
+    const method = request.method;
     
     try {
       switch (method) {
         case 'POST':
-          result = await this.createSharepointItem(request.body.form);
+          result = await this.createSharepointItem(request.events[0]);
           break;
         case 'PATCH':
-          result = await this.updateSharepointItem(request.body.form);
+          result = await this.updateSharepointItem(request.events[0].event);
           break;
         case 'DELETE':
           result = await this.deleteSharepointItem(request.params.package_id);
@@ -94,7 +96,7 @@ class Sharepoint {
 
       return next();
     } catch(err) {
-      return response.status(400).json({ error: err });
+      return response.status(400).json({ error: err, method });
     }
   }
 }
