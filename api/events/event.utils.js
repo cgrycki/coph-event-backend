@@ -12,6 +12,7 @@ const {
   extractWorkflowInfo,
   removeEmptyKeys 
 }                             = require('../utils/');
+const { Sharepoint }          = require('../utils/Sharepoint');
 const EventModel              = require('./event.model');
 const { 
   ModelSchema,
@@ -189,7 +190,7 @@ async function patchDynamoEventMiddleware(request, response, next) {
  */
 async function processWorkflowCallback(request, response) {
   let { packageId: package_id, state } = request.body;
-  let result;
+  let dynamo, sharepoint, evtObj;
 
   console.log('body', request.body);
   console.log('params', request.params);
@@ -198,15 +199,19 @@ async function processWorkflowCallback(request, response) {
   console.log('METHOD', request.method);
 
   if (state === 'COMPLETE') {
-    result = await EventModel.patchEvent({ package_id: package_id, approved: 'true'});
+    dynamo = await EventModel.patchEvent({ package_id: package_id, approved: 'true'});
+    evtObj = await EventModel.getEvent(package_id);
+    sharepoint = await Sharepoint.createSharepointItem(evtObj[0]);
   }
-  // else if (state === 'VOID')
-  // else ROUTING
+  else if (state === 'VOID') {
+    dynamo = await EventModel.patchEvent({ package_id: package_id, approved: 'void' });
+    sharepoint = await Sharepoint.deleteSharepointItem(package_id);
+  }
 
   // Handle response
-  if (result === undefined) return response.status(400).end();
+  if (dynamo === undefined) return response.status(400).end();
   else if (request.error) {
-    console.log('ERROR', result);
+    console.log('ERROR', { dynamo, sharepoint });
     return response.status(400).end();
   }
   else return response.status(200).end();

@@ -10,6 +10,8 @@ class Sharepoint {
   static getListItem(dynamoObj) {
     // Extract information for a Sharepoint List Item
     const info = dynamoObj.get();
+    const comments = (info.hasOwnProperty('comments')) ? info.comments : '';
+    const url = (info.room_number === 'XC100') ? `https://dev.cphb-events.public-health.uiowa.edu/cphit/${info.package_id}` : '';
 
     const flowBody = {
       date      : info.date,
@@ -17,7 +19,9 @@ class Sharepoint {
       end_time  : getSharepointFormat(info.date, info.end_time),
       event_name: info.event_name,
       package_id: info.package_id,
-      url       : `https://dev.cphb-events.public-health.uiowa.edu/cphit/${info.package_id}`
+      user_email: info.user_email,
+      url       : url,
+      comments  : comments
     };
 
     return flowBody;

@@ -23,10 +23,10 @@ const { processWorkflowCallback } = require('../events/event.utils');
  * @param {object} req Incoming HTTP Request
  * @returns {object}
  */
-router.post('/callback', (req, res) => processWorkflowCallback(req, res));
+router.post('/callback',  (req, res) => processWorkflowCallback(req, res));
 router.patch('/callback', (req, res) => processWorkflowCallback(req, res));
-router.put('/callback', (req, res) => processWorkflowCallback(req, res));
-router.get('/callback', (req, res) => processWorkflowCallback(req, res));
+router.put('/callback',   (req, res) => processWorkflowCallback(req, res));
+router.get('/callback',   (req, res) => processWorkflowCallback(req, res));
 
 
 /**
