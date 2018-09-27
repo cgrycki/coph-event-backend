@@ -68,7 +68,6 @@ router.post('/',
   postDynamoEventMiddleware,
   validateLayout,
   postLayoutMiddleware,
-  sharepointMiddleware,
   (req, res) => res.status(201).json({ 
     event      : req.events[0],
     permissions: req.permissions,

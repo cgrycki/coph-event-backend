@@ -23,10 +23,9 @@ const getSharepointFormat = (date, time) => {
   const inFormat = 'YYYY-MM-DD h:mm A';
   const outFormat= 'M/D/YYYY h:mm A';
 
-  const test = moment(dateTime, inFormat).local();
-
-  const sharepointFormatted = moment.utc(test).format(outFormat);
-  return sharepointFormatted
+  const localTime = moment(dateTime, inFormat);
+  const utcTime   = moment.utc(localTime).format(outFormat);
+  return utcTime;
 }
 
 
