@@ -41,7 +41,7 @@ const {
   patchLayoutMiddleware,
   deleteLayoutMiddleware
 }                               = require('../layouts/layout.utils');
-const Sharepoint                = require('../utils/Sharepoint');
+const { sharepointMiddleware }  = require('../utils/Sharepoint');
 
 
 // Parameters + Sessions ----------------------------------------------------*/
@@ -68,7 +68,7 @@ router.post('/',
   postDynamoEventMiddleware,
   validateLayout,
   postLayoutMiddleware,
-  Sharepoint.sharepointMiddleware,
+  sharepointMiddleware,
   (req, res) => res.status(201).json({ 
     event      : req.events[0],
     permissions: req.permissions,

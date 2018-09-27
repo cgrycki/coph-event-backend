@@ -32,7 +32,7 @@ class Sharepoint {
     return methodMap[method];
   }
 
-  static getPromise(options) {
+  static async getPromise(options) {
     return rp(options)
       .then(res => res)
       .catch(err => { throw new Error(err); });
@@ -74,34 +74,37 @@ class Sharepoint {
 
     return this.getPromise(options);
   }
+}
 
-  static async sharepointMiddleware(request, response, next) {
-    let result;
-    const method = request.method;
-    
-    try {
-      switch (method) {
-        case 'POST':
-          result = await this.createSharepointItem(request.events[0]);
-          break;
-        case 'PATCH':
-          result = await this.updateSharepointItem(request.events[0].event);
-          break;
-        case 'DELETE':
-          result = await this.deleteSharepointItem(request.params.package_id);
-          break;
-        default:
-          return response.status(400).json({ error: true, message: 'Method not recognized'});
-      };
+async function sharepointMiddleware(request, response, next) {
+  let result;
+  const method = request.method;
+  
+  try {
+    switch (method) {
+      case 'POST':
+        result = await Sharepoint.createSharepointItem(request.events[0]);
+        break;
+      case 'PATCH':
+        result = await Sharepoint.updateSharepointItem(request.events[0].event);
+        break;
+      case 'DELETE':
+        result = await Sharepoint.deleteSharepointItem(request.params.package_id);
+        break;
+      default:
+        return response.status(400).json({ error: true, message: 'Method not recognized'});
+    };
 
-      return next();
-    } catch(err) {
-      return response.status(400).json({ error: err, method, result, event: request.events[0] });
-    }
+    next();
+  } catch(err) {
+    return response.status(400).json({ error: err, method, result, event: request.events[0] });
   }
 }
 
-module.exports = Sharepoint;
+module.exports = {
+  Sharepoint,
+  sharepointMiddleware
+};
 
 
 
