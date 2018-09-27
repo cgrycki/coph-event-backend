@@ -126,6 +126,7 @@ router.delete('/:package_id',
   deleteWorkflowEventMiddleware,
   deleteDynamoEventMiddleware,
   deleteLayoutMiddleware,
+  sharepointMiddleware,
   (req, res) => res.status(200).json({ package_id: req.params.package_id }));
 
 
