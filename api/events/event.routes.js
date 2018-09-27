@@ -148,6 +148,7 @@ router.patch('/:package_id',
   getWorkflowPermissionsMiddleware,
   validateLayout,
   patchLayoutMiddleware,
+  sharepointMiddleware,
   (req, res) => res.status(200).json({
     event      : req.events[0].event,
     permissions: req.events[0].permissions,

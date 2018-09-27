@@ -2,7 +2,8 @@
  * Date Utilities
  */
 
-const moment = require('moment');
+const moment = require('moment-timezone');
+moment.tz.setDefault('America/Chicago');
 moment.suppressDeprecationWarnings = true;
 
 const getFormattedDate = (date=new Date()) => moment(date).local().format('YYYY-MM-DD');
@@ -20,7 +21,7 @@ const getFormattedDateTime = (date=new Date(), time="4:50PM") => {
 const getSharepointFormat = (date, time) => {
   const dateTime = `${date} ${time}`;
   const inFormat = 'YYYY-MM-DD h:mm A';
-  const outFormat= 'M/D/YYYY h:mm AZ';
+  const outFormat= 'M/D/YYYY h:mm A';
 
   const test = moment(dateTime, inFormat).local();
 
