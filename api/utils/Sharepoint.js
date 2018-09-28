@@ -86,10 +86,8 @@ async function sharepointMiddleware(request, response, next) {
   
   try {
     switch (method) {
-      case 'POST':
-        result = await Sharepoint.createSharepointItem(request.events[0]);
-        break;
       case 'PATCH':
+        if (request.events[0].event.get('approved')) return next();
         result = await Sharepoint.updateSharepointItem(request.events[0].event);
         break;
       case 'DELETE':

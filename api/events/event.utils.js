@@ -199,12 +199,12 @@ async function processWorkflowCallback(request, response) {
   console.log('METHOD', request.method);
 
   if (state === 'COMPLETE') {
-    dynamo = await EventModel.patchEvent({ package_id: package_id, approved: 'true'});
-    evtObj = await EventModel.getEvent(package_id);
+    dynamo     = await EventModel.patchEvent({ package_id: package_id, approved: 'true'});
+    evtObj     = await EventModel.getEvent(package_id);
     sharepoint = await Sharepoint.createSharepointItem(evtObj[0]);
   }
   else if (state === 'VOID') {
-    dynamo = await EventModel.patchEvent({ package_id: package_id, approved: 'void' });
+    dynamo     = await EventModel.patchEvent({ package_id: package_id, approved: 'void' });
     sharepoint = await Sharepoint.deleteSharepointItem(package_id);
   }
 
