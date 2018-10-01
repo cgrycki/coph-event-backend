@@ -37,8 +37,10 @@ function validateLayout(request, response, next) {
   
   // Check if request came from user (private layout) to assign type
   if (!request.body.layout.id) {
-    layout_info.package_id = request.dynamo_data.get('package_id');
-    layout_info.id         = layout_info.package_id.toString();
+    // POST and PATCH
+    const pid = (request.method === 'POST') ? request.package_id : request.params.package_id;
+    layout_info.package_id = +pid;
+    layout_info.id         = pid.toString();
     layout_info.user_email = `${request.hawkid}@uiowa.edu`;
   } else {
     layout_info.id    = request.body.layout.id;
@@ -93,14 +95,14 @@ async function patchLayoutMiddleware(request, response, next) {
 
   // Get current request's layout information from layout validation
   const currentlayout = request.validLayout;
-
-  // Get current request's call to the layout table to see if this event 
-  // had a layout. GET layout returns an empty array if not found 
-  const oldLayout = request.layout.items;
   
   // Keep a variable for the database operations
   let result;
   try {
+
+    // Get current request's call to the layout table to see if this event 
+    // had a layout. GET layout returns an empty array if not found
+    const oldLayout = await LayoutModel.getLayout(package_id);
 
     // CASE 0: neither iteration of this event had furniture items => PASS
     if (currentlayout === undefined && oldLayout.length === 0) {
@@ -142,6 +144,8 @@ async function patchLayoutMiddleware(request, response, next) {
       });
     };
 
+
+
     next();
   } catch(err) {
     return response.status(400).json({
@@ -154,11 +158,11 @@ async function patchLayoutMiddleware(request, response, next) {
 
 
 /**
- * Queries DyanmoDB `layouts` table for a layout object.
+ * Queries DyanmoDB `layouts` table for a layout object and zips with events in request.
  * @function
  * @returns {object}
  */
-async function getLayoutMiddleware(request, response, next) {
+async function getEventLayoutMiddleware(request, response, next) {
   // Middleware could be called from /layouts OR /events
   const id = request.params.id || request.params.package_id;
   
@@ -175,6 +179,26 @@ async function getLayoutMiddleware(request, response, next) {
     return response.status(400).json({ error: err, id });
   }
 }
+
+
+/**
+ * Queries DynamoDB table for a layout
+ * @function
+ * @returns {object}
+ */
+async function getLayoutMiddleware(request, response, next) {
+  const id = request.params.id;
+
+  try {
+    const result  = await LayoutModel.getLayout(id);
+    request.layout = result;
+    return next();
+  } catch(err) {
+    return response.status(400).json({ error: err, id });
+  }
+}
+
+
 
 
 /**
@@ -252,6 +276,7 @@ async function getLayoutsMiddleware(request, response, next) {
 
 module.exports = {
   validateLayout,
+  getEventLayoutMiddleware,
   getLayoutMiddleware,
   getLayoutsMiddleware,
   postLayoutMiddleware,

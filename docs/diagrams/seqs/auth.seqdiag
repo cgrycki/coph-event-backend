@@ -1,0 +1,22 @@
+Title: Authentication Example
+
+# Entitities
+participant Client
+participant Lambda
+participant DynamoDB
+participant U.Iowa
+
+
+# HTTP Sequence
+Client->Lambda: GET /*
+Lambda->DynamoDB: checkSession()
+DynamoDB->Lambda: none
+Lambda-->Lambda: redirect /auth
+Lambda->U.Iowa: redirect(login)
+U.Iowa->Lambda: GET /:code
+Lambda-->Lambda: redirect /auth/:code
+Lambda->U.Iowa: auth(OAuth2 code)
+U.Iowa->Lambda: OAuth2 token
+Lambda->DynamoDB: saveUserSession(token)
+DynamoDB->Lambda: sessionID
+Lambda->Client: cookie(sessionID)

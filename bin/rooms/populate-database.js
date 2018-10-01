@@ -41,7 +41,7 @@ function assignReservable(room) {
 
   // Create inclusion sets for types of rooms
   let reservable_auditorium = new Set(['N110', 'N120', 'S030', 'XC100']);
-  let reservable_classroom  = new Set(['S025A', 'S025B', 'S025AB', 'C301', 'C303',  'C410', 'C217A', 'C217B', 'C217AB']);
+  let reservable_classroom  = new Set(['S025A', 'S025B', 'S025AB', 'C301', 'C303',  'C410', 'C217AB']);
 
   // Test for inclusion and assign a human readable room type
   const roomNumber = room.roomNumber;

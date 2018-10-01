@@ -35,12 +35,13 @@ const {
 }                               = require('../workflow/workflow.utils');
 const {
   validateLayout,
-  getLayoutMiddleware,
+  getEventLayoutMiddleware,
   getLayoutsMiddleware,
   postLayoutMiddleware,
   patchLayoutMiddleware,
   deleteLayoutMiddleware
 }                               = require('../layouts/layout.utils');
+const { sharepointMiddleware }  = require('../utils/Sharepoint');
 
 
 // Parameters + Sessions ----------------------------------------------------*/
@@ -68,7 +69,7 @@ router.post('/',
   validateLayout,
   postLayoutMiddleware,
   (req, res) => res.status(201).json({ 
-    event      : req.dynamo_data,
+    event      : req.events[0],
     permissions: req.permissions,
     layout     : req.layout
   }));
@@ -105,7 +106,7 @@ router.get('/my',
 router.get('/:package_id',
   getDynamoEventMiddleware,
   getWorkflowPermissionsMiddleware,
-  getLayoutMiddleware,
+  getEventLayoutMiddleware,
   (req, res) => res.status(200).json(req.events[0]));
 
 
@@ -124,6 +125,7 @@ router.delete('/:package_id',
   deleteWorkflowEventMiddleware,
   deleteDynamoEventMiddleware,
   deleteLayoutMiddleware,
+  sharepointMiddleware,
   (req, res) => res.status(200).json({ package_id: req.params.package_id }));
 
 
@@ -140,16 +142,16 @@ router.delete('/:package_id',
  */
 router.patch('/:package_id',
   validateEvent,
-  getDynamoEventMiddleware,
+  //getDynamoEventMiddleware,
   //patchWorkflowEventMiddleware,
-  getWorkflowPermissionsMiddleware,
   patchDynamoEventMiddleware,
+  getWorkflowPermissionsMiddleware,
   validateLayout,
-  getLayoutMiddleware,
   patchLayoutMiddleware,
+  sharepointMiddleware,
   (req, res) => res.status(200).json({
-    event      : req.dynamo_data,
-    permissions: req.permissions,
+    event      : req.events[0].event,
+    permissions: req.events[0].permissions,
     layout     : req.layout
   }));
 

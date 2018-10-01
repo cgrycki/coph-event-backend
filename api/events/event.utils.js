@@ -12,6 +12,7 @@ const {
   extractWorkflowInfo,
   removeEmptyKeys 
 }                             = require('../utils/');
+const { Sharepoint }          = require('../utils/Sharepoint');
 const EventModel              = require('./event.model');
 const { 
   ModelSchema,
@@ -148,7 +149,8 @@ async function postDynamoEventMiddleware(request, response, next) {
   // If there was an error return, otherwise pass on the information
   if (result.error) return response.status(400).json({error: result, data: evt, workflow_data: request.workflow_data});
   else {
-    request.dynamo_data = result;
+    // Next middleware (validateLayout) 
+    request.events = [result];
     return next();
   };
 }
@@ -173,7 +175,8 @@ async function patchDynamoEventMiddleware(request, response, next) {
   // If there was an error return, otherwise pass on the information
   if (result.error) return response.status(400).json(result);
   else {
-    request.dynamo_data = result;
+    // Next middleware (Workflow permissions) expects an array of event objects
+    request.events = [result];
     return next();
   };
 }
@@ -187,7 +190,7 @@ async function patchDynamoEventMiddleware(request, response, next) {
  */
 async function processWorkflowCallback(request, response) {
   let { packageId: package_id, state } = request.body;
-  let result;
+  let dynamo, sharepoint, evtObj;
 
   console.log('body', request.body);
   console.log('params', request.params);
@@ -196,15 +199,19 @@ async function processWorkflowCallback(request, response) {
   console.log('METHOD', request.method);
 
   if (state === 'COMPLETE') {
-    result = await EventModel.patchEvent({ package_id: package_id, approved: 'true'});
+    dynamo     = await EventModel.patchEvent({ package_id: package_id, approved: 'true'});
+    evtObj     = await EventModel.getEvent(package_id);
+    sharepoint = await Sharepoint.createSharepointItem(evtObj[0]);
   }
-  // else if (state === 'VOID')
-  // else ROUTING
+  else if (state === 'VOID') {
+    dynamo     = await EventModel.patchEvent({ package_id: package_id, approved: 'void' });
+    sharepoint = await Sharepoint.deleteSharepointItem(package_id);
+  }
 
   // Handle response
-  if (result === undefined) return response.status(400).end();
+  if (dynamo === undefined) return response.status(400).end();
   else if (request.error) {
-    console.log('ERROR', result);
+    console.log('ERROR', { dynamo, sharepoint });
     return response.status(400).end();
   }
   else return response.status(200).end();
