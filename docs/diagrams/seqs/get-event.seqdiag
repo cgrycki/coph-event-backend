@@ -1,0 +1,26 @@
+Title: GET Request
+
+# Entitities
+participant Client
+participant Lambda
+participant Workflow
+participant DynamoDB
+participant MAUI
+
+# Link styles
+#A->B: Normal line
+#B-->C: Dashed line
+#C->>D: Open arrow
+#D-->>A: Dashed open arrow
+
+# Request sequence
+Client->Lambda: GET /events/:package_id
+Lambda-->Lambda: checkSession
+Lambda-->Lambda: retrieveSession
+Lambda->Workflow: getWorkflowPermissions(package_id)
+Workflow->Lambda: permissions {}
+Lambda->DynamoDB: getEvent(package_id)
+DynamoDB->Lambda: event {}
+Lambda->DynamoDB: getLayout(package_id)
+DynamoDB->Lambda: layout {}
+Lambda->Client: payload {event, layout, permissions}

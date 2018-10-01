@@ -1,0 +1,29 @@
+Title: PATCH Event Example
+
+# Entitities
+participant Client
+participant Lambda
+participant DynamoDB
+participant Workflow
+
+# Sequence
+Client->Lambda: PATCH/:package_id {info, layout}
+Lambda->DynamoDB: checkSessionExists()
+DynamoDB->Lambda: sessionInfo/NONE
+Lambda-->>Client: error: not logged in
+Lambda-->Lambda: validateEventInfo({info})
+Lambda-->>Client: error: invalid info
+Lambda->DynamoDB: GET/:package_id
+DynamoDB->Lambda: {info}/NONE
+Lambda-->>Client: error: event doesn't exist
+Lambda->Workflow: GET/permissions/:package_id
+Workflow->Lambda: {permissions}
+Lambda-->Lambda: validatePermissions({permissions})
+Lambda-->>Client: error: permissions
+Lambda->DynamoDB: PATCH {info}
+DynamoDB->Lambda: {info}
+Lambda-->Lambda: validateLayoutInfo({layout})
+Lambda-->>Client: error: invalid layout
+Lambda->DynamoDB: POST {layout}
+DynamoDB->Lambda: {layout}
+Lambda->Client: {info, layout, permissions}

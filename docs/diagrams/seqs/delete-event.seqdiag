@@ -1,0 +1,21 @@
+Title: Delete Event Example
+
+# Entitities
+participant Client
+participant Lambda
+participant DynamoDB
+participant Workflow
+
+# Sequence
+Client->Lambda: DELETE/:package_id
+Lambda->DynamoDB: checkSessionExists()
+DynamoDB->Lambda: sessionInfo/NONE
+Lambda-->>Client: error: not logged in
+Lambda->Workflow: DELETE/:package_id
+Workflow->Lambda: {package_id}/error
+Lambda-->>Client: error: permissions
+Lambda->DynamoDB: DELETE events/:package_id
+DynamoDB->Lambda: :package_id
+Lambda->DynamoDB: DELETE layouts/:id
+DynamoDB->Lambda: :id
+Lambda->Client: :package_id

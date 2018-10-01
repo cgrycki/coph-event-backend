@@ -1,0 +1,25 @@
+Title: POST Event Example
+
+# Entitities
+participant Client
+participant Lambda
+participant DynamoDB
+participant Workflow
+
+# Sequence
+Client->Lambda: POST {info, layout}
+Lambda->DynamoDB: checkSessionExists()
+DynamoDB->Lambda: sessionInfo/NONE
+Lambda-->>Client: error: not logged in
+Lambda-->Lambda: validateEventInfo({info})
+Lambda-->>Client: error: invalid info
+Lambda->Workflow: POST {info}
+Workflow->Lambda: permissions/error {}
+Lambda-->>Client: error: invalid info
+Lambda->DynamoDB: POST {info}
+DynamoDB->Lambda: {info}
+Lambda-->Lambda: validateLayoutInfo({layout})
+Lambda-->>Client: error: invalid layout
+Lambda->DynamoDB: POST {layout}
+DynamoDB->Lambda: {layout}
+Lambda->Client: {info, layout, permissions}
