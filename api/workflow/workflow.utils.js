@@ -56,8 +56,6 @@ async function getWorkflowPermissionsMiddleware(request, response, next) {
     request.events = events_with_permissions;
     return next();
   } catch (permissionErr) {
-    console.log('some error happened');
-    console.log(permissionErr);
     return response.status(400).json({ error: permissionErr, events: request.events });
   }
 };

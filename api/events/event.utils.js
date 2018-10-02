@@ -88,6 +88,10 @@ async function getDynamoEventsMiddleware(request, response, next) {
     events,
     package_ids
   }            = await EventModel.getEvents(field, value);
+  console.log('result: '+result);
+  console.log('error: '+error);
+  console.log('events: '+events);
+  console.log('package_ids: '+package_ids);
 
   // Either response with error or pass on the DynamoDB info
   if (error !== undefined) return response.status(400).json(result);
