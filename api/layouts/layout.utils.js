@@ -254,6 +254,8 @@ async function getLayoutsMiddleware(request, response, next) {
         request.events  = events_with_layouts;
       } catch (zipErr) {
         console.log('got a zip error');
+        console.log(zipErr);
+        console.log(events_with_layouts);
         return response.status(400).json({ err: zipErr, layouts, events: request.events, lays });
       }
     }
