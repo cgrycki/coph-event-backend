@@ -10,7 +10,7 @@ const {
 } = require('../api/utils/date.utils');
 
 
-const expDate = new Date();
+const expDate = new Date(2018,9,26,11,50);
 const expDateStr = "2018-09-26";
 const expTime = "04:50PM";
 
