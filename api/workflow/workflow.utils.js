@@ -51,11 +51,9 @@ async function getWorkflowPermissionsMiddleware(request, response, next) {
     
     // Check for errors in REST call
     if (list_of_permissions.error) return response.status(400).json(list_of_permissions);
-    
     // Permissions should be a list regardless of how many packageIDs we passed
     const events_with_permissions = zipperEventsAndPermissions(request.events, list_of_permissions);
     request.events = events_with_permissions;
-
     return next();
   } catch (permissionErr) {
     return response.status(400).json({ error: permissionErr, events: request.events });

@@ -253,7 +253,12 @@ async function getLayoutsMiddleware(request, response, next) {
         const events_with_layouts = zipperEventsAndLayouts(request.events, layouts);
         request.events  = events_with_layouts;
       } catch (zipErr) {
-        return response.status(400).json({ err: zipErr, layouts, events: request.events, lays });
+        return response.status(400).json({ 
+          error: zipErr, 
+          layouts, 
+          events: request.events, 
+          lays 
+        });
       }
     }
     // Events aren't present when calling for public events => No need to zip
