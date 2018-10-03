@@ -207,6 +207,16 @@ async function processWorkflowCallback(request, response) {
     dynamo     = await EventModel.patchEvent({ package_id: package_id, approved: 'void' });
     sharepoint = await Sharepoint.deleteSharepointItem(package_id);
   }
+  else if (state == 'PRE_ROUTING') {
+    // The event may not have been added to Sharepoint yet
+    // Catch the error if the event is not found
+    try {
+      sharepoint = await Sharepoint.deleteSharepointItem(package_id);
+    } catch(err) {
+      console.log({ error: err, package_id: package_id, sharepoint });
+    }
+    dynamo     = await EventModel.deleteEvent(package_id);
+  }
 
   // Handle response
   if (dynamo === undefined) return response.status(400).end();
